@@ -9,5 +9,6 @@ public class Controller {
 	
 	public static void initGui(){
 		System.out.println("hallo");
+		//Michael ich ändere etweas
 	}
 }
