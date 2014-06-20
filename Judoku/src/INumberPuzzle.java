@@ -7,5 +7,8 @@ public interface INumberPuzzle {
 
 	public boolean trySetValue(int x, int y, int value);
 
-	public void giveHint();
+	public void giveHint(); //Fill out an useful number
+	
+	public int[] markMistake(); //Check mistakes, if mistake found -> X and Y value; empty array means no mistakes. Check impl. with tupel
+	
 }
