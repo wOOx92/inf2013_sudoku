@@ -1,14 +1,12 @@
 
 public class Controller {
-//Commit Test
 	public static void main (String[]args){
 		
-		
-		//Test Nochmal test
 	}
 	
 	public static void initGui(){
+		//creates GUI objects and sets the windows to visible
 		System.out.println("hallo");
-		//Michael ich ändere etweas
+		
 	}
 }
