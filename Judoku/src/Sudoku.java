@@ -345,8 +345,8 @@ public class Sudoku implements INumberPuzzle {
 	}
 
 	public int[] searchMistake() {
-		for(int x = 0; x < 9; x++){
-			for(int y = 0; y < 9; y++){
+		for(int x = 0; x < SIZE; x++){
+			for(int y = 0; y < SIZE; y++){
 				if(this.recentGrid[y][x] != 0 && this.recentGrid[y][x] != this.solvedGrid[y][x]){
 					int[] mistake = new int[2];
 					mistake[0] = x;
