@@ -6,117 +6,57 @@ public class Sudoku implements INumberPuzzle {
 	private int[][] solvedGrid;
 	private int[][] recentGrid;
 	final Difficulty DIFFICULTY;
+
+	// CARREE_SIZE eines Sudoku = sqrt(SIZE)
+	final static int CARREE_SIZE = 3;
 	final static int SIZE = 9;
-	
+
 	public Sudoku(long seed) {
 		this.DIFFICULTY = generate(seed);
 	}
 
-	public Sudoku(Difficulty dif){
+	public Sudoku(Difficulty dif) {
 		Difficulty realDiff;
 		int i = 0;
-		do{
+		do {
 			Random prng = new Random();
 			realDiff = generate(prng.nextLong());
 			i++;
-		}while(realDiff != dif && i < 5);
-		
+		} while (realDiff != dif && i < 5);
+
 		this.DIFFICULTY = realDiff;
 	}
-	
+
 	private Difficulty generate(long seed) {
 		Random prng = new Random(seed);
-		int[][] buildArray = new int[SIZE][SIZE];
 
-		// Schritt 1: Setze die Zahlen 1 bis 8 an beliebige Plï¿½tze
-		for (int i = 1; i <= 8; i++) {
-			int x = prng.nextInt(SIZE);
-			int y = prng.nextInt(SIZE);
-			while (buildArray[y][x] != 0) {
-				x = prng.nextInt();
-				y = prng.nextInt();
-			}
-			buildArray[y][x] = i;
-		}
+		// Schritt 1 und 2 -> Generiere ein gelöstes Sudoku
+		solvedGrid = generateSolvedGrid(prng);
 
-		// Schritt 2: Finde mï¿½gliche Lï¿½sung per Backtracking
-
-		startGrid = buildArray;
-		this.solve();
-		int[][] solved = Arrays.copyOf(startGrid, startGrid.length);
+		int[][] templateSdk = Controller.deepCopy(solvedGrid);
 
 		// Schritt 3 entferne genau 3 beliebige elemente
-		for (int i = 0; i < 3; i++) {
-			int x = prng.nextInt(SIZE);
-			int y = prng.nextInt(SIZE);
-			solved[y][x] = 0;
+		for (int i = 0; i < 3;) {
+			if(removeRandomElement(templateSdk, prng)){
+				i++;
+			}
 		}
 
-		// Schritt 4 entferne aus jeder vollstï¿½ndigen Spalte, Zeile und Karee
+		// Schritt 4 entferne aus jeder vollstaendigen Spalte, Zeile und Karee
 		// genau ein Element
-
-		// erst die zeilen
-		for (int i = 0; i < SIZE; i++) {
-			boolean lineComplete = true;
-			for (int e = 0; e < SIZE; e++) {
-				if (solved[i][e] == 0) {
-					lineComplete = false;
-					break;
-				}
-			}
-			if (lineComplete) {
-				int x = prng.nextInt(SIZE);
-				solved[i][x] = 0;
-			}
-		}
-
-		// dann die spalten
-		for (int i = 0; i < SIZE; i++) {
-			boolean columnComplete = true;
-			for (int e = 0; e < SIZE; e++) {
-				if (solved[e][i] == 0) {
-					columnComplete = false;
-					break;
-				}
-			}
-			if (columnComplete) {
-				int y = prng.nextInt(SIZE);
-				solved[y][i] = 0;
-			}
-		}
-
-		// Aus jedem vollstï¿½ndigen Carre eine zahl entfernen
-		for (int i = 0; i < SIZE; i = i + 3) {
-			for (int e = 0; e < SIZE; e = e + 3) {
-				boolean carreeComplete = true;
-				for (int xos = 0; xos < 3; xos++) { // x Offset
-					for (int yos = 0; yos < 3; yos++) { // y Offset
-						if (solved[i + yos][e + xos] == 0) {
-							carreeComplete = false;
-							break; // Lohnt sich das hier? Breaked nur die
-									// innerste Schleife
-						}
-					}
-				}
-				if (carreeComplete) {
-					int x = prng.nextInt(3);
-					int y = prng.nextInt(3);
-					solved[i + y][e + x] = 0;
-				}
-			}
-		}
-
+		cutCompleteStructures(templateSdk,prng);
+		
 		// Schritt 5 Regelbasiertes Streichen
 
 		// Schneide jede Zahl die in ihren nachbarzellen alle anderen werte
 		// schon vergeben hat
 		for (int x = 0; x < SIZE; x++) {
 			for (int y = 0; y < SIZE; y++) {
-				int save = solved[y][x];
-				solved[y][x] = 0;
+				int save = templateSdk[y][x];
+				templateSdk[y][x] = 0;
 				for (int i = 1; i < SIZE; i++) {
-					if (i != save && legal(x, y, i, solved)) {
-						solved[y][x] = save;
+					if (i != save && legal(x, y, i, templateSdk)) {
+						templateSdk[y][x] = save;
 						break;
 					}
 				}
@@ -127,9 +67,9 @@ public class Sudoku implements INumberPuzzle {
 		// Spalte / Karree ausgeschlossen ist.
 		for (int x = 0; x < SIZE; x++) {
 			for (int y = 0; y < SIZE; y++) {
-				if (solved[y][x] != 0) {
-					int cutCandidate = solved[y][x];
-					solved[y][x] = 0;
+				if (templateSdk[y][x] != 0) {
+					int cutCandidate = templateSdk[y][x];
+					templateSdk[y][x] = 0;
 
 					boolean rowCuttable = true;
 					boolean columnCuttable = true;
@@ -137,9 +77,10 @@ public class Sudoku implements INumberPuzzle {
 
 					// Zeilen
 					for (int x1 = 0; x1 < SIZE; x1++) {
-						if (solved[y][x1] == 0
+						if (templateSdk[y][x1] == 0
 								&& x1 != x
-								&& !isNeighbouredBy(x1, y, cutCandidate, solved)) {
+								&& !isNeighbouredBy(x1, y, cutCandidate,
+										templateSdk)) {
 							rowCuttable = false;
 							break;
 						}
@@ -147,9 +88,10 @@ public class Sudoku implements INumberPuzzle {
 
 					// Spalten
 					for (int y1 = 0; y1 < SIZE; y1++) {
-						if (solved[y1][x] == 0
+						if (templateSdk[y1][x] == 0
 								&& y1 != y
-								&& !isNeighbouredBy(x, y1, cutCandidate, solved)) {
+								&& !isNeighbouredBy(x, y1, cutCandidate,
+										templateSdk)) {
 							columnCuttable = false;
 							break;
 						}
@@ -166,7 +108,7 @@ public class Sudoku implements INumberPuzzle {
 					 */
 
 					if (!(rowCuttable || columnCuttable || false)) {
-						solved[y][x] = cutCandidate;
+						templateSdk[y][x] = cutCandidate;
 					}
 				}
 			}
@@ -176,26 +118,111 @@ public class Sudoku implements INumberPuzzle {
 
 		for (int x = 0; x < SIZE; x++) {
 			for (int y = 0; y < SIZE; y++) {
-				if (solved[y][x] != 0) {
-					int cutCandidate = solved[y][x];
-					solved[y][x] = 0;
+				if (templateSdk[y][x] != 0) {
+					int cutCandidate = templateSdk[y][x];
+					templateSdk[y][x] = 0;
 					int[][] copy = new int[SIZE][SIZE];
 					for (int i = 0; i < SIZE; i++) {
-						copy[i] = Arrays.copyOf(solved[i], solved[i].length);
+						copy[i] = Arrays.copyOf(templateSdk[i],
+								templateSdk[i].length);
 					}
 					if (hasMultipleSolutions(0, 0, copy, 0) != 1) {
-						solved[y][x] = cutCandidate;
+						templateSdk[y][x] = cutCandidate;
 					}
 				}
 			}
 		}
 
-		// Idee fï¿½r difficulty -> Leicht ohne zufallsschneiden, mittel mit 1-2x
+		// Idee fuer difficulty -> Leicht ohne zufallsschneiden, mittel mit
+		// 1-2x
 		// zufallsschneiden und schwer mit viel zufallsschneiden, extrem testen
 		// ob nicht zu lange zum generieren braucht
 
-		this.startGrid = solved;
+		this.startGrid = templateSdk;
 		return Difficulty.EASY;
+	}
+
+	private static int[][] generateSolvedGrid(Random prng) {
+		int[][] solvedGrid = new int[SIZE][SIZE];
+
+		// Schritt 1: Setze die Zahlen 1 bis 8 an beliebige Plaetze
+		for (int i = 1; i <= 8; i++) {
+			int x = prng.nextInt(SIZE);
+			int y = prng.nextInt(SIZE);
+			while (solvedGrid[y][x] != 0) {
+				x = prng.nextInt();
+				y = prng.nextInt();
+			}
+			solvedGrid[y][x] = i;
+		}
+
+		// Schritt 2: Finde ein Element aus der Menge aller möglichen Lösungen
+		// per Backtracking
+		solve(0, 0, solvedGrid);
+
+		return solvedGrid;
+	}
+
+	private static boolean removeRandomElement(int[][] sudoku, Random prng){
+		int x = prng.nextInt(SIZE);
+		int y = prng.nextInt(SIZE);
+		if(sudoku[y][x] != 0){
+			sudoku[y][x] = 0;
+			return true;
+		}
+		return false;
+	}
+
+	private static void cutCompleteStructures(int[][] sudoku, Random prng){
+		// erst die zeilen
+		for (int i = 0; i < SIZE; i++) {
+			boolean lineComplete = true;
+			for (int e = 0; e < SIZE; e++) {
+				if (sudoku[i][e] == 0) {
+					lineComplete = false;
+					break;
+				}
+			}
+			if (lineComplete) {
+				int x = prng.nextInt(SIZE);
+				sudoku[i][x] = 0;
+			}
+		}
+
+		// dann die spalten
+		for (int i = 0; i < SIZE; i++) {
+			boolean columnComplete = true;
+			for (int e = 0; e < SIZE; e++) {
+				if (sudoku[e][i] == 0) {
+					columnComplete = false;
+					break;
+				}
+			}
+			if (columnComplete) {
+				int y = prng.nextInt(SIZE);
+				sudoku[y][i] = 0;
+			}
+		}
+
+		// Aus jedem vollstaendigen Carre eine zahl entfernen
+		for (int i = 0; i < SIZE; i = i + CARREE_SIZE) {
+			for (int e = 0; e < SIZE; e = e + CARREE_SIZE) {
+				boolean carreeComplete = true;
+				for (int xos = 0; xos < CARREE_SIZE; xos++) { // x Offset
+					for (int yos = 0; yos < CARREE_SIZE; yos++) { // y Offset
+						if (sudoku[i + yos][e + xos] == 0) {
+							carreeComplete = false;
+							break; // Lohnt sich das hier? Breaked nur die innerste Schleife
+						}
+					}
+				}
+				if (carreeComplete) {
+					int x = prng.nextInt(CARREE_SIZE);
+					int y = prng.nextInt(CARREE_SIZE);
+					sudoku[i + y][e + x] = 0;
+				}
+			}
+		}
 	}
 
 	private static boolean isNeighbouredBy(int x, int y, int val, int[][] sudoku) {
@@ -205,11 +232,11 @@ public class Sudoku implements INumberPuzzle {
 			}
 		}
 
-		int xos = (x / 3) * 3;
-		int yos = (y / 3) * 3;
+		int xos = (x / CARREE_SIZE) * CARREE_SIZE;
+		int yos = (y / CARREE_SIZE) * CARREE_SIZE;
 
-		for (int x1 = 0; x1 < 3; x1++) {
-			for (int y1 = 0; y1 < 3; y1++) {
+		for (int x1 = 0; x1 < CARREE_SIZE; x1++) {
+			for (int y1 = 0; y1 < CARREE_SIZE; y1++) {
 				if (sudoku[yos + y1][xos + x1] == val) {
 					return true;
 				}
@@ -219,7 +246,8 @@ public class Sudoku implements INumberPuzzle {
 		return false;
 	}
 
-	private static int hasMultipleSolutions(int x, int y, int[][] sudoku, int solutionsFound) {
+	private static int hasMultipleSolutions(int x, int y, int[][] sudoku,
+			int solutionsFound) {
 		if (x == SIZE) {
 			x = 0;
 			if (++y == SIZE)
@@ -231,7 +259,8 @@ public class Sudoku implements INumberPuzzle {
 		for (int val = 1; val <= SIZE && solutionsFound < 2; ++val) {
 			if (legal(x, y, val, sudoku)) {
 				sudoku[x][y] = val;
-				solutionsFound = hasMultipleSolutions(x + 1, y, sudoku, solutionsFound);
+				solutionsFound = hasMultipleSolutions(x + 1, y, sudoku,
+						solutionsFound);
 			}
 		}
 		sudoku[x][y] = 0; // reset on backtrack
@@ -278,11 +307,11 @@ public class Sudoku implements INumberPuzzle {
 			if (val == sudoku[y][k])
 				return false;
 
-		int boxRowOffset = (x / 3) * 3;
-		int boxColOffset = (y / 3) * 3;
-		for (int k = 0; k < 3; ++k)
+		int boxRowOffset = (x / CARREE_SIZE) * CARREE_SIZE;
+		int boxColOffset = (y / CARREE_SIZE) * CARREE_SIZE;
+		for (int k = 0; k < CARREE_SIZE; ++k)
 			// box
-			for (int m = 0; m < 3; ++m)
+			for (int m = 0; m < CARREE_SIZE; ++m)
 				if (val == sudoku[boxRowOffset + k][boxColOffset + m])
 					return false;
 
@@ -315,8 +344,20 @@ public class Sudoku implements INumberPuzzle {
 		return this.recentGrid;
 	}
 
-	public int[] markMistake() {
-		return new int[2];
+	public int[] searchMistake() {
+		for(int x = 0; x < 9; x++){
+			for(int y = 0; y < 9; y++){
+				if(this.recentGrid[y][x] != 0 && this.recentGrid[y][x] != this.solvedGrid[y][x]){
+					int[] mistake = new int[2];
+					mistake[0] = x;
+					mistake[1] = y;
+					return mistake;
+				}
+			}
+		}
+		
+		//No mistake found
+		return new int[0];
 	}
 
 	public void giveHint() {

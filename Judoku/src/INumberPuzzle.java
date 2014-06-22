@@ -9,7 +9,7 @@ public interface INumberPuzzle {
 
 	public void giveHint(); //Fill out an useful number
 	
-	public int[] markMistake(); //Check mistakes, if mistake found -> X and Y value; empty array means no mistakes. Check impl. with tupel
+	public int[] searchMistake(); //Check mistakes, if mistake found -> X and Y value; empty array means no mistakes. Check impl. with tupel
 	
 	public void reset();
 	
