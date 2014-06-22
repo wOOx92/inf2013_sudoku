@@ -11,4 +11,6 @@ public interface INumberPuzzle {
 	
 	public int[] markMistake(); //Check mistakes, if mistake found -> X and Y value; empty array means no mistakes. Check impl. with tupel
 	
+	public void reset();
+	
 }
