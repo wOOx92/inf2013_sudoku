@@ -1,8 +1,6 @@
 import java.util.Arrays;
 import java.util.Random;
 
-//Bis Dienstag -> Flo
-
 public class Sudoku implements INumberPuzzle {
 	private int[][] startGrid;
 	private int[][] solvedGrid;
@@ -30,7 +28,7 @@ public class Sudoku implements INumberPuzzle {
 		Random prng = new Random(seed);
 		int[][] buildArray = new int[SIZE][SIZE];
 
-		// Schritt 1: Setze die Zahlen 1 bis 8 an beliebige Plätze
+		// Schritt 1: Setze die Zahlen 1 bis 8 an beliebige Plï¿½tze
 		for (int i = 1; i <= 8; i++) {
 			int x = prng.nextInt(SIZE);
 			int y = prng.nextInt(SIZE);
@@ -41,7 +39,7 @@ public class Sudoku implements INumberPuzzle {
 			buildArray[y][x] = i;
 		}
 
-		// Schritt 2: Finde mögliche Lösung per Backtracking
+		// Schritt 2: Finde mï¿½gliche Lï¿½sung per Backtracking
 
 		startGrid = buildArray;
 		this.solve();
@@ -54,7 +52,7 @@ public class Sudoku implements INumberPuzzle {
 			solved[y][x] = 0;
 		}
 
-		// Schritt 4 entferne aus jeder vollständigen Spalte, Zeile und Karee
+		// Schritt 4 entferne aus jeder vollstï¿½ndigen Spalte, Zeile und Karee
 		// genau ein Element
 
 		// erst die zeilen
@@ -87,7 +85,7 @@ public class Sudoku implements INumberPuzzle {
 			}
 		}
 
-		// Aus jedem vollständigen Carre eine zahl entfernen
+		// Aus jedem vollstï¿½ndigen Carre eine zahl entfernen
 		for (int i = 0; i < SIZE; i = i + 3) {
 			for (int e = 0; e < SIZE; e = e + 3) {
 				boolean carreeComplete = true;
@@ -192,7 +190,7 @@ public class Sudoku implements INumberPuzzle {
 			}
 		}
 
-		// Idee für difficulty -> Leicht ohne zufallsschneiden, mittel mit 1-2x
+		// Idee fï¿½r difficulty -> Leicht ohne zufallsschneiden, mittel mit 1-2x
 		// zufallsschneiden und schwer mit viel zufallsschneiden, extrem testen
 		// ob nicht zu lange zum generieren braucht
 
