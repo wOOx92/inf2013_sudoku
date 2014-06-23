@@ -3,23 +3,64 @@ import java.util.Random;
 import java.util.Stack;
 
 public class Sudoku implements INumberPuzzle {
+	/**
+	 * This array saves the state of the Sudoku at the beginning.
+	 */
 	private int[][] startGrid;
+	
+	/**
+	 * This array saves the state of the solved Sudoku.
+	 */
 	private int[][] solvedGrid;
+	
+	/**
+	 * This array saves the recent state of the Sudoku.
+	 */
 	private int[][] recentGrid;
+	
+	/**
+	 * This field saves the rating of the difficulty of this Sudoku.
+	 */
 	final Difficulty DIFFICULTY;
 
-	// CARREE_SIZE eines Sudoku = sqrt(SIZE)
+	/**
+	 * This field is the side-length of a carree in a Sudoku. 
+	 */
 	final static int CARREE_SIZE = 3;
+	
+	/**
+	 *The side-length of a Sudoku grid.
+	 */
 	final static int SIZE = 9;
+	
+	/**
+	 * The maximum of steps a user can go back and forth.
+	 */
 	final static int UNDOLIMIT = 5;
 	
+	/**
+	 * Stores the previous states of this Sudoku
+	 */
 	private Stack<int[][]> undoStorage = new Stack<int[][]>();
+	
+	/**
+	 * Stores the states of the Sudoku for redoing.
+	 */
 	private Stack<int[][]> redoStorage = new Stack<int[][]>();
 	
+	/**
+	 * Creates an instance of Sudoku.
+	 * @param seed The seed for the (P)RNG that is used for constructing this instance.
+	 * @param diff The desired difficulty of this Sudoku.
+	 */
 	public Sudoku(long seed, Difficulty diff) {
 		this.DIFFICULTY = generate(seed, diff);
 	}
 
+	/**
+	 * Creates an instance of Sudoku.
+	 * @param diff The desired difficulty.
+	 */
 	public Sudoku(Difficulty diff) {
 		Difficulty realDiff;
 		int i = 0;
@@ -32,6 +73,12 @@ public class Sudoku implements INumberPuzzle {
 		this.DIFFICULTY = realDiff;
 	}
 
+	/**
+	 * Tries to generate a Sudoku of the desired difficulty.
+	 * @param seed The seed for the (P)RNG that is used to construct the Sudoku.
+	 * @param diff The desired difficulty of the Sudoku.
+	 * @return The actual difficulty of the generated Sudoku.
+	 */
 	private Difficulty generate(long seed, Difficulty diff) {
 		Random prng = new Random(seed);
 
@@ -122,7 +169,7 @@ public class Sudoku implements INumberPuzzle {
 		}*/
 
 		// Zufallsbasiertes Schneiden
-		doRandomCutting(templateSdk, prng, diff.toRandomCuttingIndex());
+		doRandomCutting(templateSdk, diff.toRandomCuttingIndex());
 		
 		// Testen welche Schwierigkeit erreicht wurde
 
@@ -147,6 +194,11 @@ public class Sudoku implements INumberPuzzle {
 		return Difficulty.HARD;
 	}
 
+	/**
+	 * Generates a solved Sudoku grid.
+	 * @param prng The (P)RNG used to generate the grid.
+	 * @return A completely and correctly filled Sudoku grid.
+	 */
 	private static int[][] generateSolvedGrid(Random prng) {
 		int[][] solvedGrid = new int[SIZE][SIZE];
 
@@ -168,6 +220,12 @@ public class Sudoku implements INumberPuzzle {
 		return solvedGrid;
 	}
 
+	/**
+	 * Sets a random element from the sudoku grid to 0
+	 * @param sudoku The sudoku grid which gets modified.
+	 * @param prng The Random Number Generator used to generate the random variables.
+	 * @return
+	 */
 	private static boolean removeRandomElement(int[][] sudoku, Random prng) {
 		int x = prng.nextInt(SIZE);
 		int y = prng.nextInt(SIZE);
@@ -178,6 +236,11 @@ public class Sudoku implements INumberPuzzle {
 		return false;
 	}
 
+	/**
+	 * Cuts out one element from the Sudoku grid.
+	 * @param sudoku The Sudoku which gets modified.
+	 * @param prng The Random Number Generator used to generate the random variables.
+	 */
 	private static void cutCompleteStructures(int[][] sudoku, Random prng) {
 		// erst die zeilen
 		for (int i = 0; i < SIZE; i++) {
@@ -231,6 +294,11 @@ public class Sudoku implements INumberPuzzle {
 		}
 	}
 
+	/**
+	 * Calculates the number of clues in a Sudoku grid.
+	 * @param sudoku The Sudoku grid.
+	 * @return The amount of given clues.
+	 */
 	public static int getNumberOfClues(int[][] sudoku){
 		int clues = 0;
 		for(int x = 0; x < 9; x++){
@@ -243,6 +311,14 @@ public class Sudoku implements INumberPuzzle {
 		return clues;
 	}
 	
+	/**
+	 * Shows wether a certain cell in a Sudoku grid has a neighbouring cell containing a given value.
+	 * @param x The x-value of the cell in the Sudoku grid.
+	 * @param y The y-value of the cell in the Sudoku grid.
+	 * @param val The value which is searched for in the neighbouring cells.
+	 * @param sudoku The Sudoku grid.
+	 * @return True if there is a neighbour with the given value, false if not.
+	 */
 	private static boolean isNeighbouredBy(int x, int y, int val, int[][] sudoku) {
 		for (int i = 0; i < SIZE; i++) {
 			if (sudoku[i][x] == val || sudoku[y][i] == val) {
@@ -264,7 +340,12 @@ public class Sudoku implements INumberPuzzle {
 		return false;
 	}
 
-	private static void doRandomCutting(int[][] sudoku, Random prng, int maxCuts){
+	/**
+	 * Trys to cut out values which are not cuttable by deduction. Always checks wether this results in multiple solutions.
+	 * @param sudoku The sudoku grid to be cut.
+	 * @param maxCuts The maximum number of clues that get cut out.
+	 */
+	private static void doRandomCutting(int[][] sudoku, int maxCuts){
 		for (int x = 0; x < SIZE && maxCuts > 0; x++) {
 			for (int y = 0; y < SIZE && maxCuts > 0; y++) {
 				if (sudoku[y][x] != 0) {
@@ -286,6 +367,11 @@ public class Sudoku implements INumberPuzzle {
 		}
 	}
 	
+	/**
+	 * Adds random clues to make the Sudoku easier.
+	 * @param prng The Random Number Generator used to generate the random variables.
+	 * @param number The total amount of clues to add.
+	 */
 	private void addRandomClues(Random prng, int number){
 		while(number > 0){
 			int x = prng.nextInt(SIZE);
@@ -296,7 +382,16 @@ public class Sudoku implements INumberPuzzle {
 			}
 		}
 	}
-	
+
+	//TODO wrapper methode?
+	/**
+	 * Checks wether a given Sudoku has none, one or mutliple Solutions. The Sudoku grid will get modified.
+	 * @param x The x-value of the cell where possibilities will be applied.
+	 * @param y The y-value of the cell where possibilities will be applied.
+	 * @param sudoku The sudoku grid to be checked for solutions.
+	 * @param solutionsFound The amount of solutions found so far.
+	 * @return 0 if no solutions exist, 1 if the sudoku has a unique solutions, >1 if multiple solutions where found (not neccesarily the actual amount of solutions).
+	 */
 	private static int hasMultipleSolutions(int x, int y, int[][] sudoku,
 			int solutionsFound) {
 		if (x == SIZE) {
@@ -318,6 +413,7 @@ public class Sudoku implements INumberPuzzle {
 		return solutionsFound;
 	}
 
+	//TODO: nicht mehr gebraucht?
 	private boolean solve() {
 		int[][] buffer = Arrays.copyOf(this.startGrid, this.startGrid.length);
 		if (solve(0, 0, buffer)) {
@@ -327,6 +423,13 @@ public class Sudoku implements INumberPuzzle {
 		return false;
 	}
 
+	/**
+	 * Tries to find the first element in all the possible solutions of this Sudoku.
+	 * @param x The x-value of the cell where possibilities will be applied.
+	 * @param y The y-value of the cell where possibilities will be applied.
+	 * @param sudoku The sudoku grid to be checked for solutions.
+	 * @return True if a solution was found, false if not.
+	 */
 	private static boolean solve(int x, int y, int[][] sudoku) {
 		if (x == SIZE) {
 			x = 0;
@@ -347,6 +450,14 @@ public class Sudoku implements INumberPuzzle {
 		return false;
 	}
 
+	/**
+	 * Checks wether a value is a possible candidate in a certain cell in a Sudoku grid.
+	 * @param x The x-value of the cell where the value is checked.
+	 * @param y The y-value of the cell where the value is checked.
+	 * @param val The value which is checked.
+	 * @param sudoku The Sudoku in which the value is checked.
+	 * @return True if the value is a possible candidate at this cell, false if not.
+	 */
 	private static boolean legal(int x, int y, int val, int[][] sudoku) {
 		for (int k = 0; k < SIZE; ++k)
 			// row
@@ -370,7 +481,12 @@ public class Sudoku implements INumberPuzzle {
 	}
 
 	public void reset() {
+		undoStorage.push(Controller.deepCopy(recentGrid));
+		if(undoStorage.size() > UNDOLIMIT){
+			undoStorage.remove(redoStorage.size()-1);
+		}
 		this.recentGrid = this.startGrid;
+		
 	}
 
 	public boolean trySetValue(int x, int y, int val) {
@@ -387,6 +503,9 @@ public class Sudoku implements INumberPuzzle {
 			return false;
 		}
 		undoStorage.push(Controller.deepCopy(recentGrid));
+		if(undoStorage.size() > UNDOLIMIT){
+			undoStorage.remove(redoStorage.size()-1);
+		}
 		this.recentGrid[y][x] = val;
 		return true;
 	}
@@ -437,3 +556,5 @@ public class Sudoku implements INumberPuzzle {
 		}
 	}
 }
+
+//TODO prüfen ob undo limit erreich in extra methode
