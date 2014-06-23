@@ -4,7 +4,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
-
+//Resizable with LayoutManager
 public class GUI_Window {
 
 	private JFrame frame;
