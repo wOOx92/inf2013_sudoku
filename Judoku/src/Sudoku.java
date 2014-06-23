@@ -2,6 +2,12 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.Stack;
 
+/**
+ * This class represents Sudokus.
+ * @author Dennis Uteg, Florian Steurer, Markus Wingler, Michael Jauch
+ * The generate and solving algorithms used are originate from:
+ * https://www.hochschule-trier.de/uploads/tx_rfttheses/Eckart_Sussenburger_-_Loesungs-_und_Generierungsalgorithmen_fuer_Sudoku.pdf
+ */
 public class Sudoku implements INumberPuzzle {
 	/**
 	 * This array saves the state of the Sudoku at the beginning.
