@@ -20,4 +20,14 @@ public enum Difficulty {
 		}
 		return 3;
 	}
+	
+	public int toRandomCuttingIndex(){
+		if(this == EASY){
+			return 0;
+		}
+		if(this == MEDIUM){
+			return 2;
+		}
+		return 81;
+	}
 }
