@@ -139,16 +139,27 @@ public class Sudoku implements INumberPuzzle {
 			}
 		}
 		
-		//Testen welche Schwierigkeit erreicht wurde
-		
-		
-		// Idee fuer difficulty -> Leicht ohne zufallsschneiden, mittel mit
-		// 1-2x
-		// zufallsschneiden und schwer mit viel zufallsschneiden, extrem testen
-		// ob nicht zu lange zum generieren braucht
+		// Testen welche Schwierigkeit erreicht wurde
 
+		int clues = getNumberOfClues(templateSdk);
+		int missingClues = diff.minNumberOfClues() - clues;
+		
 		this.startGrid = templateSdk;
-		return Difficulty.EASY;
+		addRandomClues(prng, missingClues);
+		
+		if (clues >= 30) {
+			return Difficulty.EASY;
+		}
+		else if (diff == Difficulty.EASY) {		
+			return Difficulty.EASY;
+		}
+		else if (diff == Difficulty.MEDIUM) {
+			return Difficulty.MEDIUM;
+		}
+		else if (clues >= 20) {
+			return Difficulty.EXTREME;
+		}
+		return Difficulty.HARD;
 	}
 
 	private static int[][] generateSolvedGrid(Random prng) {
@@ -268,6 +279,17 @@ public class Sudoku implements INumberPuzzle {
 		return false;
 	}
 
+	private void addRandomClues(Random prng, int number){
+		while(number > 0){
+			int x = prng.nextInt(SIZE);
+			int y = prng.nextInt(SIZE);
+			if(this.startGrid[y][x] == 0){
+				startGrid[y][x] = solvedGrid[y][x];
+				number--;
+			}
+		}
+	}
+	
 	private static int hasMultipleSolutions(int x, int y, int[][] sudoku,
 			int solutionsFound) {
 		if (x == SIZE) {
