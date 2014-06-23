@@ -82,97 +82,23 @@ public class Sudoku implements INumberPuzzle {
 	private Difficulty generate(long seed, Difficulty diff) {
 		Random prng = new Random(seed);
 
-		// Schritt 1 und 2 -> Generiere ein gelöstes Sudoku
+		// Generiere ein gelöstes Sudoku
 		solvedGrid = generateSolvedGrid(prng);
-
 		int[][] templateSdk = Controller.deepCopy(solvedGrid);
 
-		// Schritt 3 entferne genau 3 beliebige elemente
+		// Entferne genau 3 beliebige elemente
 		for (int i = 0; i < 3;) {
 			if (removeRandomElement(templateSdk, prng)) {
 				i++;
 			}
 		}
 
-		// Schritt 4 entferne aus jeder vollstaendigen Spalte, Zeile und Karee
-		// genau ein Element
 		cutCompleteStructures(templateSdk, prng);
-
-		// Schritt 5 Regelbasiertes Streichen
-
-		// Schneide jede Zahl die in ihren nachbarzellen alle anderen werte
-		// schon vergeben hat
-		for (int x = 0; x < SIZE; x++) {
-			for (int y = 0; y < SIZE; y++) {
-				int save = templateSdk[y][x];
-				templateSdk[y][x] = 0;
-				for (int i = 1; i < SIZE; i++) {
-					if (i != save && legal(x, y, i, templateSdk)) {
-						templateSdk[y][x] = save;
-						break;
-					}
-				}
-			}
-		}
-
-		//TODO Testen ob IMMER eindeutig bleibt, evtl ist implementierung dieser regel falsch, bei CARREES funktioniert es bisher noch nicht
-		
-		// Schneide jede Zahl die in allen anderen leeren Zellen ihrer Zeile /
-		// Spalte / Karree ausgeschlossen ist.
-		/*for (int x = 0; x < SIZE; x++) {
-			for (int y = 0; y < SIZE; y++) {
-				if (templateSdk[y][x] != 0) {
-					int cutCandidate = templateSdk[y][x];
-					templateSdk[y][x] = 0;
-
-					boolean rowCuttable = true;
-					boolean columnCuttable = true;
-					boolean carreeCuttable = true;
-
-					// Zeilen
-					for (int x1 = 0; x1 < SIZE; x1++) {
-						if (templateSdk[y][x1] == 0
-								&& x1 != x
-								&& !isNeighbouredBy(x1, y, cutCandidate,
-										templateSdk)) {
-							rowCuttable = false;
-							break;
-						}
-					}
-
-					// Spalten
-					for (int y1 = 0; y1 < SIZE; y1++) {
-						if (templateSdk[y1][x] == 0
-								&& y1 != y
-								&& !isNeighbouredBy(x, y1, cutCandidate,
-										templateSdk)) {
-							columnCuttable = false;
-							break;
-						}
-					}
-
-					/*
-					 * //Carrees int xos = (x/3)*3; int yos = (y/3)*3;
-					 * 
-					 * for(int x1 = 0; x1 < 3; x1++){ for(int y1 = 0; y1 < 3;
-					 * y1++){ if(solved[yos+y1][xos+x1] == 0 && xos+x1 != x &&
-					 * yos+y1 != y &&
-					 * !isNeighbouredBy(xos+x1,yos+y1,cutCandidate,solved)){
-					 * carreeCuttable = false; break; } } }
-					 
-
-					if (!(rowCuttable || columnCuttable || false)) {
-						templateSdk[y][x] = cutCandidate;
-					}
-				}
-			}
-		}*/
-
-		// Zufallsbasiertes Schneiden
+		cutDeductively(templateSdk);
+		cutWithNeighbourRule(templateSdk);
 		doRandomCutting(templateSdk, diff.toRandomCuttingIndex());
 		
 		// Testen welche Schwierigkeit erreicht wurde
-
 		int clues = getNumberOfClues(templateSdk);
 		int missingClues = diff.minNumberOfClues() - clues;
 		
@@ -299,7 +225,7 @@ public class Sudoku implements INumberPuzzle {
 	 * @param sudoku The Sudoku grid.
 	 * @return The amount of given clues.
 	 */
-	public static int getNumberOfClues(int[][] sudoku){
+	private static int getNumberOfClues(int[][] sudoku){
 		int clues = 0;
 		for(int x = 0; x < 9; x++){
 			for(int y = 0; y < 9; y++){
@@ -311,6 +237,84 @@ public class Sudoku implements INumberPuzzle {
 		return clues;
 	}
 	
+	/**
+	 * Tries to cut out clues using the deductive cutting-rule "cut out a number if all possible values are already used in its neighbouring cells"
+	 * @param sudoku The Sudoku grid to be cut.
+	 */
+	private static void cutDeductively(int[][] sudoku){
+		for (int x = 0; x < SIZE; x++) {
+			for (int y = 0; y < SIZE; y++) {
+				int save = sudoku[y][x];
+				sudoku[y][x] = 0;
+				for (int i = 1; i < SIZE; i++) {
+					if (i != save && legal(x, y, i, sudoku)) {
+						sudoku[y][x] = save;
+						break;
+					}
+				}
+			}
+		}		
+	}
+	
+	/**
+	 * Tries to cut out clues using the deductive cutting-rule "cut out every number which is neighboured by each of its neighbours".
+	 * @param sudoku The Sudoku grid to be cut.
+	 */
+	private static void cutWithNeighbourRule(int[][] sudoku){
+		//TODO Testen ob IMMER eindeutig bleibt, evtl ist implementierung dieser regel falsch, bei CARREES funktioniert es bisher noch nicht
+		
+		// Schneide jede Zahl die in allen anderen leeren Zellen ihrer Zeile /
+		// Spalte / Karree ausgeschlossen ist.
+		for (int x = 0; x < SIZE; x++) {
+			for (int y = 0; y < SIZE; y++) {
+				if (sudoku[y][x] != 0) {
+					int cutCandidate = sudoku[y][x];
+					sudoku[y][x] = 0;
+
+					boolean rowCuttable = true;
+					boolean columnCuttable = true;
+					boolean carreeCuttable = true;
+
+					// Zeilen
+					for (int x1 = 0; x1 < SIZE; x1++) {
+						if (sudoku[y][x1] == 0
+								&& x1 != x
+								&& !isNeighbouredBy(x1, y, cutCandidate,
+										sudoku)) {
+							rowCuttable = false;
+							break;
+						}
+					}
+
+					// Spalten
+					for (int y1 = 0; y1 < SIZE; y1++) {
+						if (sudoku[y1][x] == 0
+								&& y1 != y
+								&& !isNeighbouredBy(x, y1, cutCandidate,
+										sudoku)) {
+							columnCuttable = false;
+							break;
+						}
+					}
+
+					/*
+					 * //Carrees int xos = (x/3)*3; int yos = (y/3)*3;
+					 * 
+					 * for(int x1 = 0; x1 < 3; x1++){ for(int y1 = 0; y1 < 3;
+					 * y1++){ if(solved[yos+y1][xos+x1] == 0 && xos+x1 != x &&
+					 * yos+y1 != y &&
+					 * !isNeighbouredBy(xos+x1,yos+y1,cutCandidate,solved)){
+					 * carreeCuttable = false; break; } } }
+					 */
+
+					if (!(rowCuttable || columnCuttable || false)) {
+						sudoku[y][x] = cutCandidate;
+					}
+				}
+			}
+		}		
+	}
+
 	/**
 	 * Shows wether a certain cell in a Sudoku grid has a neighbouring cell containing a given value.
 	 * @param x The x-value of the cell in the Sudoku grid.

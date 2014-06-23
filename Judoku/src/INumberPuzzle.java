@@ -1,3 +1,7 @@
+/**
+ * Every class implementing this interface can be presented by the Gui.
+ * @author Dennis Uteg, Florian Steurer, Markus Wingler, Michael Jauch
+ */
 public interface INumberPuzzle {
 	// Contains all methods, which are used by the Gui
 	
