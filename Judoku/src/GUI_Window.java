@@ -17,28 +17,16 @@ public class GUI_Window {
 	private JTextField[][] gameField = new JTextField[9][9];
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					GUI_Window window = new GUI_Window();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the application.
 	 */
 	public GUI_Window() {
 		initialize();
 	}
 
+	public JFrame getJFrame(){
+		return this.frame;
+	}
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */

@@ -1,15 +1,22 @@
+import java.awt.EventQueue;
 import java.util.Arrays;
 
 
 public class Controller {
-	public static void main (String[]args){
-		
+	public static void main(String[] args) {
+		initGui();
 	}
-	
 	public static void initGui(){
-		//creates GUI objects and sets the windows to visible
-		System.out.println("Hello World");
-		
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					GUI_Window window = new GUI_Window();
+					window.getJFrame().setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 	
 	public static int[][] deepCopy(int [][] template){
