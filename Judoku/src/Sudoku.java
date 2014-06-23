@@ -378,6 +378,11 @@ public class Sudoku implements INumberPuzzle {
 		}
 	}
 
+	/**
+	 * Checks wether a given Sudoku is uniquely solvable.
+	 * @param sudoku The sudoku to be checked.
+	 * @return True if only one solution exists, false if there are none or mutliple solutions.
+	 */
 	private static boolean hasUniqueSolution(int[][] sudoku){
 		int[][] copy = Controller.deepCopy(sudoku);
 		return (checkSolutions(0,0,copy,0) == 1);
