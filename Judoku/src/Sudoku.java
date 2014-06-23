@@ -351,12 +351,7 @@ public class Sudoku implements INumberPuzzle {
 				if (sudoku[y][x] != 0) {
 					int cutCandidate = sudoku[y][x];
 					sudoku[y][x] = 0;
-					int[][] copy = new int[SIZE][SIZE];
-					for (int i = 0; i < SIZE; i++) {
-						copy[i] = Arrays.copyOf(sudoku[i],
-								sudoku[i].length);
-					}
-					if (hasMultipleSolutions(0, 0, copy, 0) != 1) {
+					if (!hasUniqueSolution(sudoku)) {
 						sudoku[y][x] = cutCandidate;
 					}
 					else{
@@ -383,16 +378,20 @@ public class Sudoku implements INumberPuzzle {
 		}
 	}
 
-	//TODO wrapper methode?
+	private static boolean hasUniqueSolution(int[][] sudoku){
+		int[][] copy = Controller.deepCopy(sudoku);
+		return (checkSolutions(0,0,copy,0) == 1);
+	}
+	
 	/**
-	 * Checks wether a given Sudoku has none, one or mutliple Solutions. The Sudoku grid will get modified.
+	 * Checks wether a given Sudoku has none, one or mutliple Solutions per Backtracking. The Sudoku grid will get modified.
 	 * @param x The x-value of the cell where possibilities will be applied.
 	 * @param y The y-value of the cell where possibilities will be applied.
 	 * @param sudoku The sudoku grid to be checked for solutions.
 	 * @param solutionsFound The amount of solutions found so far.
 	 * @return 0 if no solutions exist, 1 if the sudoku has a unique solutions, >1 if multiple solutions where found (not neccesarily the actual amount of solutions).
 	 */
-	private static int hasMultipleSolutions(int x, int y, int[][] sudoku,
+	private static int checkSolutions(int x, int y, int[][] sudoku,
 			int solutionsFound) {
 		if (x == SIZE) {
 			x = 0;
@@ -400,12 +399,12 @@ public class Sudoku implements INumberPuzzle {
 				return 1 + solutionsFound;
 		}
 		if (sudoku[x][y] != 0) // skip filled cells
-			return hasMultipleSolutions(x + 1, y, sudoku, solutionsFound);
+			return checkSolutions(x + 1, y, sudoku, solutionsFound);
 
 		for (int val = 1; val <= SIZE && solutionsFound < 2; ++val) {
 			if (legal(x, y, val, sudoku)) {
 				sudoku[x][y] = val;
-				solutionsFound = hasMultipleSolutions(x + 1, y, sudoku,
+				solutionsFound = checkSolutions(x + 1, y, sudoku,
 						solutionsFound);
 			}
 		}
@@ -424,7 +423,7 @@ public class Sudoku implements INumberPuzzle {
 	}
 
 	/**
-	 * Tries to find the first element in all the possible solutions of this Sudoku.
+	 * Tries to find the first element in all the possible solutions of this Sudoku per Backtracking.
 	 * @param x The x-value of the cell where possibilities will be applied.
 	 * @param y The y-value of the cell where possibilities will be applied.
 	 * @param sudoku The sudoku grid to be checked for solutions.
