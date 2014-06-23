@@ -13,4 +13,8 @@ public interface INumberPuzzle {
 	
 	public void reset();
 	
+	public void undo();
+	
+	public void redo();
+	
 }

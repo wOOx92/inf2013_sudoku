@@ -1,5 +1,6 @@
 import java.util.Arrays;
 import java.util.Random;
+import java.util.Stack;
 
 public class Sudoku implements INumberPuzzle {
 	private int[][] startGrid;
@@ -10,7 +11,11 @@ public class Sudoku implements INumberPuzzle {
 	// CARREE_SIZE eines Sudoku = sqrt(SIZE)
 	final static int CARREE_SIZE = 3;
 	final static int SIZE = 9;
-
+	final static int UNDOLIMIT = 5;
+	
+	private Stack<int[][]> undoStorage = new Stack<int[][]>();
+	private Stack<int[][]> redoStorage = new Stack<int[][]>();
+	
 	public Sudoku(long seed, Difficulty diff) {
 		this.DIFFICULTY = generate(seed, diff);
 	}
@@ -117,27 +122,7 @@ public class Sudoku implements INumberPuzzle {
 		}*/
 
 		// Zufallsbasiertes Schneiden
-		
-		int maxCuts = diff.toRandomCuttingIndex();
-		for (int x = 0; x < SIZE && maxCuts > 0; x++) {
-			for (int y = 0; y < SIZE && maxCuts > 0; y++) {
-				if (templateSdk[y][x] != 0) {
-					int cutCandidate = templateSdk[y][x];
-					templateSdk[y][x] = 0;
-					int[][] copy = new int[SIZE][SIZE];
-					for (int i = 0; i < SIZE; i++) {
-						copy[i] = Arrays.copyOf(templateSdk[i],
-								templateSdk[i].length);
-					}
-					if (hasMultipleSolutions(0, 0, copy, 0) != 1) {
-						templateSdk[y][x] = cutCandidate;
-					}
-					else{
-						maxCuts--;
-					}
-				}
-			}
-		}
+		doRandomCutting(templateSdk, prng, diff.toRandomCuttingIndex());
 		
 		// Testen welche Schwierigkeit erreicht wurde
 
@@ -279,6 +264,28 @@ public class Sudoku implements INumberPuzzle {
 		return false;
 	}
 
+	private static void doRandomCutting(int[][] sudoku, Random prng, int maxCuts){
+		for (int x = 0; x < SIZE && maxCuts > 0; x++) {
+			for (int y = 0; y < SIZE && maxCuts > 0; y++) {
+				if (sudoku[y][x] != 0) {
+					int cutCandidate = sudoku[y][x];
+					sudoku[y][x] = 0;
+					int[][] copy = new int[SIZE][SIZE];
+					for (int i = 0; i < SIZE; i++) {
+						copy[i] = Arrays.copyOf(sudoku[i],
+								sudoku[i].length);
+					}
+					if (hasMultipleSolutions(0, 0, copy, 0) != 1) {
+						sudoku[y][x] = cutCandidate;
+					}
+					else{
+						maxCuts--;
+					}
+				}
+			}
+		}
+	}
+	
 	private void addRandomClues(Random prng, int number){
 		while(number > 0){
 			int x = prng.nextInt(SIZE);
@@ -379,9 +386,9 @@ public class Sudoku implements INumberPuzzle {
 		if (this.startGrid[y][x] != 0) {
 			return false;
 		}
+		undoStorage.push(Controller.deepCopy(recentGrid));
 		this.recentGrid[y][x] = val;
 		return true;
-
 	}
 
 	public int[][] getRecentGrid() {
@@ -407,5 +414,26 @@ public class Sudoku implements INumberPuzzle {
 
 	public void giveHint() {
 
+	}
+
+	public void undo(){
+		if(!undoStorage.empty()){
+			redoStorage.push(Controller.deepCopy(recentGrid));
+			if(redoStorage.size() > UNDOLIMIT){
+				redoStorage.remove(redoStorage.size()-1);
+			}
+			recentGrid = undoStorage.pop();
+			
+		}
+	}
+	
+	public void redo(){
+		if(!redoStorage.empty()){
+			undoStorage.push(Controller.deepCopy(recentGrid));
+			if(undoStorage.size() > UNDOLIMIT){
+				undoStorage.remove(undoStorage.size()-1);
+			}
+			recentGrid = redoStorage.pop();
+		}
 	}
 }
