@@ -142,7 +142,7 @@ public class GUI_Window {
         	if(e.getSource() == btnQuit){ 
                 frame.dispose();
             } else if(e.getSource() == btnNewGame){
-            		puzzle = new Sudoku(Difficulty.EASY);
+            		puzzle = new Sudoku(Difficulty.HARD);
             		btnHint.setEnabled(true);
             		btnUndo.setEnabled(true);
             		btnRedo.setEnabled(true);

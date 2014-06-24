@@ -23,13 +23,13 @@ public interface INumberPuzzle {
 	/**
 	 * Sets a useful hint in the recentGrid within the INumberPuzzle.
 	 */
-	public void giveHint(); //Fill out an useful number
+	public void giveHint();
 	
 	/**
 	 * Searches for wrong entries in the INumberPuzzle.
 	 * @return An array of size 2 with the x and y value of the mistake. An empty array if there are no mistakes.
 	 */
-	public int[] searchMistake(); //Check mistakes, if mistake found -> X and Y value; empty array means no mistakes. Check impl. with tupel
+	public int[] searchMistake();
 	
 	/**
 	 * Resets the INumberPuzzle to the initial state.

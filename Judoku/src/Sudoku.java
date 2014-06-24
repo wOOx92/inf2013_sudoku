@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.Random;
 import java.util.Stack;
 
@@ -102,14 +101,17 @@ public class Sudoku implements INumberPuzzle {
 		}
 
 		cutCompleteStructures(templateSdk, prng);
-		//cutDeductively(templateSdk);
-		
-		int cl = getNumberOfClues(templateSdk);
-		cutWithNeighbourRule(templateSdk);
-		System.out.println(getNumberOfClues(templateSdk) - cl + " removed");
-		System.out.println(hasUniqueSolution(templateSdk) + " has unique solutions");
 		
 		int clues1 = getNumberOfClues(templateSdk);
+		cutDeductively(templateSdk);
+		System.out.println(getNumberOfClues(templateSdk)-clues1 + "removed deductively");
+		
+		clues1 = getNumberOfClues(templateSdk);
+		cutWithNeighbourRule(templateSdk);
+		System.out.println(getNumberOfClues(templateSdk) - clues1 + " removed neighbour");
+		System.out.println(hasUniqueSolution(templateSdk) + " has unique solutions");
+		
+		clues1 = getNumberOfClues(templateSdk);
 		doRandomCutting(templateSdk, diff.toRandomCuttingIndex());
 		System.out.println(clues1 - getNumberOfClues(templateSdk) + " removed by rnd cutting");
 		
@@ -120,20 +122,16 @@ public class Sudoku implements INumberPuzzle {
 		this.startGrid = templateSdk;
 		addRandomClues(prng, missingClues);
 		
-		if (clues >= 30) {
+		//no random cutting has been done so its easy
+		if (clues >= Difficulty.EASY.minNumberOfClues()) {
 			return Difficulty.EASY;
 		}
-		else if (diff == Difficulty.EASY) {		
-			return Difficulty.EASY;
+		//if random cutting has been done and it has less clues than a medium rated Sudoku
+		else if (clues < Difficulty.MEDIUM.minNumberOfClues() && diff == Difficulty.HARD){
+			return Difficulty.HARD;
 		}
-		else if (diff == Difficulty.MEDIUM) {
-			return Difficulty.MEDIUM;
-		}
-		//TODO clues <= 22 wahrsch zeitliches minimum, 23 wesentlich schneller.
-		else if (clues <= 22) {
-			return Difficulty.EXTREME;
-		}
-		return Difficulty.HARD;
+		//If its neither easy nor hard its medium
+		return Difficulty.MEDIUM;
 	}
 
 	/**
@@ -258,13 +256,12 @@ public class Sudoku implements INumberPuzzle {
 	 * @param sudoku The Sudoku grid to be cut.
 	 */
 	private static void cutDeductively(int[][] sudoku){
-		
 		for (int x = 0; x < SIZE; x++) {
 			for (int y = 0; y < SIZE; y++) {
 				int save = sudoku[y][x];
 				sudoku[y][x] = 0;
-				for (int i = 1; i < SIZE; i++) {
-					if (i != save && legal(x, y, i, sudoku)) {
+				for (int i = 1; i <= SIZE; i++) {
+					if (i != save && legal(y, x, i, sudoku)) {
 						sudoku[y][x] = save;
 						break;
 					}
@@ -436,16 +433,6 @@ public class Sudoku implements INumberPuzzle {
 		}
 		sudoku[x][y] = 0; // reset on backtrack
 		return solutionsFound;
-	}
-
-	//TODO: nicht mehr gebraucht?
-	private boolean solve() {
-		int[][] buffer = Arrays.copyOf(this.startGrid, this.startGrid.length);
-		if (solve(0, 0, buffer)) {
-			this.solvedGrid = buffer;
-			return true;
-		}
-		return false;
 	}
 
 	/**
