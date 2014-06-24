@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -7,6 +8,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.Document;
 //Resizable with LayoutManager
 public class GUI_Window {
 
@@ -21,6 +25,7 @@ public class GUI_Window {
 	private JButton btnUndo;
 	private JButton btnReset;
 	private JButton btnQuit;
+	private JButton btnHint;
 	
 	/**
 	 * Create the application.
@@ -69,7 +74,7 @@ public class GUI_Window {
 		}
 
 		
-		//ToDo: Progress bar?   [---->     ]
+		//TODO: Progress bar?   [---->     ]
 
 		
 		//Declare Buttons
@@ -81,28 +86,37 @@ public class GUI_Window {
 		btnReset = new JButton("Reset");
 		btnReset.setBounds(370, 50, 100, 40);
 		frame.getContentPane().add(btnReset);
-
+		btnReset.addActionListener(new ButtonLauscher());
+		btnReset.setEnabled(false);
+		
 		btnUndo = new JButton("Undo");
 		btnUndo.setBounds(370, 89, 100, 40);
 		frame.getContentPane().add( btnUndo);
-
+		btnUndo.addActionListener(new ButtonLauscher());
+		btnUndo.setEnabled(false);
+		
 		btnRedo = new JButton("Redo");
 		btnRedo.setBounds(370, 128, 100, 40);
 		frame.getContentPane().add(btnRedo);
-
+		btnRedo.addActionListener(new ButtonLauscher());
+		btnRedo.setEnabled(false); 
+		
+		btnHint = new JButton("Give Hint");
+		btnHint.setBounds(370, 167, 100, 40);
+		frame.getContentPane().add(btnHint);
+		btnHint.addActionListener(new ButtonLauscher()); 
+		btnHint.setEnabled(false);
+		
 		btnQuit = new JButton("Quit Game");
 		btnQuit.setBounds(370, 314, 100, 40);
 		frame.getContentPane().add(btnQuit);
 		btnQuit.addActionListener(new ButtonLauscher()); 
-   
-
+		
 		JTextPane txtpnNochVersuch = new JTextPane();
 		txtpnNochVersuch.setText("Noch 1 Versuch");
 		txtpnNochVersuch.setBounds(370, 245, 100, 40);
 		frame.getContentPane().add(txtpnNochVersuch);
 	}
-	
-	
 	
 	public void refreshView() {
 		int recentGrid[][] = this.puzzle.getRecentGrid();
@@ -117,28 +131,53 @@ public class GUI_Window {
 				}
 			}
 		}
-		
+	}
+	
+	public void giveHint(){
 		
 	}
 	
 	class ButtonLauscher implements ActionListener { 
         public void actionPerformed(ActionEvent e) { 
-            System.out.println("Button clicked");
         	if(e.getSource() == btnQuit){ 
                 frame.dispose();
             } else if(e.getSource() == btnNewGame){
-            	puzzle = new Sudoku(Difficulty.EASY);
-            	refreshView();
+            		puzzle = new Sudoku(Difficulty.EASY);
+            		btnHint.setEnabled(true);
+            		btnUndo.setEnabled(true);
+            		btnRedo.setEnabled(true);
+            		btnReset.setEnabled(true);
+            		
+            		refreshView();
+            } else if(e.getSource() == btnReset){
+            	if(puzzle != null){
+            		puzzle.reset();
+            		refreshView();
+            	}
+            } else if(e.getSource() == btnUndo){
+            	if(puzzle != null){
+            		puzzle.undo();
+            		refreshView();
+            	}
+            } else if(e.getSource() == btnRedo){
+            	if(puzzle != null){
+            		puzzle.redo();
+            		refreshView();
+            	}
+            } else if(e.getSource() == btnHint){
+            	if(puzzle != null){
+            		int[] coords = puzzle.searchMistake();
+            		if(coords.length == 0){
+            			puzzle.giveHint();
+            		}
+            		else{
+            			gameField[coords[1]][coords[0]].setBackground(Color.RED);
+            			refreshView();
+            		}
+            	}
             }
-            /*
-             *  else if(e.getSource() == nächster Buttonname){
-            	//hier action rein
-            	
-            }
-             */
         } 
     } 
-
 }
 
 

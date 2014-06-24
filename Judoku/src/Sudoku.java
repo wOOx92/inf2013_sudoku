@@ -70,12 +70,12 @@ public class Sudoku implements INumberPuzzle {
 	 */
 	public Sudoku(Difficulty diff) {
 		Difficulty realDiff;
+		Random prng = new Random();
 		int i = 0;
 		do {
-			Random prng = new Random();
 			realDiff = generate(prng.nextLong(), diff);
 			i++;
-		} while (realDiff != diff && i < 1);
+		} while (realDiff != diff && i < 20);
 
 		this.recentGrid = this.startGrid;
 		this.DIFFICULTY = realDiff;
@@ -102,9 +102,16 @@ public class Sudoku implements INumberPuzzle {
 		}
 
 		cutCompleteStructures(templateSdk, prng);
-		cutDeductively(templateSdk);
+		//cutDeductively(templateSdk);
+		
+		int cl = getNumberOfClues(templateSdk);
 		cutWithNeighbourRule(templateSdk);
+		System.out.println(getNumberOfClues(templateSdk) - cl + " removed");
+		System.out.println(hasUniqueSolution(templateSdk) + " has unique solutions");
+		
+		int clues1 = getNumberOfClues(templateSdk);
 		doRandomCutting(templateSdk, diff.toRandomCuttingIndex());
+		System.out.println(clues1 - getNumberOfClues(templateSdk) + " removed by rnd cutting");
 		
 		// Testen welche Schwierigkeit erreicht wurde
 		int clues = getNumberOfClues(templateSdk);
@@ -122,7 +129,8 @@ public class Sudoku implements INumberPuzzle {
 		else if (diff == Difficulty.MEDIUM) {
 			return Difficulty.MEDIUM;
 		}
-		else if (clues >= 20) {
+		//TODO clues <= 22 wahrsch zeitliches minimum, 23 wesentlich schneller.
+		else if (clues <= 22) {
 			return Difficulty.EXTREME;
 		}
 		return Difficulty.HARD;
@@ -250,6 +258,7 @@ public class Sudoku implements INumberPuzzle {
 	 * @param sudoku The Sudoku grid to be cut.
 	 */
 	private static void cutDeductively(int[][] sudoku){
+		
 		for (int x = 0; x < SIZE; x++) {
 			for (int y = 0; y < SIZE; y++) {
 				int save = sudoku[y][x];
@@ -268,9 +277,7 @@ public class Sudoku implements INumberPuzzle {
 	 * Tries to cut out clues using the deductive cutting-rule "cut out every number which is neighboured by each of its neighbours".
 	 * @param sudoku The Sudoku grid to be cut.
 	 */
-	private static void cutWithNeighbourRule(int[][] sudoku){
-		//TODO Testen ob IMMER eindeutig bleibt, evtl ist implementierung dieser regel falsch, bei CARREES funktioniert es bisher noch nicht
-		
+	private static void cutWithNeighbourRule(int[][] sudoku){	
 		// Schneide jede Zahl die in allen anderen leeren Zellen ihrer Zeile /
 		// Spalte / Karree ausgeschlossen ist.
 		for (int x = 0; x < SIZE; x++) {
@@ -304,23 +311,25 @@ public class Sudoku implements INumberPuzzle {
 							break;
 						}
 					}
-
-					/*
-					 * //Carrees int xos = (x/3)*3; int yos = (y/3)*3;
-					 * 
-					 * for(int x1 = 0; x1 < 3; x1++){ for(int y1 = 0; y1 < 3;
-					 * y1++){ if(solved[yos+y1][xos+x1] == 0 && xos+x1 != x &&
-					 * yos+y1 != y &&
-					 * !isNeighbouredBy(xos+x1,yos+y1,cutCandidate,solved)){
-					 * carreeCuttable = false; break; } } }
-					 */
+					
+					  //Carrees 
+					//TODO FUNKTIONIERT NICHT
+					int xos = (x/3)*3; 
+					int yos = (y/3)*3;
+					  
+					 for(int x1 = 0; x1 < 3; x1++){ for(int y1 = 0; y1 < 3;
+					  y1++){ if(sudoku[yos+y1][xos+x1] == 0 && xos+x1 != x &&
+					  yos+y1 != y &&
+					  !isNeighbouredBy(xos+x1,yos+y1,cutCandidate,sudoku)){
+					  carreeCuttable = false; break; } } }
+					 
 
 					if (!(rowCuttable || columnCuttable || false)) {
 						sudoku[y][x] = cutCandidate;
 					}
 				}
 			}
-		}		
+		}	
 	}
 
 	/**
