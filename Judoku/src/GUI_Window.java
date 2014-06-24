@@ -35,6 +35,7 @@ public class GUI_Window {
 		frame.setBounds(100, 100, 497, 413);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		frame.setTitle("Judoku 0.0.0.1");
 
 		// positioning and sizing the text fields
 		int xPosition = 10;
@@ -57,25 +58,25 @@ public class GUI_Window {
 			xPosition = xPosition + 38;
 		}
 
-		JButton btnNewButton = new JButton("New button");
-		btnNewButton.setBounds(370, 11, 100, 40);
-		frame.getContentPane().add(btnNewButton);
+		JButton btnNewGame = new JButton("New Game");
+		btnNewGame.setBounds(370, 11, 100, 40);
+		frame.getContentPane().add(btnNewGame);
 
-		JButton button = new JButton("New button");
-		button.setBounds(370, 50, 100, 40);
-		frame.getContentPane().add(button);
+		JButton btnReset = new JButton("Reset");
+		btnReset.setBounds(370, 50, 100, 40);
+		frame.getContentPane().add(btnReset);
 
-		JButton button_1 = new JButton("New button");
-		button_1.setBounds(370, 89, 100, 40);
-		frame.getContentPane().add(button_1);
+		JButton btnUndo = new JButton("Undo");
+		 btnUndo.setBounds(370, 89, 100, 40);
+		frame.getContentPane().add( btnUndo);
 
-		JButton button_2 = new JButton("New button");
-		button_2.setBounds(370, 128, 100, 40);
-		frame.getContentPane().add(button_2);
+		JButton btnRedo = new JButton("Redo");
+		btnRedo.setBounds(370, 128, 100, 40);
+		frame.getContentPane().add(btnRedo);
 
-		JButton button_3 = new JButton("New button");
-		button_3.setBounds(370, 167, 100, 40);
-		frame.getContentPane().add(button_3);
+		JButton btnQuit = new JButton("Quit Game");
+		btnQuit.setBounds(370, 314, 100, 40);
+		frame.getContentPane().add(btnQuit);
 
 		JTextPane txtpnNochVersuch = new JTextPane();
 		txtpnNochVersuch.setText("Noch 1 Versuch");
