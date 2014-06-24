@@ -58,6 +58,9 @@ public class GUI_Window {
 			xPosition = xPosition + 38;
 		}
 
+		
+		//ToDo: Progress bar?   [---->     ]
+
 		JButton btnNewGame = new JButton("New Game");
 		btnNewGame.setBounds(370, 11, 100, 40);
 		frame.getContentPane().add(btnNewGame);
