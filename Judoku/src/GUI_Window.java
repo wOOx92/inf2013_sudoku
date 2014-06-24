@@ -1,4 +1,7 @@
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -9,13 +12,16 @@ public class GUI_Window {
 
 	private JFrame frame;
 
-	// the gamefield
-
-	// private JTextField textField;
-	// private JTextField textField_1;
-	// private JTextField textField_2;
+	private INumberPuzzle puzzle;
 	private JTextField[][] gameField = new JTextField[9][9];
-
+	
+	//Initialise Buttons
+	private JButton btnNewGame;
+	private JButton btnRedo;
+	private JButton btnUndo;
+	private JButton btnReset;
+	private JButton btnQuit;
+	
 	/**
 	 * Create the application.
 	 */
@@ -49,6 +55,10 @@ public class GUI_Window {
 			for (int j = 0; j < 9; j++) {
 				gameField[i][j] = new JTextField();
 				gameField[i][j].setColumns(10);
+				//set font size in gameField
+				Font font = new Font("Arial", Font.BOLD, 32);
+				gameField[i][j].setFont(font);
+				gameField[i][j].setHorizontalAlignment(JTextField.CENTER);
 				gameField[i][j].setBounds(xPosition, yPosition, width, height);
 				frame.getContentPane().add(gameField[i][j]);
 				
@@ -61,29 +71,70 @@ public class GUI_Window {
 		
 		//ToDo: Progress bar?   [---->     ]
 
-		JButton btnNewGame = new JButton("New Game");
+		
+		//Declare Buttons
+		btnNewGame = new JButton("New Game");
 		btnNewGame.setBounds(370, 11, 100, 40);
 		frame.getContentPane().add(btnNewGame);
 
-		JButton btnReset = new JButton("Reset");
+		btnReset = new JButton("Reset");
 		btnReset.setBounds(370, 50, 100, 40);
 		frame.getContentPane().add(btnReset);
 
-		JButton btnUndo = new JButton("Undo");
+		btnUndo = new JButton("Undo");
 		 btnUndo.setBounds(370, 89, 100, 40);
 		frame.getContentPane().add( btnUndo);
 
-		JButton btnRedo = new JButton("Redo");
+		btnRedo = new JButton("Redo");
 		btnRedo.setBounds(370, 128, 100, 40);
 		frame.getContentPane().add(btnRedo);
 
-		JButton btnQuit = new JButton("Quit Game");
+		btnQuit = new JButton("Quit Game");
 		btnQuit.setBounds(370, 314, 100, 40);
 		frame.getContentPane().add(btnQuit);
+		btnQuit.addActionListener(new ButtonLauscher()); 
+   
 
 		JTextPane txtpnNochVersuch = new JTextPane();
 		txtpnNochVersuch.setText("Noch 1 Versuch");
 		txtpnNochVersuch.setBounds(370, 245, 100, 40);
 		frame.getContentPane().add(txtpnNochVersuch);
 	}
+	
+	
+	
+	public void refreshView() {
+		int recentGrid[][] = this.puzzle.getRecentGrid();
+		
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {	
+				gameField[i][j].setText(String.valueOf(recentGrid[i][j])); 
+			}
+		}
+		
+		
+	}
+	
+	class ButtonLauscher implements ActionListener { 
+        public void actionPerformed(ActionEvent e) { 
+            if(e.getSource() == btnQuit){ 
+                frame.dispose();
+            } else if(e.getSource() == btnNewGame){
+            	
+            	//what do to?
+            	gameField[1][1].setText("12"); 
+            	//jFrame.setVisible(true);
+            }
+            
+            /*
+             *  else if(e.getSource() == nächster Buttonname){
+            	//hier action rein
+            	
+            }
+             */
+        } 
+    } 
+
 }
+
+
