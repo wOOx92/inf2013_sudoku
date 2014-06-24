@@ -76,13 +76,14 @@ public class GUI_Window {
 		btnNewGame = new JButton("New Game");
 		btnNewGame.setBounds(370, 11, 100, 40);
 		frame.getContentPane().add(btnNewGame);
-
+		btnNewGame.addActionListener(new ButtonLauscher()); 
+		
 		btnReset = new JButton("Reset");
 		btnReset.setBounds(370, 50, 100, 40);
 		frame.getContentPane().add(btnReset);
 
 		btnUndo = new JButton("Undo");
-		 btnUndo.setBounds(370, 89, 100, 40);
+		btnUndo.setBounds(370, 89, 100, 40);
 		frame.getContentPane().add( btnUndo);
 
 		btnRedo = new JButton("Redo");
@@ -108,7 +109,12 @@ public class GUI_Window {
 		
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {	
-				gameField[i][j].setText(String.valueOf(recentGrid[i][j])); 
+				if(recentGrid[i][j] != 0){
+					gameField[i][j].setText(String.valueOf(recentGrid[i][j])); 
+				}
+				else{
+					gameField[i][j].setText("");
+				}
 			}
 		}
 		
@@ -117,15 +123,13 @@ public class GUI_Window {
 	
 	class ButtonLauscher implements ActionListener { 
         public void actionPerformed(ActionEvent e) { 
-            if(e.getSource() == btnQuit){ 
+            System.out.println("Button clicked");
+        	if(e.getSource() == btnQuit){ 
                 frame.dispose();
             } else if(e.getSource() == btnNewGame){
-            	
-            	//what do to?
-            	gameField[1][1].setText("12"); 
-            	//jFrame.setVisible(true);
+            	puzzle = new Sudoku(Difficulty.EASY);
+            	refreshView();
             }
-            
             /*
              *  else if(e.getSource() == nächster Buttonname){
             	//hier action rein

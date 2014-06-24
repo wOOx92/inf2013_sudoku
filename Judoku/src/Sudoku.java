@@ -61,6 +61,7 @@ public class Sudoku implements INumberPuzzle {
 	 */
 	public Sudoku(long seed, Difficulty diff) {
 		this.DIFFICULTY = generate(seed, diff);
+		this.recentGrid = this.startGrid;
 	}
 
 	/**
@@ -74,8 +75,9 @@ public class Sudoku implements INumberPuzzle {
 			Random prng = new Random();
 			realDiff = generate(prng.nextLong(), diff);
 			i++;
-		} while (realDiff != diff && i < 5);
+		} while (realDiff != diff && i < 1);
 
+		this.recentGrid = this.startGrid;
 		this.DIFFICULTY = realDiff;
 	}
 
@@ -139,8 +141,8 @@ public class Sudoku implements INumberPuzzle {
 			int x = prng.nextInt(SIZE);
 			int y = prng.nextInt(SIZE);
 			while (solvedGrid[y][x] != 0) {
-				x = prng.nextInt();
-				y = prng.nextInt();
+				x = prng.nextInt(SIZE);
+				y = prng.nextInt(SIZE);
 			}
 			solvedGrid[y][x] = i;
 		}
@@ -444,56 +446,45 @@ public class Sudoku implements INumberPuzzle {
 	 * @param sudoku The sudoku grid to be checked for solutions.
 	 * @return True if a solution was found, false if not.
 	 */
-	private static boolean solve(int x, int y, int[][] sudoku) {
-		if (x == SIZE) {
-			x = 0;
-			if (++y == SIZE)
-				return true;
-		}
-		if (sudoku[x][y] != 0) // skip filled cells
-			return solve(x + 1, y, sudoku);
+    private static boolean solve(int i, int j, int[][] cells) {
+        if (i == 9) {
+            i = 0;
+            if (++j == 9)
+                return true;
+        }
+        if (cells[i][j] != 0)  // skip filled cells
+            return solve(i+1,j,cells);
 
-		for (int val = 1; val <= SIZE; ++val) {
-			if (legal(x, y, val, sudoku)) {
-				sudoku[x][y] = val;
-				if (solve(x + 1, y, sudoku))
-					return true;
-			}
-		}
-		sudoku[x][y] = 0; // reset on backtrack
-		return false;
-	}
+        for (int val = 1; val <= 9; ++val) {
+            if (legal(i,j,val,cells)) {
+                cells[i][j] = val;
+                if (solve(i+1,j,cells))
+                    return true;
+            }
+        }
+        cells[i][j] = 0; // reset on backtrack
+        return false;
+    }
 
-	/**
-	 * Checks wether a value is a possible candidate in a certain cell in a Sudoku grid.
-	 * @param x The x-value of the cell where the value is checked.
-	 * @param y The y-value of the cell where the value is checked.
-	 * @param val The value which is checked.
-	 * @param sudoku The Sudoku in which the value is checked.
-	 * @return True if the value is a possible candidate at this cell, false if not.
-	 */
-	private static boolean legal(int x, int y, int val, int[][] sudoku) {
-		for (int k = 0; k < SIZE; ++k)
-			// row
-			if (val == sudoku[k][x])
-				return false;
+    private static boolean legal(int i, int j, int val, int[][] cells) {
+        for (int k = 0; k < 9; ++k)  // row
+            if (val == cells[k][j])
+                return false;
 
-		for (int k = 0; k < SIZE; ++k)
-			// col
-			if (val == sudoku[y][k])
-				return false;
+        for (int k = 0; k < 9; ++k) // col
+            if (val == cells[i][k])
+                return false;
 
-		int boxRowOffset = (x / CARREE_SIZE) * CARREE_SIZE;
-		int boxColOffset = (y / CARREE_SIZE) * CARREE_SIZE;
-		for (int k = 0; k < CARREE_SIZE; ++k)
-			// box
-			for (int m = 0; m < CARREE_SIZE; ++m)
-				if (val == sudoku[boxRowOffset + k][boxColOffset + m])
-					return false;
+        int boxRowOffset = (i / 3)*3;
+        int boxColOffset = (j / 3)*3;
+        for (int k = 0; k < 3; ++k) // box
+            for (int m = 0; m < 3; ++m)
+                if (val == cells[boxRowOffset+k][boxColOffset+m])
+                    return false;
 
-		return true; // no violations, so it's legal
-	}
-
+        return true; // no violations, so it's legal
+    }
+    
 	public void reset() {
 		undoStorage.push(Controller.deepCopy(recentGrid));
 		if(undoStorage.size() > UNDOLIMIT){
