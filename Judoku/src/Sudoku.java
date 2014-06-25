@@ -488,9 +488,7 @@ public class Sudoku implements INumberPuzzle {
     
 	public void reset() {
 		undoStorage.push(Controller.deepCopy(recentGrid));
-		if(undoStorage.size() > UNDOLIMIT){
-			undoStorage.remove(redoStorage.size()-1);
-		}
+		limitStack(undoStorage);
 		this.recentGrid = this.startGrid;
 		
 	}
@@ -509,9 +507,7 @@ public class Sudoku implements INumberPuzzle {
 			return false;
 		}
 		undoStorage.push(Controller.deepCopy(recentGrid));
-		if(undoStorage.size() > UNDOLIMIT){
-			undoStorage.remove(redoStorage.size()-1);
-		}
+		limitStack(undoStorage);
 		this.recentGrid[y][x] = val;
 		return true;
 	}
@@ -544,9 +540,7 @@ public class Sudoku implements INumberPuzzle {
 	public void undo(){
 		if(!undoStorage.empty()){
 			redoStorage.push(Controller.deepCopy(recentGrid));
-			if(redoStorage.size() > UNDOLIMIT){
-				redoStorage.remove(redoStorage.size()-1);
-			}
+			limitStack(redoStorage);
 			recentGrid = undoStorage.pop();
 			
 		}
@@ -555,12 +549,14 @@ public class Sudoku implements INumberPuzzle {
 	public void redo(){
 		if(!redoStorage.empty()){
 			undoStorage.push(Controller.deepCopy(recentGrid));
-			if(undoStorage.size() > UNDOLIMIT){
-				undoStorage.remove(undoStorage.size()-1);
-			}
+			limitStack(undoStorage);
 			recentGrid = redoStorage.pop();
 		}
 	}
+	
+	private <T> void limitStack(Stack<T> undoRedoStack){
+		if(undoRedoStack.size() > UNDOLIMIT){
+			undoRedoStack.remove(undoRedoStack.size()-1);
+		}
+	}
 }
-
-//TODO prüfen ob undo limit erreich in extra methode
