@@ -76,9 +76,9 @@ public class Sudoku implements NumberPuzzle {
 		Random prng = new Random();
 		int i = 0;
 		do {
-			long t = System.nanoTime();
+			//long t = System.nanoTime();
 			realDiff = generate(prng.nextLong(), diff);
-			System.out.println("Generated " + realDiff.toString() + " in " + (System.nanoTime() - t)/1000000 + "ms");
+			//System.out.println("Generated " + realDiff.toString() + " in " + (System.nanoTime() - t)/1000000 + "ms");
 			i++;
 		} while (realDiff != diff && i < 10);
 
@@ -94,7 +94,7 @@ public class Sudoku implements NumberPuzzle {
 	 */
 	private Difficulty generate(long seed, Difficulty diff) {
 		Random prng = new Random(seed);
-
+	
 		// Generiere ein gelöstes Sudoku
 		solvedGrid = generateSolvedGrid(prng);
 		int[][] templateSdk = Controller.deepCopy(solvedGrid);
@@ -304,6 +304,7 @@ public class Sudoku implements NumberPuzzle {
 						}
 					}
 					
+					//TODO jede zahl die hier geschnitte3n wird wird bereits durch die zeilen regel geschnitten
 					// Spalten
 					for (int y1 = 0; y1 < SIZE; y1++) {
 						if (sudoku[y1][x] == 0
@@ -544,7 +545,9 @@ public class Sudoku implements NumberPuzzle {
 	}
 
 	public void giveHint() {
-
+		do{
+			
+		} while(false);
 	}
 
 	public void undo(){

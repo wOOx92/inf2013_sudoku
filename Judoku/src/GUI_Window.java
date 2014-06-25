@@ -55,9 +55,19 @@ public class GUI_Window {
 		final int height = 40;
 
 		//draw the gamefield
+		
+		Color active = Color.WHITE;
+		Color toggle = Color.LIGHT_GRAY;
+		
 		for (int i = 0; i < 9; i++) {
 			yPosition = 10;
 			for (int j = 0; j < 9; j++) {
+				if(j%3 == 0){
+					Color buffer = active;
+					active = toggle;
+					toggle = buffer;
+				}
+				
 				gameField[i][j] = new JTextField();
 				gameField[i][j].setColumns(10);
 				//set font size in gameField
@@ -65,14 +75,18 @@ public class GUI_Window {
 				gameField[i][j].setFont(font);
 				gameField[i][j].setHorizontalAlignment(JTextField.CENTER);
 				gameField[i][j].setBounds(xPosition, yPosition, width, height);
+				gameField[i][j].setBackground(active);
 				frame.getContentPane().add(gameField[i][j]);
 				
 				yPosition = yPosition + 38;
 			}
-			
+			if((i+1)%3 != 0){
+				Color buffer = active;
+				active = toggle;
+				toggle = buffer;
+			}
 			xPosition = xPosition + 38;
 		}
-
 		
 		//TODO: Progress bar?   [---->     ]
 

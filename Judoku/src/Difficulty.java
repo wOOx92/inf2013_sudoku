@@ -42,7 +42,7 @@ public enum Difficulty{
 	 */
 	public int minNumberOfClues(){
 		if(this == EASY){
-			return 30;
+			return 32;
 		}
 		if(this == MEDIUM){
 			return 25;
