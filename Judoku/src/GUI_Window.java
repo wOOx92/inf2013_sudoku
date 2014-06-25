@@ -183,6 +183,7 @@ public class GUI_Window {
             		int[] coords = puzzle.searchMistake();
             		if(coords.length == 0){
             			puzzle.giveHint();
+            			refreshView();
             		}
             		else{
             			gameField[coords[1]][coords[0]].setBackground(Color.RED);

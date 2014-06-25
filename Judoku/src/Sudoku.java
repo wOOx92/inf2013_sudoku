@@ -64,7 +64,7 @@ public class Sudoku implements NumberPuzzle {
 	 */
 	public Sudoku(long seed, Difficulty diff) {
 		this.DIFFICULTY = generate(seed, diff);
-		this.recentGrid = this.startGrid;
+		this.recentGrid = Controller.deepCopy(this.startGrid);
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class Sudoku implements NumberPuzzle {
 			i++;
 		} while (realDiff != diff && i < 10);
 
-		this.recentGrid = this.startGrid;
+		this.recentGrid = Controller.deepCopy(this.startGrid);
 		this.DIFFICULTY = realDiff;
 	}
 
@@ -500,7 +500,7 @@ public class Sudoku implements NumberPuzzle {
 	public void reset() {
 		undoStorage.push(Controller.deepCopy(recentGrid));
 		limitStack(undoStorage);
-		this.recentGrid = this.startGrid;
+		this.recentGrid = Controller.deepCopy(this.startGrid);
 		
 	}
 
@@ -545,9 +545,16 @@ public class Sudoku implements NumberPuzzle {
 	}
 
 	public void giveHint() {
-		do{
-			
-		} while(false);
+		//TODO theoretisch unendliche laufzeit wegen random
+		Random prng = new Random();
+		while(getNumberOfClues(recentGrid) < 81){
+			int x = prng.nextInt(SIZE);
+			int y = prng.nextInt(SIZE);
+			if(recentGrid[y][x] == 0){
+				recentGrid[y][x] = solvedGrid[y][x];
+				break;
+			}
+		}
 	}
 
 	public void undo(){
