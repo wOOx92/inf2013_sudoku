@@ -8,7 +8,7 @@ import java.util.Stack;
  * https://www.hochschule-trier.de/uploads/tx_rfttheses/Eckart_Sussenburger_-_Loesungs-_und_Generierungsalgorithmen_fuer_Sudoku.pdf
  * http://www.sudokuwiki.org/sudoku.htm
  */
-public class Sudoku implements INumberPuzzle {
+public class Sudoku implements NumberPuzzle {
 	//TODO schwere sudokus die lange zu generieren bruachen erreichen meist nicht die gewünschte schwierigkeit. -> Generieren abbrechen und neustarten wenn zu lange braucht
 	
 	/**

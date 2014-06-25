@@ -16,7 +16,7 @@ public class GUI_Window {
 
 	private JFrame frame;
 
-	private INumberPuzzle puzzle;
+	private NumberPuzzle puzzle;
 	private JTextField[][] gameField = new JTextField[9][9];
 	
 	//Initialise Buttons

@@ -11,14 +11,14 @@
 //Ändert die Gui Table direkt das Objekt?
 
 public class Gui {
-	private INumberPuzzle gameField;
+	private NumberPuzzle gameField;
 	
 	//Wird aufgerufen wenn das gameField geändert wird oder resettet wird.
 	public void refreshView(){
 		
 	}
 	
-	public void setGameField(INumberPuzzle newGameField){
+	public void setGameField(NumberPuzzle newGameField){
 		this.gameField = newGameField;
 		refreshView();
 	}

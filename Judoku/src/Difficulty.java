@@ -3,7 +3,7 @@
  * @author Dennis Uteg, Florian Steurer, Markus Wingler, Michael Jauch
  * 
  */
-public enum Difficulty {
+public enum Difficulty{
 	EASY,		//Logisch geschnittene Sudokus mit 30 oder mehr Vorgaben
 	MEDIUM,		//Logisch geschnittene Sudokus mit 25-30 Vorgaben und 2x Zufallsschneiden
 	HARD;		//Vollstaendig geschnittene Sudokus mit 21-25 Vorgaben
