@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Stack;
 
@@ -302,29 +303,38 @@ public class Sudoku implements NumberPuzzle {
 							break;
 						}
 					}
-
+					
 					// Spalten
 					for (int y1 = 0; y1 < SIZE; y1++) {
 						if (sudoku[y1][x] == 0
 								&& y1 != y
-								&& !isNeighbouredBy(x, y1, cutCandidate,
-										sudoku)) {
+								&& !isNeighbouredBy(x, y1, cutCandidate, sudoku)) {
 							columnCuttable = false;
 							break;
 						}
 					}
 					
-					  //Carrees 
-					//TODO FUNKTIONIERT NICHT
-					int xos = (x/3)*3; 
-					int yos = (y/3)*3;
-					  
-					 for(int x1 = 0; x1 < 3; x1++){ for(int y1 = 0; y1 < 3;
-					  y1++){ if(sudoku[yos+y1][xos+x1] == 0 && xos+x1 != x &&
-					  yos+y1 != y &&
-					  !isNeighbouredBy(xos+x1,yos+y1,cutCandidate,sudoku)){
-					  carreeCuttable = false; break; } } }
-					 
+					for(int[] a : sudoku){
+						System.out.println(Arrays.toString(a));
+					}
+					
+					// Carrees
+					// TODO FUNKTIONIERT NICHT
+					int xos = (x / 3) * 3;
+					int yos = (y / 3) * 3;
+
+					for (int x1 = 0; x1 < 3; x1++) {
+						for (int y1 = 0; y1 < 3; y1++) {
+							if (sudoku[yos + y1][xos + x1] == 0
+									&& xos + x1 != x
+									&& yos + y1 != y
+									&& !isNeighbouredBy(xos + x1, yos + y1,
+											cutCandidate, sudoku)) {
+								carreeCuttable = false;
+								break;
+							}
+						}
+					}
 
 					if (!(rowCuttable || columnCuttable || false)) {
 						sudoku[y][x] = cutCandidate;
