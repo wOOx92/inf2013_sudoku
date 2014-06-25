@@ -6,6 +6,7 @@ import java.util.Stack;
  * @author Dennis Uteg, Florian Steurer, Markus Wingler, Michael Jauch
  * The generate and solving algorithms used are originate from:
  * https://www.hochschule-trier.de/uploads/tx_rfttheses/Eckart_Sussenburger_-_Loesungs-_und_Generierungsalgorithmen_fuer_Sudoku.pdf
+ * //http://www.sudokuwiki.org/sudoku.htm
  */
 public class Sudoku implements INumberPuzzle {
 	/**
