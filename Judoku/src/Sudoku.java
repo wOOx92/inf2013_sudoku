@@ -4,11 +4,13 @@ import java.util.Stack;
 /**
  * This class represents Sudokus.
  * @author Dennis Uteg, Florian Steurer, Markus Wingler, Michael Jauch
- * The generate and solving algorithms used are originate from:
+ * The generate and solving algorithms used originate from:
  * https://www.hochschule-trier.de/uploads/tx_rfttheses/Eckart_Sussenburger_-_Loesungs-_und_Generierungsalgorithmen_fuer_Sudoku.pdf
- * //http://www.sudokuwiki.org/sudoku.htm
+ * http://www.sudokuwiki.org/sudoku.htm
  */
 public class Sudoku implements INumberPuzzle {
+	//TODO schwere sudokus die lange zu generieren bruachen erreichen meist nicht die gewünschte schwierigkeit. -> Generieren abbrechen und neustarten wenn zu lange braucht
+	
 	/**
 	 * This array saves the state of the Sudoku at the beginning.
 	 */
@@ -73,9 +75,11 @@ public class Sudoku implements INumberPuzzle {
 		Random prng = new Random();
 		int i = 0;
 		do {
+			long t = System.nanoTime();
 			realDiff = generate(prng.nextLong(), diff);
+			System.out.println("Generated " + realDiff.toString() + " in " + (System.nanoTime() - t)/1000000 + "ms");
 			i++;
-		} while (realDiff != diff && i < 20);
+		} while (realDiff != diff && i < 10);
 
 		this.recentGrid = this.startGrid;
 		this.DIFFICULTY = realDiff;
@@ -162,8 +166,8 @@ public class Sudoku implements INumberPuzzle {
 	}
 
 	/**
-	 * Sets a random element from the sudoku grid to 0
-	 * @param sudoku The sudoku grid which gets modified.
+	 * Sets a random element from the Sudoku grid to 0
+	 * @param sudoku The Sudoku grid which gets modified.
 	 * @param prng The Random Number Generator used to generate the random variables.
 	 * @return
 	 */
