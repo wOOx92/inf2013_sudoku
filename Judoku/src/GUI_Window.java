@@ -17,6 +17,7 @@ public class GUI_Window {
 	private JFrame frame;
 
 	private NumberPuzzle puzzle;
+	private Controller controller;
 	private JTextField[][] gameField = new JTextField[9][9];
 	
 	//Initialise Buttons
@@ -30,7 +31,8 @@ public class GUI_Window {
 	/**
 	 * Create the application.
 	 */
-	public GUI_Window() {
+	public GUI_Window(Controller c) {
+		this.controller = c;
 		initialize();
 	}
 
@@ -151,6 +153,14 @@ public class GUI_Window {
 		
 	}
 	
+	public void displayMistake(int x, int y){
+		this.gameField[y][x].setBackground(Color.RED);
+	}
+	
+	public NumberPuzzle getNumberPuzzle(){
+		return puzzle;
+	}
+	
 	class ButtonLauscher implements ActionListener { 
         public void actionPerformed(ActionEvent e) { 
         	if(e.getSource() == btnQuit){ 
@@ -165,30 +175,23 @@ public class GUI_Window {
             		refreshView();
             } else if(e.getSource() == btnReset){
             	if(puzzle != null){
-            		puzzle.reset();
+            		controller.resetPuzzle(puzzle);
             		refreshView();
             	}
             } else if(e.getSource() == btnUndo){
             	if(puzzle != null){
-            		puzzle.undo();
+            		controller.undoPuzzle(puzzle);
             		refreshView();
             	}
             } else if(e.getSource() == btnRedo){
             	if(puzzle != null){
-            		puzzle.redo();
+            		controller.redoPuzzle(puzzle);
             		refreshView();
             	}
             } else if(e.getSource() == btnHint){
             	if(puzzle != null){
-            		int[] coords = puzzle.searchMistake();
-            		if(coords.length == 0){
-            			puzzle.giveHint();
-            			refreshView();
-            		}
-            		else{
-            			gameField[coords[1]][coords[0]].setBackground(Color.RED);
-            			refreshView();
-            		}
+            		controller.giveHintPuzzle(puzzle);
+            		refreshView();
             	}
             }
         } 
