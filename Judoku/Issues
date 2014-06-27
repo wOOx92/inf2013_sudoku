@@ -1,0 +1,21 @@
+Issues:
+
+MODEL:
+
+- Wenn mehr als 5 Aktionen durchgeführt werden und Undo gedrückt wird, werden mehrere Schritte rückgängig gemacht (vermutlich funktioniert die methode limitStack nicht richtig)
+- Redos sollen nur nach Undos durchgeführt werden können
+- Eine SudokuBuilder klasse soll geschrieben werden
+- Generate Medium zu leicht
+- Generate Hard manchmal zu langsam
+
+GUI
+
+- Die Gui ändert bei Eingaben nicht das Sudoku Object
+- noch keine Möglichkeit die Schwierigkeit auszuwählen
+- Es kann alles in die TextFields geschrieben werden
+- Gui nicht resizeable
+
+CONTROLLER
+
+- Methode deepCopy(int[][]) im Controller evtl fehlplatziert
+- Evaluieren von Eingaben im Controller nicht durch trySetValue() im Model
