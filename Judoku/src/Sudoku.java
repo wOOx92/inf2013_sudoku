@@ -555,6 +555,8 @@ public class Sudoku implements NumberPuzzle {
 				break;
 			}
 		}
+		undoStorage.push(Controller.deepCopy(recentGrid));
+		limitStack(undoStorage);
 	}
 
 	public void undo(){
@@ -562,7 +564,6 @@ public class Sudoku implements NumberPuzzle {
 			redoStorage.push(Controller.deepCopy(recentGrid));
 			limitStack(redoStorage);
 			recentGrid = undoStorage.pop();
-			
 		}
 	}
 	

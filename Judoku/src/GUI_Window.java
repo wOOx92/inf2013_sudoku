@@ -57,7 +57,7 @@ public class GUI_Window {
 		//draw the gamefield
 		
 		Color active = Color.WHITE;
-		Color toggle = Color.LIGHT_GRAY;
+		Color toggle = Color.BLUE;
 		
 		for (int i = 0; i < 9; i++) {
 			yPosition = 10;
@@ -156,7 +156,7 @@ public class GUI_Window {
         	if(e.getSource() == btnQuit){ 
                 frame.dispose();
             } else if(e.getSource() == btnNewGame){
-            		puzzle = new Sudoku(Difficulty.HARD);
+            		puzzle = new Sudoku(Difficulty.MEDIUM);
             		btnHint.setEnabled(true);
             		btnUndo.setEnabled(true);
             		btnRedo.setEnabled(true);
