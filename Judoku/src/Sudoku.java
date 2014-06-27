@@ -546,8 +546,10 @@ public class Sudoku implements NumberPuzzle {
 
 	public void giveHint() {
 		//TODO theoretisch unendliche laufzeit wegen random
+		undoStorage.push(Controller.deepCopy(recentGrid));
 		Random prng = new Random();
 		while(getNumberOfClues(recentGrid) < 81){
+			//todo: alle leeren Felder speichern, und DANN erst zufällig eines auswählen (so dass, der Random nicht mehr auf ausgefällt stoßt).
 			int x = prng.nextInt(SIZE);
 			int y = prng.nextInt(SIZE);
 			if(recentGrid[y][x] == 0){
@@ -555,7 +557,7 @@ public class Sudoku implements NumberPuzzle {
 				break;
 			}
 		}
-		undoStorage.push(Controller.deepCopy(recentGrid));
+		
 		limitStack(undoStorage);
 	}
 
