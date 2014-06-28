@@ -4,7 +4,7 @@
  * @author Dennis Uteg, Florian Steurer, Markus Wingler, Michael Jauch
  */
 public interface NumberPuzzle {
-
+	
 	/**
 	 * Returns the recent state of the INumberPuzzle.
 	 * 

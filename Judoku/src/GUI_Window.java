@@ -166,7 +166,7 @@ public class GUI_Window {
         	if(e.getSource() == btnQuit){ 
                 frame.dispose();
             } else if(e.getSource() == btnNewGame){
-            		puzzle = new Sudoku(Difficulty.MEDIUM);
+            		puzzle = new SudokuBuilder().newSudoku(Difficulty.HARD);
             		btnHint.setEnabled(true);
             		btnUndo.setEnabled(true);
             		btnRedo.setEnabled(true);
