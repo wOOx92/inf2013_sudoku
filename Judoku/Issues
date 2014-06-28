@@ -4,7 +4,6 @@ MODEL:
 
 - Wenn mehr als 5 Aktionen durchgeführt werden und Undo gedrückt wird, werden mehrere Schritte rückgängig gemacht (vermutlich funktioniert die methode limitStack nicht richtig)
 - Redos sollen nur nach Undos durchgeführt werden können
-- Eine SudokuBuilder klasse soll geschrieben werden
 - Generate Medium zu leicht
 - Generate Hard manchmal zu langsam
 
@@ -19,3 +18,10 @@ CONTROLLER
 
 - Methode deepCopy(int[][]) im Controller evtl fehlplatziert
 - Evaluieren von Eingaben im Controller nicht durch trySetValue() im Model
+
+DONE
+- Eine SudokuBuilder klasse soll geschrieben werden
+
+NOTES:
+	Idee: Ein Sudoku ist eindeutig definiert durch sein SolvedGrid nicht durch sein startGrid, also kann das auch noch veränderbar sein. Oberklasse kann solve haben mit einem abstract legal dass später auf das grid geht.
+	Alternativ kann die oberklasse einen gemeinsamen konstruktor haben.

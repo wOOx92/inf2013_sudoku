@@ -1,10 +1,12 @@
 import java.util.Arrays;
 import java.util.Random;
 
+import javax.xml.transform.Templates;
+
 public class SudokuBuilder {
 
 	public Sudoku newSudoku(Difficulty diff) {
-		return newSudoku(new Random().nextInt(), diff);
+		return newSudoku(new Random().nextLong(), diff);
 	}
 
 	public Sudoku newSudoku(long seed, Difficulty diff) {
@@ -22,24 +24,13 @@ public class SudokuBuilder {
 		}
 
 		cutCompleteStructures(templateSdk, prng);
-
-		int clues1 = getNumberOfClues(templateSdk);
 		cutDeductively(templateSdk);
-		System.out.println(getNumberOfClues(templateSdk) - clues1
-				+ "removed deductively");
-
-		clues1 = getNumberOfClues(templateSdk);
 		cutWithNeighbourRule(templateSdk);
-		System.out.println(getNumberOfClues(templateSdk) - clues1
-				+ " removed neighbour");
 		System.out.println(hasUniqueSolution(templateSdk)
 				+ " has unique solutions");
 
-		clues1 = getNumberOfClues(templateSdk);
 		doRandomCutting(templateSdk, diff.toRandomCuttingIndex());
-		System.out.println(clues1 - getNumberOfClues(templateSdk)
-				+ " removed by rnd cutting");
-
+		
 		// Testen welche Schwierigkeit erreicht wurde
 		int clues = getNumberOfClues(templateSdk);
 		Sudoku build;
@@ -257,63 +248,17 @@ public class SudokuBuilder {
 	 *            The Sudoku grid to be cut.
 	 */
 	private static void cutWithNeighbourRule(int[][] sudoku) {
-		// Schneide jede Zahl die in allen anderen leeren Zellen ihrer Zeile /
-		// Spalte / Karree ausgeschlossen ist.
 		for (int x = 0; x < Sudoku.SIZE; x++) {
 			for (int y = 0; y < Sudoku.SIZE; y++) {
 				if (sudoku[y][x] != 0) {
 					int cutCandidate = sudoku[y][x];
 					sudoku[y][x] = 0;
 
-					boolean rowCuttable = true;
-					boolean columnCuttable = true;
-					boolean carreeCuttable = true;
-
-					// Zeilen
-					for (int x1 = 0; x1 < Sudoku.SIZE; x1++) {
-						if (sudoku[y][x1] == 0
-								&& x1 != x
-								&& !isNeighbouredBy(x1, y, cutCandidate, sudoku)) {
-							rowCuttable = false;
-							break;
-						}
-					}
-
-					// TODO jede zahl die hier geschnitte3n wird wird bereits
-					// durch die zeilen regel geschnitten
-					// Spalten
-					for (int y1 = 0; y1 < Sudoku.SIZE; y1++) {
-						if (sudoku[y1][x] == 0
-								&& y1 != y
-								&& !isNeighbouredBy(x, y1, cutCandidate, sudoku)) {
-							columnCuttable = false;
-							break;
-						}
-					}
-
-					for (int[] a : sudoku) {
-						System.out.println(Arrays.toString(a));
-					}
-
-					// Carrees
-					// TODO FUNKTIONIERT NICHT
-					int xos = (x / 3) * 3;
-					int yos = (y / 3) * 3;
-
-					for (int x1 = 0; x1 < 3; x1++) {
-						for (int y1 = 0; y1 < 3; y1++) {
-							if (sudoku[yos + y1][xos + x1] == 0
-									&& xos + x1 != x
-									&& yos + y1 != y
-									&& !isNeighbouredBy(xos + x1, yos + y1,
-											cutCandidate, sudoku)) {
-								carreeCuttable = false;
-								break;
-							}
-						}
-					}
-
-					if (!(rowCuttable || columnCuttable || false)) {
+					boolean rowCuttable = isRowCuttable(x, y, cutCandidate, sudoku);
+					boolean columnCuttable = isColumnCuttable(x, y, cutCandidate, sudoku);
+					boolean carreeCuttable = isCarreeCuttable(x, y, cutCandidate, sudoku);
+				
+					if (!(rowCuttable || columnCuttable || carreeCuttable)) {
 						sudoku[y][x] = cutCandidate;
 					}
 				}
@@ -321,6 +266,46 @@ public class SudokuBuilder {
 		}
 	}
 
+	private static boolean isRowCuttable(int x, int y, int cutCandidate, int[][] sudoku){
+		for (int x1 = 0; x1 < Sudoku.SIZE; x1++) {
+			if (sudoku[y][x1] == 0
+					&& x1 != x
+					&& !isNeighbouredBy(x1, y, cutCandidate, sudoku)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private static boolean isColumnCuttable(int x, int y, int cutCandidate, int[][] sudoku){
+		for (int y1 = 0; y1 < Sudoku.SIZE; y1++) {
+			if (sudoku[y1][x] == 0
+					&& y1 != y
+					&& !isNeighbouredBy(x, y1, cutCandidate, sudoku)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private static boolean isCarreeCuttable(int x, int y, int cutCandidate, int[][] sudoku){
+		int xos = (x / Sudoku.CARREE_SIZE) * Sudoku.CARREE_SIZE;
+		int yos = (y / Sudoku.CARREE_SIZE) * Sudoku.CARREE_SIZE;
+		
+		for(int y1 = 0; y1 < Sudoku.CARREE_SIZE; y1++){
+			for(int x1 = 0; x1 < Sudoku.CARREE_SIZE; x1++){
+				if(sudoku[yos+y1][xos+x1] == 0){
+					if(xos+x1 != x || yos+y1 != y){
+						if(!isNeighbouredBy(xos+x1, yos+y1, cutCandidate, sudoku));{
+							return false;
+						}
+					}
+				}
+			}
+		}
+		return true;
+	}
+	
 	/**
 	 * Shows wether a certain cell in a Sudoku grid has a neighbouring cell
 	 * containing a given value.

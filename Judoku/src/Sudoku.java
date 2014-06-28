@@ -18,9 +18,9 @@ public class Sudoku implements NumberPuzzle {
 	private int[][] startGrid;
 	
 	/**
-	 * This array saves the state of the solved Sudoku.
+	 * This array saves the state of the solved Sudoku. Every Sudoku is defined by its solved Grid.
 	 */
-	private int[][] solvedGrid;
+	private final int[][] solvedGrid;
 	
 	/**
 	 * This array saves the recent state of the Sudoku.
