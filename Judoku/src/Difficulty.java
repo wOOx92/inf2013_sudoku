@@ -8,20 +8,6 @@ public enum Difficulty{
 	MEDIUM,		//Logisch geschnittene Sudokus mit 25-30 Vorgaben und 2x Zufallsschneiden
 	HARD;		//Vollstaendig geschnittene Sudokus mit 21-25 Vorgaben
 	
-	/**TODO wird bisher nicht gebraucht.
-	 * Returns an index which is useful to compare difficulties.
-	 * @return The index of difficulty (Bigger = Harder)
-	 */
-	public int toInt(){
-		if(this == EASY){
-			return 0;
-		}
-		if(this == MEDIUM){
-			return 1;
-		}
-		return 2;
-	}
-	
 	/**
 	 * Determines how much random cutting is allowed in a Sudoku of the specified Difficulty.
 	 * @return The maximum number of random cuts allowed in this Difficulty.

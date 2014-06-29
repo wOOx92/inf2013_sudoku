@@ -1,10 +1,9 @@
-import java.util.Arrays;
 import java.util.Random;
 
-import javax.xml.transform.Templates;
-
 public class SudokuBuilder {
-
+	
+	private static final int MAX_RECURSION_DEPTH = 25;
+	
 	public Sudoku newSudoku(Difficulty diff) {
 		return newSudoku(new Random().nextLong(), diff);
 	}
@@ -29,7 +28,9 @@ public class SudokuBuilder {
 		System.out.println(hasUniqueSolution(templateSdk)
 				+ " has unique solutions");
 
+		int c = getNumberOfClues(templateSdk);
 		doRandomCutting(templateSdk, diff.toRandomCuttingIndex());
+		System.out.println(c-getNumberOfClues(templateSdk));
 		
 		// Testen welche Schwierigkeit erreicht wurde
 		int clues = getNumberOfClues(templateSdk);
@@ -376,7 +377,7 @@ public class SudokuBuilder {
 	 */
 	private static boolean hasUniqueSolution(int[][] sudoku) {
 		int[][] copy = Controller.deepCopy(sudoku);
-		return (checkSolutions(0, 0, copy, 0) == 1);
+		return (checkSolutions(0, 0, copy, 0, MAX_RECURSION_DEPTH) == 1);
 	}
 
 	/**
@@ -396,20 +397,24 @@ public class SudokuBuilder {
 	 *         amount of solutions).
 	 */
 	private static int checkSolutions(int x, int y, int[][] sudoku,
-			int solutionsFound) {
+			int solutionsFound, int maxRecursionDepth) {
 		if (x == Sudoku.SIZE) {
 			x = 0;
 			if (++y == Sudoku.SIZE)
 				return 1 + solutionsFound;
 		}
+		if(maxRecursionDepth == 0){
+			return 2;
+		}
+		
 		if (sudoku[x][y] != 0) // skip filled cells
-			return checkSolutions(x + 1, y, sudoku, solutionsFound);
+			return checkSolutions(x + 1, y, sudoku, solutionsFound, maxRecursionDepth--);
 
 		for (int val = 1; val <= Sudoku.SIZE && solutionsFound < 2; ++val) {
 			if (Sudoku.legal(x, y, val, sudoku)) {
 				sudoku[x][y] = val;
 				solutionsFound = checkSolutions(x + 1, y, sudoku,
-						solutionsFound);
+						solutionsFound, maxRecursionDepth--);
 			}
 		}
 		sudoku[x][y] = 0; // reset on backtrack
