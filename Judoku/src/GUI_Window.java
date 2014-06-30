@@ -3,10 +3,15 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Vector;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
@@ -15,6 +20,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
 import javax.swing.text.MaskFormatter;
+import javax.swing.text.PlainDocument;
 //Resizable with LayoutManager
 public class GUI_Window {
 
@@ -31,6 +37,7 @@ public class GUI_Window {
 	private JButton btnReset;
 	private JButton btnQuit;
 	private JButton btnHint;
+	private JComboBox cmbBox;
 	
 	/**
 	 * Create the application.
@@ -84,8 +91,8 @@ public class GUI_Window {
 				gameField[i][j].setHorizontalAlignment(JTextField.CENTER);
 				gameField[i][j].setBounds(xPosition, yPosition, width, height);
 				gameField[i][j].setBackground(active);
+
 				frame.getContentPane().add(gameField[i][j]);
-				
 				yPosition = yPosition + 38;
 			}
 			if((i+1)%3 != 0){
@@ -127,6 +134,16 @@ public class GUI_Window {
 		frame.getContentPane().add(btnHint);
 		btnHint.addActionListener(new ButtonLauscher()); 
 		btnHint.setEnabled(false);
+		
+		Vector<Difficulty> difficulties = new Vector<>();
+		difficulties.add(Difficulty.EASY);
+		difficulties.add(Difficulty.MEDIUM);
+		difficulties.add(Difficulty.HARD);
+		
+		cmbBox = new JComboBox();
+		cmbBox.setModel(new DefaultComboBoxModel(difficulties));
+		cmbBox.setBounds(370,206,100,40);
+		frame.getContentPane().add(cmbBox);
 		
 		btnQuit = new JButton("Quit Game");
 		btnQuit.setBounds(370, 314, 100, 40);
@@ -181,7 +198,7 @@ public class GUI_Window {
         	if(e.getSource() == btnQuit){ 
                 frame.dispose();
             } else if(e.getSource() == btnNewGame){
-            		puzzle = new SudokuBuilder().newSudoku(Difficulty.HARD);
+            		puzzle = new SudokuBuilder().newSudoku((Difficulty)cmbBox.getModel().getSelectedItem());
             		btnHint.setEnabled(true);
             		btnUndo.setEnabled(true);
             		btnRedo.setEnabled(true);
@@ -212,5 +229,3 @@ public class GUI_Window {
         } 
     }
 }
-
-

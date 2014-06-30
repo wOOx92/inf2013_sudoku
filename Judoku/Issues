@@ -9,9 +9,8 @@ MODEL:
 
 GUI
 
+- leerzeichen in textfeldern
 - Die Gui ändert bei Eingaben nicht das Sudoku Object
-- noch keine Möglichkeit die Schwierigkeit auszuwählen
-- Es kann alles in die TextFields geschrieben werden
 - Gui nicht resizeable
 
 CONTROLLER
@@ -20,8 +19,10 @@ CONTROLLER
 - Evaluieren von Eingaben im Controller nicht durch trySetValue() im Model
 
 DONE
-- Eine SudokuBuilder klasse soll geschrieben werden
-- Generate Hard manchmal zu langsam
+- Eine SudokuBuilder klasse soll geschrieben werden 	-> fs created class
+- Generate Hard manchmal zu langsam 					-> fs added max recursion depth
+- noch keine Möglichkeit die Schwierigkeit auszuwählen 	-> fs added JComboBox
+- Es kann alles in die TextFields geschrieben werden	-> fs changed jtextfields to jformattedtextfields
 
 NOTES:
 	Builder pattern benutzen?
