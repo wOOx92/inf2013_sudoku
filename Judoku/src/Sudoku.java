@@ -9,7 +9,6 @@ import java.util.Stack;
  * http://www.sudokuwiki.org/sudoku.htm
  */
 public class Sudoku implements NumberPuzzle {
-	//TODO schwere sudokus die lange zu generieren bruachen erreichen meist nicht die gewünschte schwierigkeit. -> Generieren abbrechen und neustarten wenn zu lange braucht
 	
 	/**
 	 * This array saves the state of the Sudoku at the beginning.
@@ -96,13 +95,13 @@ public class Sudoku implements NumberPuzzle {
 	}
 
 	public boolean trySetValue(int x, int y, int val) {
-		if (val < 0 || val > SIZE) {
+		if (val <= 0 || val > SIZE) {
 			return false;
 		}
-		if (x < 0 || x >= SIZE) {
+		if (x <= 0 || x >= SIZE) {
 			return false;
 		}
-		if (x < 0 || x >= SIZE) {
+		if (x <= 0 || x >= SIZE) {
 			return false;
 		}
 		if (this.startGrid[y][x] != 0) {
@@ -168,7 +167,7 @@ public class Sudoku implements NumberPuzzle {
 		}
 	}
 	
-	private <T> void limitStack(Stack<T> undoRedoStack){
+	private void limitStack(Stack<?> undoRedoStack){
 		if(undoRedoStack.size() > UNDOLIMIT){
 			undoRedoStack.remove(undoRedoStack.size()-1);
 		}

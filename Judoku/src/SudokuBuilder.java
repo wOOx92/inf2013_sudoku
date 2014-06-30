@@ -1,46 +1,55 @@
 import java.util.Random;
 
 public class SudokuBuilder {
-	
+
 	/**
-	 * This value influences the search depth of the backtracking algorithm used to check if multiple solution exists.
+	 * This value influences the search depth of the backtracking algorithm used
+	 * to check if multiple solution exists.
 	 */
 	private static final int MAX_RECURSION_DEPTH = 30;
-	
+
 	/**
-	 * Build a Sudoku object of the desired difficulty.
-	 * @param diff The desired difficulty.
+	 * Builds a Sudoku object of the desired difficulty.
+	 * 
+	 * @param diff
+	 *            The desired difficulty.
 	 * @return A playable Sudoku.
 	 */
 	public Sudoku newSudoku(Difficulty diff) {
 		/*
-		 * Return a new Sudoku using a random seed.
+		 * Since no seed was specified, a random seed is generated.
 		 */
 		return newSudoku(new Random().nextLong(), diff);
 	}
 
 	/**
 	 * Builds a Sudoku object of the desired difficulty using a certain seed.
-	 * @param seed The seed used for the java.util.random generators.
-	 * @param diff The desired difficulty.
+	 * 
+	 * @param seed
+	 *            The seed used for the java.util.random generators.
+	 * @param diff
+	 *            The desired difficulty.
 	 * @return A playable Sudoku object.
 	 */
 	public Sudoku newSudoku(long seed, Difficulty diff) {
 		/*
-		 * This Random objcet will be used to generate all random variables needed.
+		 * This Random object will be used to generate all random variables
+		 * needed.
 		 */
 		Random prng = new Random(seed);
 
 		/*
-		 * Step 1: Generate a entirely solved Sudoku grid and copy it for further manipulation.
+		 * Step 1: Generate a entirely solved Sudoku grid and copy it for
+		 * further manipulation.
 		 */
 		int[][] solvedGrid = generateSolvedGrid(prng);
 		int[][] templateSdk = Controller.deepCopy(solvedGrid);
 
 		/*
-		 * Step 2: Remove 3 elements at random (the Sudoku will stay valid).
+		 * Step 2: Remove 3 elements at random for more randomness in the
+		 * generation process (the Sudoku will stay valid).
 		 */
-		//TODO checking if removed in removerandomElement method.
+		// TODO checking if removed in removerandomElement method.
 		for (int i = 0; i < 3;) {
 			if (removeRandomElement(templateSdk, prng)) {
 				i++;
@@ -48,35 +57,40 @@ public class SudokuBuilder {
 		}
 
 		/*
-		 * Step 3: Cut one clue from every row / column / carree that is still complete.
+		 * Step 3: Cut one clue from every row / column / carree that is still
+		 * complete. This results in more randomness in the generating process.
 		 */
 		cutCompleteStructures(templateSdk, prng);
-		
+
 		/*
-		 * Step 4: Cut all clues that satisfy this condition: If the clue is removed, the only possible candidate for the 
-		 * resulting empty cell is said clue.
+		 * Step 4: Cut all clues that satisfy this condition: If the clue is
+		 * removed, the only possible candidate for the resulting empty cell is
+		 * said clue.
 		 */
 		cutDeductively(templateSdk);
-		
+
 		/*
-		 * Step 5: Cut all clues using the "Neighbor-rule": If every empty cell neighboring the clue is neighbored by 
-		 * the value of that cell again, the clue can be cut out. By definition a cell x is neighbored by a value if another cell in the
-		 * row, column or carree of the cell x contains that value.
+		 * Step 5: Cut all clues using the "Neighbor-rule": If every empty cell
+		 * neighboring the clue is neighbored by the value of that cell again,
+		 * the clue can be cut out. By definition a cell x is neighbored by a
+		 * value if another cell in the row, column or carree of the cell x
+		 * contains that value.
 		 */
 		cutWithNeighbourRule(templateSdk);
-		
-		//TODO debug ausgaben entfernen
+
+		// TODO debug ausgaben entfernen
 		System.out.println(hasUniqueSolution(templateSdk)
 				+ " has unique solutions");
 		int c = getNumberOfClues(templateSdk);
-		
+
 		/*
-		 * Step 6: Try to make the resulting Sudoku irreducible using a "cut-and-test" method.
+		 * Step 6: Try to make the resulting Sudoku irreducible using a
+		 * "cut-and-test" method.
 		 */
 		doRandomCutting(templateSdk, diff.toRandomCuttingIndex());
-		System.out.println(c-getNumberOfClues(templateSdk));
-		
-		//TODO: commenting
+		System.out.println(c - getNumberOfClues(templateSdk));
+
+		// TODO: commenting
 		int clues = getNumberOfClues(templateSdk);
 		Sudoku build;
 		// no random cutting has been done so its easy
@@ -125,7 +139,8 @@ public class SudokuBuilder {
 		}
 
 		/*
-		 * Step 2: Use backtracking to find one (of the many) possible solutions. 
+		 * Step 2: Use backtracking to find one (of the many) possible
+		 * solutions.
 		 */
 		solve(0, 0, solvedGrid);
 
@@ -297,7 +312,8 @@ public class SudokuBuilder {
 	 */
 	private static void cutWithNeighbourRule(int[][] sudoku) {
 		/*
-		 * Use the row, column and carrre neighborRule for each value in the Sudoku grid. 
+		 * Use the row, column and carrre neighborRule for each value in the
+		 * Sudoku grid.
 		 */
 		for (int x = 0; x < Sudoku.SIZE; x++) {
 			for (int y = 0; y < Sudoku.SIZE; y++) {
@@ -312,18 +328,21 @@ public class SudokuBuilder {
 
 	/**
 	 * Tries to cut out a clue using the neighbouring-rule for rows.
-	 * @param x The x-value of the clue in the grid.
-	 * @param y The y-value of the clue in the grid.
-	 * @param sudoku The Sudoku grid.
+	 * 
+	 * @param x
+	 *            The x-value of the clue in the grid.
+	 * @param y
+	 *            The y-value of the clue in the grid.
+	 * @param sudoku
+	 *            The Sudoku grid.
 	 * @return True if the clue has been cut, false if not.
 	 */
-	private static boolean cutRowNeighbourRule(int x, int y, int[][] sudoku){
+	private static boolean cutRowNeighbourRule(int x, int y, int[][] sudoku) {
 		int cutCandidate = sudoku[y][x];
 		sudoku[y][x] = 0;
-		
+
 		for (int x1 = 0; x1 < Sudoku.SIZE; x1++) {
-			if (sudoku[y][x1] == 0
-					&& x1 != x
+			if (sudoku[y][x1] == 0 && x1 != x
 					&& !isNeighbouredBy(x1, y, cutCandidate, sudoku)) {
 				sudoku[y][x] = cutCandidate;
 				return false;
@@ -331,21 +350,24 @@ public class SudokuBuilder {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Tries to cut out a clue using the neighbouring-rule for columns.
-	 * @param x The x-value of the clue in the grid.
-	 * @param y The y-value of the clue in the grid.
-	 * @param sudoku The Sudoku grid.
+	 * 
+	 * @param x
+	 *            The x-value of the clue in the grid.
+	 * @param y
+	 *            The y-value of the clue in the grid.
+	 * @param sudoku
+	 *            The Sudoku grid.
 	 * @return True if the clue has been cut, false if not.
 	 */
-	private static boolean cutColumnNeighbourRule(int x, int y, int[][] sudoku){
+	private static boolean cutColumnNeighbourRule(int x, int y, int[][] sudoku) {
 		int cutCandidate = sudoku[y][x];
 		sudoku[y][x] = 0;
-		
+
 		for (int y1 = 0; y1 < Sudoku.SIZE; y1++) {
-			if (sudoku[y1][x] == 0
-					&& y1 != y
+			if (sudoku[y1][x] == 0 && y1 != y
 					&& !isNeighbouredBy(x, y1, cutCandidate, sudoku)) {
 				sudoku[y][x] = cutCandidate;
 				return false;
@@ -353,25 +375,32 @@ public class SudokuBuilder {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Tries to cut out a clue using the neighbouring-rule for carrees.
-	 * @param x The x-value of the clue in the grid.
-	 * @param y The y-value of the clue in the grid.
-	 * @param sudoku The Sudoku grid.
+	 * 
+	 * @param x
+	 *            The x-value of the clue in the grid.
+	 * @param y
+	 *            The y-value of the clue in the grid.
+	 * @param sudoku
+	 *            The Sudoku grid.
 	 * @return True if the clue has been cut, false if not.
 	 */
-	private static boolean cutCarreeNeighbourRule(int x, int y, int[][] sudoku){
+	private static boolean cutCarreeNeighbourRule(int x, int y, int[][] sudoku) {
 		int cutCandidate = sudoku[y][x];
 		sudoku[y][x] = 0;
 		int xos = (x / Sudoku.CARREE_SIZE) * Sudoku.CARREE_SIZE;
 		int yos = (y / Sudoku.CARREE_SIZE) * Sudoku.CARREE_SIZE;
-		
-		for(int y1 = 0; y1 < Sudoku.CARREE_SIZE; y1++){
-			for(int x1 = 0; x1 < Sudoku.CARREE_SIZE; x1++){
-				if(sudoku[yos+y1][xos+x1] == 0){
-					if(xos+x1 != x || yos+y1 != y){
-						if(!isNeighbouredBy(xos+x1, yos+y1, cutCandidate, sudoku));{
+
+		for (int y1 = 0; y1 < Sudoku.CARREE_SIZE; y1++) {
+			for (int x1 = 0; x1 < Sudoku.CARREE_SIZE; x1++) {
+				if (sudoku[yos + y1][xos + x1] == 0) {
+					if (xos + x1 != x || yos + y1 != y) {
+						if (!isNeighbouredBy(xos + x1, yos + y1, cutCandidate,
+								sudoku))
+							;
+						{
 							sudoku[y][x] = cutCandidate;
 							return false;
 						}
@@ -381,7 +410,7 @@ public class SudokuBuilder {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Shows whether a certain cell in a Sudoku grid has a neighbouring cell
 	 * containing a given value.
@@ -418,8 +447,8 @@ public class SudokuBuilder {
 	}
 
 	/**
-	 * Tries to cut out values which are not cuttable by deduction. Always checks
-	 * whether this results in multiple solutions.
+	 * Tries to cut out values which are not cuttable by deduction. Always
+	 * checks whether this results in multiple solutions.
 	 * 
 	 * @param sudoku
 	 *            The Sudoku grid to be cut.
@@ -478,12 +507,13 @@ public class SudokuBuilder {
 			if (++y == Sudoku.SIZE)
 				return 1 + solutionsFound;
 		}
-		if(maxRecursionDepth == 0){
+		if (maxRecursionDepth == 0) {
 			return 2;
 		}
-		
+
 		if (sudoku[x][y] != 0) // skip filled cells
-			return checkSolutions(x + 1, y, sudoku, solutionsFound, maxRecursionDepth--);
+			return checkSolutions(x + 1, y, sudoku, solutionsFound,
+					maxRecursionDepth--);
 
 		for (int val = 1; val <= Sudoku.SIZE && solutionsFound < 2; ++val) {
 			if (Sudoku.legal(x, y, val, sudoku)) {

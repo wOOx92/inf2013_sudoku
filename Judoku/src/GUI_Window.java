@@ -3,14 +3,18 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
+import javax.swing.text.MaskFormatter;
 //Resizable with LayoutManager
 public class GUI_Window {
 
@@ -18,7 +22,7 @@ public class GUI_Window {
 
 	private NumberPuzzle puzzle;
 	private Controller controller;
-	private JTextField[][] gameField = new JTextField[9][9];
+	private JFormattedTextField[][] gameField = new JFormattedTextField[9][9];
 	
 	//Initialise Buttons
 	private JButton btnNewGame;
@@ -70,7 +74,9 @@ public class GUI_Window {
 					toggle = buffer;
 				}
 				
-				gameField[i][j] = new JTextField();
+
+				gameField[i][j] = new JFormattedTextField(createFormatter("#"));		
+				gameField[i][j].setText("");
 				gameField[i][j].setColumns(10);
 				//set font size in gameField
 				Font font = new Font("Arial", Font.BOLD, 32);
@@ -91,7 +97,6 @@ public class GUI_Window {
 		}
 		
 		//TODO: Progress bar?   [---->     ]
-
 		
 		//Declare Buttons
 		btnNewGame = new JButton("New Game");
@@ -132,6 +137,16 @@ public class GUI_Window {
 		txtpnNochVersuch.setText("Noch 1 Versuch");
 		txtpnNochVersuch.setBounds(370, 245, 100, 40);
 		frame.getContentPane().add(txtpnNochVersuch);
+	}
+	
+	private MaskFormatter createFormatter(String s) {
+	    MaskFormatter formatter = null;
+	    try {
+	        formatter = new MaskFormatter(s);
+	    } catch (java.text.ParseException exc) {
+	    	formatter = new MaskFormatter();
+	    }
+	    return formatter;
 	}
 	
 	public void refreshView() {
@@ -195,7 +210,7 @@ public class GUI_Window {
             	}
             }
         } 
-    } 
+    }
 }
 
 
