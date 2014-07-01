@@ -33,7 +33,7 @@ public class GUI_Window {
 	private Controller controller;
 	private JFormattedTextField[][] gameField = new JFormattedTextField[9][9];
 
-	// Initialise Buttons
+	// Initialize Buttons
 	private JButton btnNewGame;
 	private JButton btnRedo;
 	private JButton btnUndo;
