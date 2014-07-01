@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.InputMethodEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Vector;
@@ -93,23 +94,10 @@ public class GUI_Window {
 				gameField[i][j].setHorizontalAlignment(JTextField.CENTER);
 				gameField[i][j].setBounds(xPosition, yPosition, width, height);
 				gameField[i][j].setBackground(active);
-				gameField[i][j]
-						.addFocusListener(new java.awt.event.FocusAdapter() {
-							public void focusGained(
-									java.awt.event.FocusEvent evt) {
-								System.out.println("Focus gained");
-								JFormattedTextField src = (JFormattedTextField) evt
-										.getSource();
-								 src.selectAll();
-								 
-								 //TODO reparieren
-//								 src.setText(src.getText().replace(src.getText(),""));
-//								if (src.getText() == " " || src.getText() == " ") {									
-//									
-//
-//								};
-							}
-						});
+				// gameField[i][j].getDocument().addDocumentListener(myDocumentListener);
+				gameField[i][j].addFocusListener(new JudokuFocusListener());
+				gameField[i][j].setEnabled(false);
+
 				frame.getContentPane().add(gameField[i][j]);
 				yPosition = yPosition + 38;
 			}
@@ -187,13 +175,20 @@ public class GUI_Window {
 
 	public void refreshView() {
 		int recentGrid[][] = this.puzzle.getRecentGrid();
-
+		int startGrid[][] = this.puzzle.getStartGrid();
+		
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
-				if (recentGrid[i][j] != 0) {
+				if(startGrid[i][j] != 0){
+					gameField[i][j].setText(String.valueOf(startGrid[i][j]));
+					gameField[i][j].setEnabled(false);
+				}
+				else if (recentGrid[i][j] != 0) {
 					gameField[i][j].setText(String.valueOf(recentGrid[i][j]));
+					gameField[i][j].setEnabled(true);
 				} else {
 					gameField[i][j].setText("");
+					gameField[i][j].setEnabled(true);
 				}
 			}
 		}
@@ -211,6 +206,21 @@ public class GUI_Window {
 		return puzzle;
 	}
 
+	class JudokuFocusListener implements FocusListener {
+		public void focusGained(java.awt.event.FocusEvent evt) {
+			System.out.println("Focus gained");
+			JFormattedTextField src = (JFormattedTextField) evt.getSource();
+			src.selectAll();
+
+			// TODO reparieren
+		}
+
+		public void focusLost(FocusEvent e) {
+			// nothin so far
+
+		}
+	}
+
 	class ButtonLauscher implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == btnQuit) {
@@ -222,7 +232,8 @@ public class GUI_Window {
 				btnUndo.setEnabled(true);
 				btnRedo.setEnabled(true);
 				btnReset.setEnabled(true);
-
+				
+				
 				refreshView();
 			} else if (e.getSource() == btnReset) {
 				if (puzzle != null) {
@@ -248,7 +259,3 @@ public class GUI_Window {
 		}
 	}
 }
-
-
-
-

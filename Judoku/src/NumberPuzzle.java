@@ -11,6 +11,13 @@ public interface NumberPuzzle {
 	 * @return The recent state as a 2-dimensional array.
 	 */
 	public int[][] getRecentGrid();
+	
+	/**
+	 * Returns the start state of the INumberPuzzle.
+	 * 
+	 * @return The recent state as a 2-dimensional array.
+	 */
+	public int[][] getStartGrid();
 
 	/**
 	 * Tries to set a value in a certain cell in the NumberPuzzle.

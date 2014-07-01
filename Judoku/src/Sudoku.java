@@ -113,6 +113,9 @@ public class Sudoku implements NumberPuzzle {
 		return true;
 	}
 
+	public int[][] getStartGrid() {
+		return this.startGrid;
+	}
 	public int[][] getRecentGrid() {
 		return this.recentGrid;
 	}
