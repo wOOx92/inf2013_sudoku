@@ -3,12 +3,6 @@ import java.util.Random;
 public class SudokuBuilder {
 
 	/**
-	 * This value influences the search depth of the backtracking algorithm used
-	 * to check if multiple solution exists.
-	 */
-	private static final int MAX_RECURSION_DEPTH = 30;
-
-	/**
 	 * Builds a Sudoku object of the desired difficulty.
 	 * 
 	 * @param diff
@@ -79,7 +73,7 @@ public class SudokuBuilder {
 		cutWithNeighbourRule(templateSdk);
 
 		// TODO debug ausgaben entfernen
-		System.out.println(hasUniqueSolution(templateSdk)
+		System.out.println(hasUniqueSolution(templateSdk, Difficulty.HARD)
 				+ " has unique solutions");
 		int c = getNumberOfClues(templateSdk);
 
@@ -87,7 +81,7 @@ public class SudokuBuilder {
 		 * Step 6: Try to make the resulting Sudoku irreducible using a
 		 * "cut-and-test" method.
 		 */
-		doRandomCutting(templateSdk, diff.toRandomCuttingIndex());
+		doRandomCutting(templateSdk, diff);
 		System.out.println(c - getNumberOfClues(templateSdk));
 
 		// TODO: commenting
@@ -455,16 +449,14 @@ public class SudokuBuilder {
 	 * @param maxCuts
 	 *            The maximum number of clues that get cut out.
 	 */
-	private static void doRandomCutting(int[][] sudoku, int maxCuts) {
-		for (int x = 0; x < Sudoku.SIZE && maxCuts > 0; x++) {
-			for (int y = 0; y < Sudoku.SIZE && maxCuts > 0; y++) {
+	private static void doRandomCutting(int[][] sudoku, Difficulty diff) {
+		for (int x = 0; x < Sudoku.SIZE; x++) {
+			for (int y = 0; y < Sudoku.SIZE; y++) {
 				if (sudoku[y][x] != 0) {
 					int cutCandidate = sudoku[y][x];
 					sudoku[y][x] = 0;
-					if (!hasUniqueSolution(sudoku)) {
+					if (!hasUniqueSolution(sudoku, diff)) {
 						sudoku[y][x] = cutCandidate;
-					} else {
-						maxCuts--;
 					}
 				}
 			}
@@ -475,13 +467,15 @@ public class SudokuBuilder {
 	 * Checks whether a given Sudoku is uniquely solvable.
 	 * 
 	 * @param sudoku
-	 *            The sudoku to be checked.
+	 *            The Sudoku to be checked.
+	 * @param diff
+	 * 			  The Difficulty determines the maximum recursion depth. 
 	 * @return True if only one solution exists, false if there are none or
-	 *         mutliple solutions.
+	 *         multiple solutions.
 	 */
-	private static boolean hasUniqueSolution(int[][] sudoku) {
+	private static boolean hasUniqueSolution(int[][] sudoku, Difficulty diff) {
 		int[][] copy = Controller.deepCopy(sudoku);
-		return (checkSolutions(0, 0, copy, 0, MAX_RECURSION_DEPTH) == 1);
+		return (checkSolutions(0, 0, copy, 0, diff.maxRecursionDepth()) == 1);
 	}
 
 	/**

@@ -12,14 +12,14 @@ public enum Difficulty{
 	 * Determines how much random cutting is allowed in a Sudoku of the specified Difficulty.
 	 * @return The maximum number of random cuts allowed in this Difficulty.
 	 */
-	public int toRandomCuttingIndex(){
+	public int maxRecursionDepth(){
 		if(this == EASY){
 			return 0;
 		}
 		if(this == MEDIUM){
-			return 2;
+			return 20;
 		}
-		return 81;
+		return 75;
 	}
 	
 	/**
