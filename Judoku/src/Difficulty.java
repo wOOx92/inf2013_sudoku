@@ -4,22 +4,22 @@
  * 
  */
 public enum Difficulty{
-	EASY,		//Logisch geschnittene Sudokus mit 30 oder mehr Vorgaben
-	MEDIUM,		//Logisch geschnittene Sudokus mit 25-30 Vorgaben und 2x Zufallsschneiden
-	HARD;		//Vollstaendig geschnittene Sudokus mit 21-25 Vorgaben
+	EASY,
+	MEDIUM,
+	HARD;
 	
 	/**
-	 * Determines how much random cutting is allowed in a Sudoku of the specified Difficulty.
-	 * @return The maximum number of random cuts allowed in this Difficulty.
+	 * Determines how much numbers will be cut out by the "cut-and-test" Method.
+	 * @return The integer value of the recursion depth used by the backtracking algorithm.
 	 */
 	public int maxRecursionDepth(){
 		if(this == EASY){
 			return 0;
 		}
 		if(this == MEDIUM){
-			return 20;
+			return 11;
 		}
-		return 75;
+		return 27;
 	}
 	
 	/**

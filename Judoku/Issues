@@ -4,12 +4,9 @@ MODEL:
 
 - Wenn mehr als 5 Aktionen durchgeführt werden und Undo gedrückt wird, werden mehrere Schritte rückgängig gemacht (vermutlich funktioniert die methode limitStack nicht richtig)
 - Redos sollen nur nach Undos durchgeführt werden können
-- Generate Medium zu leicht
-- MAX_RECURSION_DEPTH testen
 
 GUI
 
-- leerzeichen in textfeldern
 - Die Gui ändert bei Eingaben nicht das Sudoku Object
 - Gui nicht resizeable
 
@@ -17,12 +14,6 @@ CONTROLLER
 
 - Methode deepCopy(int[][]) im Controller evtl fehlplatziert
 - Evaluieren von Eingaben im Controller nicht durch trySetValue() im Model
-
-DONE
-- Eine SudokuBuilder klasse soll geschrieben werden 	-> fs created class
-- Generate Hard manchmal zu langsam 					-> fs added max recursion depth
-- noch keine Möglichkeit die Schwierigkeit auszuwählen 	-> fs added JComboBox
-- Es kann alles in die TextFields geschrieben werden	-> fs changed jtextfields to jformattedtextfields
 
 NOTES:
 	Builder pattern benutzen?

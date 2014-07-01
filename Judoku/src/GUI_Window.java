@@ -40,6 +40,7 @@ public class GUI_Window {
 	private JButton btnReset;
 	private JButton btnQuit;
 	private JButton btnHint;
+	private JButton btnValidate;
 	private JComboBox cmbBox;
 
 	/**
@@ -65,15 +66,86 @@ public class GUI_Window {
 		frame.setTitle("Judoku 0.0.0.1");
 
 		// positioning and sizing the text fields
-		int xPosition = 10;
-		int yPosition = 10;
-		final int width = 40;
-		final int height = 40;
+
+		initializeGameField();
 
 		// draw the gamefield
 
+
+		// TODO: Progress bar? [----> ]
+
+		// Declare Buttons
+		btnNewGame = new JButton("New Game");
+		btnNewGame.setBounds(370, 11, 100, 40);
+		frame.getContentPane().add(btnNewGame);
+		btnNewGame.addActionListener(new ButtonLauscher());
+
+		Vector<Difficulty> difficulties = new Vector<>();
+		difficulties.add(Difficulty.EASY);
+		difficulties.add(Difficulty.MEDIUM);
+		difficulties.add(Difficulty.HARD);
+
+		cmbBox = new JComboBox();
+		cmbBox.setModel(new DefaultComboBoxModel(difficulties));
+		cmbBox.setBounds(370, 50, 100, 40);
+		frame.getContentPane().add(cmbBox);
+		
+		btnReset = new JButton("Reset");
+		btnReset.setBounds(370, 89, 100, 40);
+		frame.getContentPane().add(btnReset);
+		btnReset.addActionListener(new ButtonLauscher());
+		btnReset.setEnabled(false);
+
+		btnUndo = new JButton("Undo");
+		btnUndo.setBounds(370, 128, 100, 40);
+		frame.getContentPane().add(btnUndo);
+		btnUndo.addActionListener(new ButtonLauscher());
+		btnUndo.setEnabled(false);
+
+		btnRedo = new JButton("Redo");
+		btnRedo.setBounds(370, 167, 100, 40);
+		frame.getContentPane().add(btnRedo);
+		btnRedo.addActionListener(new ButtonLauscher());
+		btnRedo.setEnabled(false);
+
+		btnHint = new JButton("Give Hint");
+		btnHint.setBounds(370, 206, 100, 40);
+		frame.getContentPane().add(btnHint);
+		btnHint.addActionListener(new ButtonLauscher());
+		btnHint.setEnabled(false);
+		
+		btnValidate = new JButton("Validate");
+		btnValidate.setBounds(370, 245, 100, 40);
+		frame.getContentPane().add(btnValidate);
+		btnValidate.addActionListener(new ButtonLauscher());
+		btnValidate.setEnabled(false);	
+
+		btnQuit = new JButton("Quit Game");
+		btnQuit.setBounds(370, 314, 100, 40);
+		frame.getContentPane().add(btnQuit);
+		btnQuit.addActionListener(new ButtonLauscher());
+
+	}
+
+	private MaskFormatter createFormatter(String s) {
+		MaskFormatter formatter = null;
+		try {
+			formatter = new MaskFormatter(s);
+
+		} catch (java.text.ParseException exc) {
+			formatter = new MaskFormatter();
+		}
+		return formatter;
+	}
+
+	public void initializeGameField(){
+		int xPosition = 10;
+		int yPosition = 10;
+		final int width = 37;
+		final int height = 37;
+		
 		Color active = Color.WHITE;
-		Color toggle = Color.BLUE;
+		Color toggle = Color.LIGHT_GRAY;
 
 		for (int i = 0; i < 9; i++) {
 			yPosition = 10;
@@ -107,83 +179,20 @@ public class GUI_Window {
 				toggle = buffer;
 			}
 			xPosition = xPosition + 38;
-		}
-
-		// TODO: Progress bar? [----> ]
-
-		// Declare Buttons
-		btnNewGame = new JButton("New Game");
-		btnNewGame.setBounds(370, 11, 100, 40);
-		frame.getContentPane().add(btnNewGame);
-		btnNewGame.addActionListener(new ButtonLauscher());
-
-		btnReset = new JButton("Reset");
-		btnReset.setBounds(370, 50, 100, 40);
-		frame.getContentPane().add(btnReset);
-		btnReset.addActionListener(new ButtonLauscher());
-		btnReset.setEnabled(false);
-
-		btnUndo = new JButton("Undo");
-		btnUndo.setBounds(370, 89, 100, 40);
-		frame.getContentPane().add(btnUndo);
-		btnUndo.addActionListener(new ButtonLauscher());
-		btnUndo.setEnabled(false);
-
-		btnRedo = new JButton("Redo");
-		btnRedo.setBounds(370, 128, 100, 40);
-		frame.getContentPane().add(btnRedo);
-		btnRedo.addActionListener(new ButtonLauscher());
-		btnRedo.setEnabled(false);
-
-		btnHint = new JButton("Give Hint");
-		btnHint.setBounds(370, 167, 100, 40);
-		frame.getContentPane().add(btnHint);
-		btnHint.addActionListener(new ButtonLauscher());
-		btnHint.setEnabled(false);
-
-		Vector<Difficulty> difficulties = new Vector<>();
-		difficulties.add(Difficulty.EASY);
-		difficulties.add(Difficulty.MEDIUM);
-		difficulties.add(Difficulty.HARD);
-
-		cmbBox = new JComboBox();
-		cmbBox.setModel(new DefaultComboBoxModel(difficulties));
-		cmbBox.setBounds(370, 206, 100, 40);
-		frame.getContentPane().add(cmbBox);
-
-		btnQuit = new JButton("Quit Game");
-		btnQuit.setBounds(370, 314, 100, 40);
-		frame.getContentPane().add(btnQuit);
-		btnQuit.addActionListener(new ButtonLauscher());
-
-		JTextPane txtpnNochVersuch = new JTextPane();
-		txtpnNochVersuch.setText("Noch 1 Versuch");
-		txtpnNochVersuch.setBounds(370, 245, 100, 40);
-		frame.getContentPane().add(txtpnNochVersuch);
-	}
-
-	private MaskFormatter createFormatter(String s) {
-		MaskFormatter formatter = null;
-		try {
-			formatter = new MaskFormatter(s);
-
-		} catch (java.text.ParseException exc) {
-			formatter = new MaskFormatter();
-		}
-		return formatter;
+		}		
 	}
 
 	public void refreshView() {
 		int recentGrid[][] = this.puzzle.getRecentGrid();
 		int startGrid[][] = this.puzzle.getStartGrid();
-		
+
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
-				if(startGrid[i][j] != 0){
+				if (startGrid[i][j] != 0) {
 					gameField[i][j].setText(String.valueOf(startGrid[i][j]));
 					gameField[i][j].setEnabled(false);
-				}
-				else if (recentGrid[i][j] != 0) {
+					gameField[i][j].setDisabledTextColor(Color.RED);
+				} else if (recentGrid[i][j] != 0) {
 					gameField[i][j].setText(String.valueOf(recentGrid[i][j]));
 					gameField[i][j].setEnabled(true);
 				} else {
@@ -208,16 +217,12 @@ public class GUI_Window {
 
 	class JudokuFocusListener implements FocusListener {
 		public void focusGained(java.awt.event.FocusEvent evt) {
-			System.out.println("Focus gained");
 			JFormattedTextField src = (JFormattedTextField) evt.getSource();
 			src.selectAll();
-
-			// TODO reparieren
-		}
+	}
 
 		public void focusLost(FocusEvent e) {
 			// nothin so far
-
 		}
 	}
 
@@ -232,9 +237,8 @@ public class GUI_Window {
 				btnUndo.setEnabled(true);
 				btnRedo.setEnabled(true);
 				btnReset.setEnabled(true);
-				
-				
 				refreshView();
+				frame.validate();
 			} else if (e.getSource() == btnReset) {
 				if (puzzle != null) {
 					controller.resetPuzzle(puzzle);
