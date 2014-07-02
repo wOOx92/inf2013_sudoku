@@ -37,10 +37,7 @@ public class Controller{
 	public void undoPuzzle(NumberPuzzle puzzle){
 		puzzle.undo();
 	}
-	/**
-	 * 
-	 * @param puzzle
-	 */
+
 	public void redoPuzzle(NumberPuzzle puzzle){
 		puzzle.redo();
 	}

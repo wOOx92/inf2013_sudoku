@@ -237,29 +237,24 @@ public class GUI_Window {
 				btnUndo.setEnabled(true);
 				btnRedo.setEnabled(true);
 				btnReset.setEnabled(true);
-				refreshView();
-				frame.validate();
 			} else if (e.getSource() == btnReset) {
 				if (puzzle != null) {
 					controller.resetPuzzle(puzzle);
-					refreshView();
 				}
 			} else if (e.getSource() == btnUndo) {
 				if (puzzle != null) {
 					controller.undoPuzzle(puzzle);
-					refreshView();
 				}
 			} else if (e.getSource() == btnRedo) {
 				if (puzzle != null) {
 					controller.redoPuzzle(puzzle);
-					refreshView();
 				}
 			} else if (e.getSource() == btnHint) {
 				if (puzzle != null) {
 					controller.giveHintPuzzle(puzzle);
-					refreshView();
 				}
 			}
+			refreshView();
 		}
 	}
 }

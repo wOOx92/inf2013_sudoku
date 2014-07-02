@@ -1,7 +1,7 @@
 import java.util.Random;
 
 public class SudokuBuilder {
-
+	
 	/**
 	 * Builds a Sudoku object of the desired difficulty.
 	 * 
@@ -25,7 +25,7 @@ public class SudokuBuilder {
 	 *            The desired difficulty.
 	 * @return A playable Sudoku object.
 	 */
-	public Sudoku newSudoku(long seed, Difficulty diff) {
+	public Sudoku newSudoku(long seed, Difficulty diff){
 		/*
 		 * This Random object will be used to generate all random variables
 		 * needed.
