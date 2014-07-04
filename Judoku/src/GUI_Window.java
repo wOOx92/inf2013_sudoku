@@ -281,6 +281,7 @@ public class GUI_Window {
 			} else if (e.getSource() == btnNewGame) {
 				puzzle = new SudokuBuilder().newSudoku((Difficulty) cmbBox
 						.getModel().getSelectedItem());
+				
 				btnHint.setEnabled(true);
 				btnUndo.setEnabled(true);
 				btnRedo.setEnabled(true);
