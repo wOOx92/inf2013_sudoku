@@ -257,6 +257,7 @@ public class GUI_Window {
 					currentTextField.setText("");
 
 				} else {
+					//test
 
 					/** Remove String outputs for final Version **/
 					
