@@ -195,7 +195,7 @@ public class GUI_Window {
 					// gameField[y][x].setBackground(Color.RED);
 					gameField[y][x].setText(String.valueOf(startGrid[y][x]));
 					gameField[y][x].setEnabled(false);
-					gameField[y][x].setDisabledTextColor(Color.RED);
+					gameField[y][x].setDisabledTextColor(Color.GRAY);
 				} else if (recentGrid[y][x] != 0) {
 					gameField[y][x].setText(String.valueOf(recentGrid[y][x]));
 					gameField[y][x].setEnabled(true);
