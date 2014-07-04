@@ -21,8 +21,7 @@ public class JudokuSwingWorker extends SwingWorker<Sudoku,Void>{
 			this.guiWndw.setNumberPuzzle(get());
 		}
 		catch(Exception ignore){
-			//Ignore Exceptions;
-			
+			//Ignore Exceptions;	
 		}
 	}*/
 	
