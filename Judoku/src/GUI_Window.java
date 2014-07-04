@@ -12,6 +12,7 @@ import java.util.Vector;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
@@ -29,6 +30,7 @@ import javax.swing.text.PlainDocument;
 public class GUI_Window {
 
 	private JFrame frame;
+	ImageIcon icon;
 
 	private NumberPuzzle puzzle;
 	private Controller controller;
@@ -60,6 +62,8 @@ public class GUI_Window {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		icon = new ImageIcon("judku_icon.png");
+		frame.setIconImage(icon.getImage());
 		frame = new JFrame();
 		frame.setBounds(100, 100, 497, 413);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
