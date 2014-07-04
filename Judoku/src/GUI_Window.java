@@ -1,30 +1,18 @@
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.InputMethodEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.Vector;
-import java.util.concurrent.ExecutionException;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
-import javax.swing.SwingUtilities;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.Document;
+import javax.swing.border.Border;
 import javax.swing.text.MaskFormatter;
-import javax.swing.text.PlainDocument;
 
 //Resizable with LayoutManager
 public class GUI_Window {
@@ -63,7 +51,7 @@ public class GUI_Window {
 	 */
 	private void initialize() {
 		icon = new ImageIcon("judku_icon.png");
-		frame.setIconImage(icon.getImage());
+		// frame.setIconImage(icon.getImage());
 		frame = new JFrame();
 		frame.setBounds(100, 100, 497, 413);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -149,7 +137,7 @@ public class GUI_Window {
 		final int height = 37;
 
 		Color active = Color.WHITE;
-		Color toggle = Color.LIGHT_GRAY;
+		Color toggle = new Color(255, 200, 200);
 
 		for (int y = 0; y < 9; y++) {
 			yPosition = 10;
@@ -162,7 +150,12 @@ public class GUI_Window {
 
 				// CAUTION: i= Y und J = X
 				gameField[y][x] = new JudokuJFormattedTextField(x, y,
-						createFormatter("#"));
+						createFormatter("#")) {
+					@Override
+					public void setBorder(Border border) {
+						// No!
+					}
+				};
 				gameField[y][x].setText("");
 				gameField[y][x].setColumns(10);
 				// set font size in gameField
@@ -170,9 +163,9 @@ public class GUI_Window {
 				gameField[y][x].setFont(font);
 				gameField[y][x].setHorizontalAlignment(JTextField.CENTER);
 				gameField[y][x].setBounds(xPosition, yPosition, width, height);
-				
-				//gameField[y][x].setBackground(active);
-				//set Color
+
+				// gameField[y][x].setBackground(active);
+				// set Color
 				gameField[y][x].setInitialColor(active);
 				// gameField[i][j].getDocument().addDocumentListener(myDocumentListener);
 				gameField[y][x].addFocusListener(new JudokuFocusListener());
@@ -199,7 +192,7 @@ public class GUI_Window {
 
 				if (startGrid[y][x] != 0) {
 					// New Game / Give Hint / Undo / Redo
-					//gameField[y][x].setBackground(Color.RED);
+					// gameField[y][x].setBackground(Color.RED);
 					gameField[y][x].setText(String.valueOf(startGrid[y][x]));
 					gameField[y][x].setEnabled(false);
 					gameField[y][x].setDisabledTextColor(Color.RED);
@@ -222,11 +215,11 @@ public class GUI_Window {
 		return puzzle;
 	}
 
-	public void setNumberPuzzle(NumberPuzzle np){
+	public void setNumberPuzzle(NumberPuzzle np) {
 		this.puzzle = np;
 		refreshView();
 	}
-	
+
 	class JudokuFocusListener implements FocusListener {
 		public void focusGained(java.awt.event.FocusEvent evt) {
 
@@ -240,7 +233,7 @@ public class GUI_Window {
 			JudokuJFormattedTextField currentTextField = (JudokuJFormattedTextField) evt
 					.getSource();
 
-			//this.gameField[y][x].setBackground(Color.RED);
+			// this.gameField[y][x].setBackground(Color.RED);
 			if (currentTextField.getText().equals(" ")
 					|| currentTextField.getText().equals("")) {
 				// If value was deleted or still no value inserted
@@ -265,8 +258,9 @@ public class GUI_Window {
 				} else {
 
 					/** Remove String outputs for final Version **/
-					
-					currentTextField.unmmark();;
+
+					currentTextField.unmmark();
+					;
 					System.out
 							.println("-------- FOCUS LOST---------\nX-Value: "
 									+ currentTextField.X
@@ -293,7 +287,8 @@ public class GUI_Window {
 			if (e.getSource() == btnQuit) {
 				frame.dispose();
 			} else if (e.getSource() == btnNewGame) {
-				sWork = new JudokuSwingWorker((Difficulty)cmbBox.getModel().getSelectedItem(), GUI_Window.this);
+				sWork = new JudokuSwingWorker((Difficulty) cmbBox.getModel()
+						.getSelectedItem(), GUI_Window.this);
 				sWork.execute();
 				btnHint.setEnabled(true);
 				btnUndo.setEnabled(true);
@@ -316,13 +311,12 @@ public class GUI_Window {
 					controller.giveHintPuzzle(puzzle);
 				}
 			}
-			
-			if(sWork != null){
-				try{
-				puzzle = sWork.get();
-				}
-				catch(Exception exceptio){
-					
+
+			if (sWork != null) {
+				try {
+					puzzle = sWork.get();
+				} catch (Exception exceptio) {
+
 				}
 			}
 			refreshView();
