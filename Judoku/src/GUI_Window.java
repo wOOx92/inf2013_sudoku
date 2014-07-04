@@ -186,20 +186,21 @@ public class GUI_Window {
 		int recentGrid[][] = this.puzzle.getRecentGrid();
 		int startGrid[][] = this.puzzle.getStartGrid();
 
-		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < 9; j++) {
+		for (int y = 0; y < 9; y++) {
+			for (int x = 0; x < 9; x++) {
 
-				if (startGrid[i][j] != 0) {
+				if (startGrid[y][x] != 0) {
 					// New Game / Give Hint / Undo / Redo
-					gameField[i][j].setText(String.valueOf(startGrid[i][j]));
-					gameField[i][j].setEnabled(false);
-					gameField[i][j].setDisabledTextColor(Color.RED);
-				} else if (recentGrid[i][j] != 0) {
-					gameField[i][j].setText(String.valueOf(recentGrid[i][j]));
-					gameField[i][j].setEnabled(true);
+					gameField[y][x].setBackground(Color.RED);
+					gameField[y][x].setText(String.valueOf(startGrid[y][x]));
+					gameField[y][x].setEnabled(false);
+					gameField[y][x].setDisabledTextColor(Color.RED);
+				} else if (recentGrid[y][x] != 0) {
+					gameField[y][x].setText(String.valueOf(recentGrid[y][x]));
+					gameField[y][x].setEnabled(true);
 				} else {
-					gameField[i][j].setText("");
-					gameField[i][j].setEnabled(true);
+					gameField[y][x].setText("");
+					gameField[y][x].setEnabled(true);
 				}
 			}
 		}
