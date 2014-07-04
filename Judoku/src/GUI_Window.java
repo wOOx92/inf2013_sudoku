@@ -9,6 +9,7 @@ import java.awt.event.InputMethodEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Vector;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -209,10 +210,6 @@ public class GUI_Window {
 		}
 	}
 
-	public void giveHint() {
-
-	}
-
 	public void displayMistake(int x, int y) {
 		this.gameField[y][x].mark();
 	}
@@ -221,6 +218,11 @@ public class GUI_Window {
 		return puzzle;
 	}
 
+	public void setNumberPuzzle(NumberPuzzle np){
+		this.puzzle = np;
+		refreshView();
+	}
+	
 	class JudokuFocusListener implements FocusListener {
 		public void focusGained(java.awt.event.FocusEvent evt) {
 
@@ -283,12 +285,12 @@ public class GUI_Window {
 
 	class ButtonLauscher implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			JudokuSwingWorker sWork = null;
 			if (e.getSource() == btnQuit) {
 				frame.dispose();
 			} else if (e.getSource() == btnNewGame) {
-				puzzle = new SudokuBuilder().newSudoku((Difficulty) cmbBox
-						.getModel().getSelectedItem());
-				
+				sWork = new JudokuSwingWorker((Difficulty)cmbBox.getModel().getSelectedItem(), GUI_Window.this);
+				sWork.execute();
 				btnHint.setEnabled(true);
 				btnUndo.setEnabled(true);
 				btnRedo.setEnabled(true);
@@ -308,6 +310,15 @@ public class GUI_Window {
 			} else if (e.getSource() == btnHint) {
 				if (puzzle != null) {
 					controller.giveHintPuzzle(puzzle);
+				}
+			}
+			
+			if(sWork != null){
+				try{
+				puzzle = sWork.get();
+				}
+				catch(Exception exceptio){
+					
 				}
 			}
 			refreshView();
