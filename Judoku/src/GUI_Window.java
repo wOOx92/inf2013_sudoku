@@ -191,7 +191,7 @@ public class GUI_Window {
 
 				if (startGrid[y][x] != 0) {
 					// New Game / Give Hint / Undo / Redo
-					gameField[y][x].setBackground(Color.RED);
+					//gameField[y][x].setBackground(Color.RED);
 					gameField[y][x].setText(String.valueOf(startGrid[y][x]));
 					gameField[y][x].setEnabled(false);
 					gameField[y][x].setDisabledTextColor(Color.RED);
