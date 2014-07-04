@@ -8,7 +8,6 @@ MODEL:
 GUI
 
 - Multithreading
-- Die Gui ändert bei Eingaben nicht das Sudoku Object
 - Gui nicht resizeable
 
 CONTROLLER
