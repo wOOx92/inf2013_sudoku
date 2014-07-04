@@ -165,7 +165,10 @@ public class GUI_Window {
 				gameField[y][x].setFont(font);
 				gameField[y][x].setHorizontalAlignment(JTextField.CENTER);
 				gameField[y][x].setBounds(xPosition, yPosition, width, height);
-				gameField[y][x].setBackground(active);
+				
+				//gameField[y][x].setBackground(active);
+				//set Color
+				gameField[y][x].setInitialColor(active);
 				// gameField[i][j].getDocument().addDocumentListener(myDocumentListener);
 				gameField[y][x].addFocusListener(new JudokuFocusListener());
 				gameField[y][x].setEnabled(false);
@@ -211,7 +214,7 @@ public class GUI_Window {
 	}
 
 	public void displayMistake(int x, int y) {
-		this.gameField[y][x].setBackground(Color.RED);
+		this.gameField[y][x].mark();
 	}
 
 	public NumberPuzzle getNumberPuzzle() {
@@ -231,6 +234,7 @@ public class GUI_Window {
 			JudokuJFormattedTextField currentTextField = (JudokuJFormattedTextField) evt
 					.getSource();
 
+			//this.gameField[y][x].setBackground(Color.RED);
 			if (currentTextField.getText().equals(" ")
 					|| currentTextField.getText().equals("")) {
 				// If value was deleted or still no value inserted
@@ -255,6 +259,8 @@ public class GUI_Window {
 				} else {
 
 					/** Remove String outputs for final Version **/
+					
+					currentTextField.unmmark();;
 					System.out
 							.println("-------- FOCUS LOST---------\nX-Value: "
 									+ currentTextField.X
