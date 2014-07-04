@@ -31,7 +31,7 @@ public class GUI_Window {
 
 	private NumberPuzzle puzzle;
 	private Controller controller;
-	private JFormattedTextField[][] gameField = new JFormattedTextField[9][9];
+	private JudokuJFormattedTextField[][] gameField = new JudokuJFormattedTextField[9][9];
 
 	// Initialize Buttons
 	private JButton btnNewGame;
@@ -71,7 +71,6 @@ public class GUI_Window {
 
 		// draw the gamefield
 
-
 		// TODO: Progress bar? [----> ]
 
 		// Declare Buttons
@@ -89,7 +88,7 @@ public class GUI_Window {
 		cmbBox.setModel(new DefaultComboBoxModel(difficulties));
 		cmbBox.setBounds(370, 50, 100, 40);
 		frame.getContentPane().add(cmbBox);
-		
+
 		btnReset = new JButton("Reset");
 		btnReset.setBounds(370, 89, 100, 40);
 		frame.getContentPane().add(btnReset);
@@ -113,12 +112,12 @@ public class GUI_Window {
 		frame.getContentPane().add(btnHint);
 		btnHint.addActionListener(new ButtonLauscher());
 		btnHint.setEnabled(false);
-		
+
 		btnValidate = new JButton("Validate");
 		btnValidate.setBounds(370, 245, 100, 40);
 		frame.getContentPane().add(btnValidate);
 		btnValidate.addActionListener(new ButtonLauscher());
-		btnValidate.setEnabled(false);	
+		btnValidate.setEnabled(false);
 
 		btnQuit = new JButton("Quit Game");
 		btnQuit.setBounds(370, 314, 100, 40);
@@ -138,48 +137,49 @@ public class GUI_Window {
 		return formatter;
 	}
 
-	public void initializeGameField(){
+	public void initializeGameField() {
 		int xPosition = 10;
 		int yPosition = 10;
 		final int width = 37;
 		final int height = 37;
-		
+
 		Color active = Color.WHITE;
 		Color toggle = Color.LIGHT_GRAY;
 
-		for (int i = 0; i < 9; i++) {
+		for (int y = 0; y < 9; y++) {
 			yPosition = 10;
-			for (int j = 0; j < 9; j++) {
-				if (j % 3 == 0) {
+			for (int x = 0; x < 9; x++) {
+				if (x % 3 == 0) {
 					Color buffer = active;
 					active = toggle;
 					toggle = buffer;
 				}
 
 				// CAUTION: i= Y und J = X
-				gameField[i][j] = new JFormattedTextField(createFormatter("#"));
-				gameField[i][j].setText("");
-				gameField[i][j].setColumns(10);
+				gameField[y][x] = new JudokuJFormattedTextField(x, y,
+						createFormatter("#"));
+				gameField[y][x].setText("");
+				gameField[y][x].setColumns(10);
 				// set font size in gameField
 				Font font = new Font("Arial", Font.BOLD, 32);
-				gameField[i][j].setFont(font);
-				gameField[i][j].setHorizontalAlignment(JTextField.CENTER);
-				gameField[i][j].setBounds(xPosition, yPosition, width, height);
-				gameField[i][j].setBackground(active);
+				gameField[y][x].setFont(font);
+				gameField[y][x].setHorizontalAlignment(JTextField.CENTER);
+				gameField[y][x].setBounds(xPosition, yPosition, width, height);
+				gameField[y][x].setBackground(active);
 				// gameField[i][j].getDocument().addDocumentListener(myDocumentListener);
-				gameField[i][j].addFocusListener(new JudokuFocusListener());
-				gameField[i][j].setEnabled(false);
+				gameField[y][x].addFocusListener(new JudokuFocusListener());
+				gameField[y][x].setEnabled(false);
 
-				frame.getContentPane().add(gameField[i][j]);
+				frame.getContentPane().add(gameField[y][x]);
 				yPosition = yPosition + 38;
 			}
-			if ((i + 1) % 3 != 0) {
+			if ((y + 1) % 3 != 0) {
 				Color buffer = active;
 				active = toggle;
 				toggle = buffer;
 			}
 			xPosition = xPosition + 38;
-		}		
+		}
 	}
 
 	public void refreshView() {
@@ -188,7 +188,9 @@ public class GUI_Window {
 
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
+
 				if (startGrid[i][j] != 0) {
+					// New Game / Give Hint / Undo / Redo
 					gameField[i][j].setText(String.valueOf(startGrid[i][j]));
 					gameField[i][j].setEnabled(false);
 					gameField[i][j].setDisabledTextColor(Color.RED);
@@ -217,12 +219,58 @@ public class GUI_Window {
 
 	class JudokuFocusListener implements FocusListener {
 		public void focusGained(java.awt.event.FocusEvent evt) {
-			JFormattedTextField src = (JFormattedTextField) evt.getSource();
-			src.selectAll();
-	}
 
-		public void focusLost(FocusEvent e) {
-			// nothin so far
+			System.out.println("-------- FOCUS GAINED---------\n");
+			JudokuJFormattedTextField currentTextField = (JudokuJFormattedTextField) evt
+					.getSource();
+			currentTextField.selectAll();
+		}
+
+		public void focusLost(java.awt.event.FocusEvent evt) {
+			JudokuJFormattedTextField currentTextField = (JudokuJFormattedTextField) evt
+					.getSource();
+
+			if (currentTextField.getText().equals(" ")
+					|| currentTextField.getText().equals("")) {
+				// If value was deleted or still no value inserted
+
+				/** FOR DEBUGGING **/
+				System.out.println("-------- FOCUS LOST---------\nX-Value: "
+						+ currentTextField.X
+						+ "\nY-Value: "
+						+ currentTextField.Y
+						+ "\nCurrent value: "
+						+ "NULL"
+						+ "\nValue successfully set: "
+						+ puzzle.trySetValue(currentTextField.X,
+								currentTextField.Y, 0));
+
+			} else {
+
+				if (currentTextField.getText().equals("0")) {
+					// if 0 was inserted, remove immediately
+					currentTextField.setText("");
+
+				} else {
+
+					/** Remove String outputs for final Version **/
+					System.out
+							.println("-------- FOCUS LOST---------\nX-Value: "
+									+ currentTextField.X
+									+ "\nY-Value: "
+									+ currentTextField.Y
+									+ "\nCurrent value: "
+									+ "NULL"
+									+ "\nValue successfully set: "
+									+ puzzle.trySetValue(currentTextField.X,
+											currentTextField.Y, Integer
+													.parseInt(currentTextField
+															.getText())));
+
+				}
+
+			}
+
 		}
 	}
 
