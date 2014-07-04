@@ -22,6 +22,7 @@ public class JudokuSwingWorker extends SwingWorker<Sudoku,Void>{
 		}
 		catch(Exception ignore){
 			//Ignore Exceptions;
+			
 		}
 	}*/
 	
