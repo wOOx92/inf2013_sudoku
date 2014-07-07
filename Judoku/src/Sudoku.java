@@ -101,7 +101,7 @@ public class Sudoku implements NumberPuzzle {
 		if (x <= 0 || x >= SIZE) {
 			return false;
 		}
-		if (x <= 0 || x >= SIZE) {
+		if (y <= 0 || y >= SIZE) {
 			return false;
 		}
 		if (this.startGrid[y][x] != 0) {
@@ -172,7 +172,8 @@ public class Sudoku implements NumberPuzzle {
 	
 	private void limitStack(Stack<?> undoRedoStack){
 		if(undoRedoStack.size() > UNDOLIMIT){
-			undoRedoStack.remove(undoRedoStack.size()-1);
+			
+			undoRedoStack.remove(0);
 		}
 	}
 }
