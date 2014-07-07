@@ -172,7 +172,7 @@ public class Sudoku implements NumberPuzzle {
 	
 	private void limitStack(Stack<?> undoRedoStack){
 		if(undoRedoStack.size() > UNDOLIMIT){
-			undoRedoStack.remove(undoRedoStack.size());
+			undoRedoStack.remove(undoRedoStack.size()-1);
 		}
 	}
 }
