@@ -276,7 +276,7 @@ public class GUI_Window {
 				frame.dispose();
 			} else if (e.getSource() == btnNewGame) {
 				sWork = new JudokuSwingWorker((Difficulty) cmbBox.getModel()
-						.getSelectedItem(), GUI_Window.this);
+						.getSelectedItem());
 				sWork.execute();
 				btnHint.setEnabled(true);
 				btnUndo.setEnabled(true);

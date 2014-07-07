@@ -3,11 +3,9 @@ import javax.swing.SwingWorker;
 public class JudokuSwingWorker extends SwingWorker<Sudoku,Void>{
 	
 	final Difficulty diff;
-	final GUI_Window guiWndw;
 	
-	public JudokuSwingWorker(Difficulty diff, GUI_Window gw){
+	public JudokuSwingWorker(Difficulty diff){
 		this.diff = diff;
-		this.guiWndw = gw;
 	}
 	
 	@Override
