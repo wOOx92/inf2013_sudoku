@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusListener;
@@ -12,6 +13,9 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 import javax.swing.text.MaskFormatter;
 
 //Resizable with LayoutManager
@@ -22,7 +26,7 @@ public class GUI_Window {
 
 	private NumberPuzzle puzzle;
 	private Controller controller;
-	private JudokuJFormattedTextField[][] gameField = new JudokuJFormattedTextField[9][9];
+	private JudokuJTextField[][] gameField = new JudokuJTextField[9][9];
 
 	// Initialize Buttons
 	private JButton btnNewGame;
@@ -149,14 +153,13 @@ public class GUI_Window {
 				}
 
 				// CAUTION: i= Y und J = X
-				gameField[y][x] = new JudokuJFormattedTextField(x, y,
-						createFormatter("#")) {
-					@Override
+				gameField[y][x] = new JudokuJTextField(x, y) {
 					public void setBorder(Border border) {
 						// No!
 					}
 				};
-				gameField[y][x].setText("");
+				gameField[y][x].setDocument(new JTextFieldLimit(1));
+				// gameField[y][x].setText("");
 				gameField[y][x].setColumns(10);
 				// set font size in gameField
 				Font font = new Font("Arial", Font.BOLD, 32);
@@ -224,57 +227,42 @@ public class GUI_Window {
 		public void focusGained(java.awt.event.FocusEvent evt) {
 
 			System.out.println("-------- FOCUS GAINED---------\n");
-			JudokuJFormattedTextField currentTextField = (JudokuJFormattedTextField) evt
+			JudokuJTextField currentTextField = (JudokuJTextField) evt
 					.getSource();
 			currentTextField.selectAll();
 		}
 
 		public void focusLost(java.awt.event.FocusEvent evt) {
-			JudokuJFormattedTextField currentTextField = (JudokuJFormattedTextField) evt
+			JudokuJTextField currentTextField = (JudokuJTextField) evt
 					.getSource();
-
+			System.out.println("Was steht in dem Scheiss JTextField? "
+					+ currentTextField.getText());
 			// this.gameField[y][x].setBackground(Color.RED);
-			if (currentTextField.getText().equals(" ")
-					|| currentTextField.getText().equals("")) {
-				// If value was deleted or still no value inserted
 
-				/** FOR DEBUGGING **/
+			/** FOR DEBUGGING **/
+
+			if (currentTextField.getText().equals("") || currentTextField.getText().equals(" ") || currentTextField.getText().equals(null)) {
 				System.out.println("-------- FOCUS LOST---------\nX-Value: "
 						+ currentTextField.X
 						+ "\nY-Value: "
 						+ currentTextField.Y
 						+ "\nCurrent value: "
-						+ "NULL"
+						+ ""
 						+ "\nValue successfully set: "
 						+ puzzle.trySetValue(currentTextField.X,
 								currentTextField.Y, 0));
 
 			} else {
-
-				if (currentTextField.getText().equals("0")) {
-					// if 0 was inserted, remove immediately
-					currentTextField.setText("");
-
-				} else {
-
-					/** Remove String outputs for final Version **/
-
-					currentTextField.unmmark();
-					;
-					System.out
-							.println("-------- FOCUS LOST---------\nX-Value: "
-									+ currentTextField.X
-									+ "\nY-Value: "
-									+ currentTextField.Y
-									+ "\nCurrent value: "
-									+ "NULL"
-									+ "\nValue successfully set: "
-									+ puzzle.trySetValue(currentTextField.X,
-											currentTextField.Y, Integer
-													.parseInt(currentTextField
-															.getText())));
-
-				}
+				System.out.println("-------- FOCUS LOST---------\nX-Value: "
+						+ currentTextField.X
+						+ "\nY-Value: "
+						+ currentTextField.Y
+						+ "\nCurrent value: "
+						+ ""
+						+ "\nValue successfully set: "
+						+ puzzle.trySetValue(currentTextField.X,
+								currentTextField.Y,
+								Integer.parseInt(currentTextField.getText())));
 
 			}
 

@@ -1,16 +1,15 @@
 import java.awt.Color;
 
-import javax.swing.JFormattedTextField;
+import javax.swing.JTextField;
 import javax.swing.text.MaskFormatter;
 
-public class JudokuJFormattedTextField extends JFormattedTextField {
+public class JudokuJTextField extends JTextField {
 
 	final public int X;
 	final public int Y;
 	private Color initialColor;
 
-	public JudokuJFormattedTextField(int x, int y, MaskFormatter mskf) {
-		super(mskf);
+	public JudokuJTextField(int x, int y) {
 		this.X = x;
 		this.Y = y;
 	}
