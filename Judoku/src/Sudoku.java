@@ -101,7 +101,7 @@ public class Sudoku implements NumberPuzzle {
 		if (x <= 0 || x >= SIZE) {
 			return false;
 		}
-		if (y <= 0 || y >= SIZE) {
+		if (y <= 0 || y >= SIZE) { //
 			return false;
 		}
 		if (this.startGrid[y][x] != 0) {
