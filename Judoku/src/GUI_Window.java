@@ -1,29 +1,24 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.MenuBar;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusListener;
-import java.util.Vector;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.MenuSelectionManager;
 import javax.swing.border.Border;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DocumentFilter;
 import javax.swing.text.MaskFormatter;
 
 public class GUI_Window {
@@ -38,7 +33,6 @@ public class GUI_Window {
 	/*
 	 * Buttons
 	 */
-	private JButton btnNewGame;
 	private JButton btnRedo;
 	private JButton btnUndo;
 	private JButton btnReset;
@@ -47,13 +41,22 @@ public class GUI_Window {
 	private JButton btnValidate;
 	private JButton btnLangDEU;
 	private JButton btnLangENG;
+	private JButton btnEasy;
+	private JButton btnMedium;
+	private JButton btnHard;
 	
 	/*
 	 * GridLayout Components
 	 */
 	private JMenuBar mnbrTop;
+	private JMenu mnNewGame;
 	private JPanel pnlCenter;
 	private JPanel pnlSouth;
+	private JPanel pnlSouthTop;
+	private JPanel pnlSouthBottom;
+
+	private JProgressBar prgrBar; 
+	private JTextArea txtTime;
 	
 	/**
 	 * Create the application.
@@ -82,67 +85,113 @@ public class GUI_Window {
 		pnlCenter = new JPanel();	
 		pnlCenter.setLayout(new GridLayout(9,9,2,2));
 		pnlSouth = new JPanel();
-		pnlSouth.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+		pnlSouth.setLayout(new GridLayout(2,1));
+		pnlSouthTop = new JPanel();
+		pnlSouthTop.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+		pnlSouthBottom = new JPanel();
+		pnlSouthBottom.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+		pnlSouth.add(pnlSouthTop);
+		pnlSouth.add(pnlSouthBottom);
 		
 		// positioning and sizing the text fields
-
 		initializeGameField();
 
 		// draw the gamefield
 		mnbrTop = new JMenuBar();
-		mnbrTop.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+		//mnbrTop.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
 		
-		JMenu mnNewGame = new JMenu("New Game");
+		mnNewGame = new JMenu("New Game");
 		
-		JButton btnEasy = new JButton("EASY");
+		btnEasy = new JButton("EASY");
 		btnEasy.setText("Easy");
+		btnEasy.setContentAreaFilled(false);
+		btnEasy.setBorderPainted(false);
+		btnEasy.addActionListener(new ButtonLauscher());
 		mnNewGame.add(btnEasy);
-		JButton btnMedium = new JButton("MEDIUM");
+		
+		btnMedium = new JButton("MEDIUM");
 		btnMedium.setText("Medium");
+		btnMedium.setContentAreaFilled(false);
+		btnMedium.setBorderPainted(false);
+		btnMedium.addActionListener(new ButtonLauscher());
 		mnNewGame.add(btnMedium);
-		JButton btnHard = new JButton("HARD");
-		mnNewGame.add(btnHard);
+		
+		btnHard = new JButton("HARD");
+		btnHard.setContentAreaFilled(false);
+		btnHard.setBorderPainted(false);
 		btnHard.setText("Hard");
+		btnHard.addActionListener(new ButtonLauscher());
+		mnNewGame.add(btnHard);
 		
 		mnbrTop.add(mnNewGame);
 		
 		btnHint = new JButton("Give Hint");
-		mnbrTop.add(btnHint);
+		btnHint.setContentAreaFilled(false);
+		btnHint.setBorderPainted(false);
 		btnHint.addActionListener(new ButtonLauscher());
 		btnHint.setEnabled(false);
+		mnbrTop.add(btnHint);
 		
 		btnReset = new JButton("Reset");
-		mnbrTop.add(btnReset);
+		btnReset.setContentAreaFilled(false);
+		btnReset.setBorderPainted(false);
 		btnReset.addActionListener(new ButtonLauscher());
 		btnReset.setEnabled(false);
-
+		mnbrTop.add(btnReset);
+		
 		btnLangDEU = new JButton("DEU");
-		mnbrTop.add(btnLangDEU);
+		btnLangDEU.setContentAreaFilled(false);
+		btnLangDEU.setBorderPainted(false);
 		btnLangDEU.addActionListener(new ButtonLauscher());
+		mnbrTop.add(btnLangDEU);
 		
 		btnLangENG = new JButton("ENG");
-		btnLangENG.setHorizontalAlignment(SwingConstants.RIGHT);
-		mnbrTop.add(btnLangENG);
+		btnLangENG.setContentAreaFilled(false);
+		btnLangENG.setBorderPainted(false);
 		btnLangENG.addActionListener(new ButtonLauscher());
-
+		mnbrTop.add(btnLangENG);
+		
 		btnUndo = new JButton("Undo");
-		pnlSouth.add(btnUndo);
+		btnUndo.setContentAreaFilled(false);
+		btnUndo.setPreferredSize(new Dimension(90, 35));
 		btnUndo.addActionListener(new ButtonLauscher());
 		btnUndo.setEnabled(false);
-
+		pnlSouthTop.add(btnUndo);
+		
 		btnRedo = new JButton("Redo");
-		pnlSouth.add(btnRedo);
+		btnRedo.setContentAreaFilled(false);
+		btnRedo.setPreferredSize(new Dimension(90, 35));
 		btnRedo.addActionListener(new ButtonLauscher());
 		btnRedo.setEnabled(false);
+		pnlSouthTop.add(btnRedo);
 
 		btnValidate = new JButton("Validate");
-		pnlSouth.add(btnValidate);
+		btnValidate.setContentAreaFilled(false);
+		btnValidate.setPreferredSize(new Dimension(90, 35));
 		btnValidate.addActionListener(new ButtonLauscher());
 		btnValidate.setEnabled(false);
+		pnlSouthTop.add(btnValidate);
 
-		btnQuit = new JButton("Quit Game");
-		//frame.getContentPane().add(btnQuit);
+		btnQuit = new JButton("Exit");
+		btnQuit.setContentAreaFilled(false);
+		btnQuit.setPreferredSize(new Dimension(90, 35));
+		pnlSouthTop.add(btnQuit);
 		btnQuit.addActionListener(new ButtonLauscher());
+
+		txtTime = new JTextArea();
+		txtTime.setEnabled(false);
+		txtTime.setText("19 Sekunden");
+		pnlSouthBottom.add(txtTime);
+		
+		JTextArea progressTxt = new JTextArea();
+		progressTxt.setText("Progress");
+		progressTxt.setEnabled(false);
+		pnlSouthBottom.add(progressTxt);
+		
+		prgrBar = new JProgressBar();
+		prgrBar.setPreferredSize(new Dimension(200, 20));
+		prgrBar.setValue(33);
+		pnlSouthBottom.add(prgrBar);
 		
 		frame.getContentPane().add(mnbrTop, BorderLayout.PAGE_START);
 		frame.getContentPane().add(pnlCenter, BorderLayout.CENTER);
@@ -179,11 +228,7 @@ public class GUI_Window {
 				}
 
 				// CAUTION: i= Y und J = X
-				gameField[y][x] = new JudokuJTextField(x, y) {
-					public void setBorder(Border border) {
-						// No!
-					}
-				};
+				gameField[y][x] = new JudokuJTextField(x, y);
 				gameField[y][x].setDocument(new JTextFieldLimit(1));
 				// gameField[y][x].setText("");
 				gameField[y][x].setColumns(10);
@@ -219,7 +264,6 @@ public class GUI_Window {
 
 		for (int y = 0; y < 9; y++) {
 			for (int x = 0; x < 9; x++) {
-
 				if (startGrid[y][x] != 0) {
 					// New Game / Give Hint / Undo / Redo
 					// gameField[y][x].setBackground(Color.RED);
@@ -250,6 +294,13 @@ public class GUI_Window {
 		refreshView();
 	}
 
+	public void enableButtons(boolean enabled){
+		btnHint.setEnabled(enabled);
+		btnUndo.setEnabled(enabled);
+		btnRedo.setEnabled(enabled);
+		btnReset.setEnabled(enabled);		
+	}
+	
 	class JudokuFocusListener implements FocusListener {
 		public void focusGained(java.awt.event.FocusEvent evt) {
 
@@ -301,39 +352,48 @@ public class GUI_Window {
 			JudokuSwingWorker sWork = null;
 			if (e.getSource() == btnQuit) {
 				frame.dispose();
-			} else if (e.getSource() == btnNewGame) {
+			} else if (e.getSource() == btnEasy) {
+				sWork = new JudokuSwingWorker(Difficulty.EASY);
+				sWork.execute();
+				puzzle = sWork.easyGet();
+				enableButtons(true);
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				refreshView();
+			} else if (e.getSource() == btnMedium){
+				sWork = new JudokuSwingWorker(Difficulty.MEDIUM);
+				sWork.execute();
+				puzzle = sWork.easyGet();
+				enableButtons(true);
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				refreshView();
+			} else if (e.getSource() == btnHard){
 				sWork = new JudokuSwingWorker(Difficulty.HARD);
 				sWork.execute();
-				btnHint.setEnabled(true);
-				btnUndo.setEnabled(true);
-				btnRedo.setEnabled(true);
-				btnReset.setEnabled(true);
+				puzzle = sWork.easyGet();
+				enableButtons(true);
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				refreshView();
 			} else if (e.getSource() == btnReset) {
 				if (puzzle != null) {
 					controller.resetPuzzle(puzzle);
+					refreshView();
 				}
 			} else if (e.getSource() == btnUndo) {
 				if (puzzle != null) {
 					controller.undoPuzzle(puzzle);
+					refreshView();
 				}
 			} else if (e.getSource() == btnRedo) {
 				if (puzzle != null) {
 					controller.redoPuzzle(puzzle);
+					refreshView();
 				}
 			} else if (e.getSource() == btnHint) {
 				if (puzzle != null) {
 					controller.giveHintPuzzle(puzzle);
+					refreshView();
 				}
 			}
-
-			if (sWork != null) {
-				try {
-					puzzle = sWork.get();
-				} catch (Exception exceptio) {
-
-				}
-			}
-			refreshView();
 		}
 	}
 }

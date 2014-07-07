@@ -13,6 +13,15 @@ public class JudokuSwingWorker extends SwingWorker<Sudoku,Void>{
 		return new SudokuBuilder().newSudoku(diff);
 	}
 	
+	public Sudoku easyGet(){
+		try{
+			return this.get();
+		}
+		catch(Exception e){
+			return null;
+		}
+	}
+	
 	/*@Override
 	public void done(){
 		try{
