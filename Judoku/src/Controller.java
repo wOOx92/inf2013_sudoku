@@ -21,18 +21,6 @@ public class Controller{
 				}
 			}
 		});
-		
-		
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					newGUI_Window window = new newGUI_Window();
-					window.getJFrame().setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
 	}
 	
 	public static int[][] deepCopy(int [][] template){

@@ -1,5 +1,9 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.MenuBar;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,14 +15,17 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 import javax.swing.text.MaskFormatter;
 
-//Resizable with LayoutManager
 public class GUI_Window {
 
 	private JFrame frame;
@@ -28,7 +35,9 @@ public class GUI_Window {
 	private Controller controller;
 	private JudokuJTextField[][] gameField = new JudokuJTextField[9][9];
 
-	// Initialize Buttons
+	/*
+	 * Buttons
+	 */
 	private JButton btnNewGame;
 	private JButton btnRedo;
 	private JButton btnUndo;
@@ -36,8 +45,16 @@ public class GUI_Window {
 	private JButton btnQuit;
 	private JButton btnHint;
 	private JButton btnValidate;
-	private JComboBox cmbBox;
-
+	private JButton btnLangDEU;
+	private JButton btnLangENG;
+	
+	/*
+	 * GridLayout Components
+	 */
+	private JMenuBar mnbrTop;
+	private JPanel pnlCenter;
+	private JPanel pnlSouth;
+	
 	/**
 	 * Create the application.
 	 */
@@ -59,68 +76,77 @@ public class GUI_Window {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 497, 413);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		frame.getContentPane().setLayout(new BorderLayout());
 		frame.setTitle("Judoku 0.0.0.1");
-
+		
+		pnlCenter = new JPanel();	
+		pnlCenter.setLayout(new GridLayout(9,9,2,2));
+		pnlSouth = new JPanel();
+		pnlSouth.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+		
 		// positioning and sizing the text fields
 
 		initializeGameField();
 
 		// draw the gamefield
-
-		// TODO: Progress bar? [----> ]
-
-		// Declare Buttons
-		btnNewGame = new JButton("New Game");
-		btnNewGame.setBounds(370, 11, 100, 40);
-		frame.getContentPane().add(btnNewGame);
-		btnNewGame.addActionListener(new ButtonLauscher());
-
-		Vector<Difficulty> difficulties = new Vector<>();
-		difficulties.add(Difficulty.EASY);
-		difficulties.add(Difficulty.MEDIUM);
-		difficulties.add(Difficulty.HARD);
-
-		cmbBox = new JComboBox();
-		cmbBox.setModel(new DefaultComboBoxModel(difficulties));
-		cmbBox.setBounds(370, 50, 100, 40);
-		frame.getContentPane().add(cmbBox);
-
+		mnbrTop = new JMenuBar();
+		mnbrTop.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+		
+		JMenu mnNewGame = new JMenu("New Game");
+		
+		JButton btnEasy = new JButton("EASY");
+		btnEasy.setText("Easy");
+		mnNewGame.add(btnEasy);
+		JButton btnMedium = new JButton("MEDIUM");
+		btnMedium.setText("Medium");
+		mnNewGame.add(btnMedium);
+		JButton btnHard = new JButton("HARD");
+		mnNewGame.add(btnHard);
+		btnHard.setText("Hard");
+		
+		mnbrTop.add(mnNewGame);
+		
+		btnHint = new JButton("Give Hint");
+		mnbrTop.add(btnHint);
+		btnHint.addActionListener(new ButtonLauscher());
+		btnHint.setEnabled(false);
+		
 		btnReset = new JButton("Reset");
-		btnReset.setBounds(370, 89, 100, 40);
-		frame.getContentPane().add(btnReset);
+		mnbrTop.add(btnReset);
 		btnReset.addActionListener(new ButtonLauscher());
 		btnReset.setEnabled(false);
 
+		btnLangDEU = new JButton("DEU");
+		mnbrTop.add(btnLangDEU);
+		btnLangDEU.addActionListener(new ButtonLauscher());
+		
+		btnLangENG = new JButton("ENG");
+		btnLangENG.setHorizontalAlignment(SwingConstants.RIGHT);
+		mnbrTop.add(btnLangENG);
+		btnLangENG.addActionListener(new ButtonLauscher());
+
 		btnUndo = new JButton("Undo");
-		btnUndo.setBounds(370, 128, 100, 40);
-		frame.getContentPane().add(btnUndo);
+		pnlSouth.add(btnUndo);
 		btnUndo.addActionListener(new ButtonLauscher());
 		btnUndo.setEnabled(false);
 
 		btnRedo = new JButton("Redo");
-		btnRedo.setBounds(370, 167, 100, 40);
-		frame.getContentPane().add(btnRedo);
+		pnlSouth.add(btnRedo);
 		btnRedo.addActionListener(new ButtonLauscher());
 		btnRedo.setEnabled(false);
 
-		btnHint = new JButton("Give Hint");
-		btnHint.setBounds(370, 206, 100, 40);
-		frame.getContentPane().add(btnHint);
-		btnHint.addActionListener(new ButtonLauscher());
-		btnHint.setEnabled(false);
-
 		btnValidate = new JButton("Validate");
-		btnValidate.setBounds(370, 245, 100, 40);
-		frame.getContentPane().add(btnValidate);
+		pnlSouth.add(btnValidate);
 		btnValidate.addActionListener(new ButtonLauscher());
 		btnValidate.setEnabled(false);
 
 		btnQuit = new JButton("Quit Game");
-		btnQuit.setBounds(370, 314, 100, 40);
-		frame.getContentPane().add(btnQuit);
+		//frame.getContentPane().add(btnQuit);
 		btnQuit.addActionListener(new ButtonLauscher());
-
+		
+		frame.getContentPane().add(mnbrTop, BorderLayout.PAGE_START);
+		frame.getContentPane().add(pnlCenter, BorderLayout.CENTER);
+		frame.getContentPane().add(pnlSouth, BorderLayout.SOUTH);
 	}
 
 	private MaskFormatter createFormatter(String s) {
@@ -173,8 +199,9 @@ public class GUI_Window {
 				// gameField[i][j].getDocument().addDocumentListener(myDocumentListener);
 				gameField[y][x].addFocusListener(new JudokuFocusListener());
 				gameField[y][x].setEnabled(false);
-
-				frame.getContentPane().add(gameField[y][x]);
+				
+				pnlCenter.add(gameField[y][x]);
+				//frame.getContentPane().add(gameField[y][x]);
 				yPosition = yPosition + 38;
 			}
 			if ((y + 1) % 3 != 0) {
@@ -275,8 +302,7 @@ public class GUI_Window {
 			if (e.getSource() == btnQuit) {
 				frame.dispose();
 			} else if (e.getSource() == btnNewGame) {
-				sWork = new JudokuSwingWorker((Difficulty) cmbBox.getModel()
-						.getSelectedItem());
+				sWork = new JudokuSwingWorker(Difficulty.HARD);
 				sWork.execute();
 				btnHint.setEnabled(true);
 				btnUndo.setEnabled(true);
