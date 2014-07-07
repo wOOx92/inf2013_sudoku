@@ -101,7 +101,7 @@ public class Sudoku implements NumberPuzzle {
 		if (x <= 0 || x >= SIZE) {
 			return false;
 		}
-		if (y <= 0 || y >= SIZE) { //
+		if (y <= 0 || y >= SIZE) { 
 			return false;
 		}
 		if (this.startGrid[y][x] != 0) {
@@ -110,6 +110,7 @@ public class Sudoku implements NumberPuzzle {
 		undoStorage.push(Controller.deepCopy(recentGrid));
 		limitStack(undoStorage);
 		this.recentGrid[y][x] = val;
+		redoStorage.clear();
 		return true;
 	}
 
@@ -162,6 +163,7 @@ public class Sudoku implements NumberPuzzle {
 		}
 	}
 	
+
 	public void redo(){
 		if(!redoStorage.empty()){
 			undoStorage.push(Controller.deepCopy(recentGrid));
