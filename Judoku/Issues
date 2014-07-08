@@ -9,6 +9,7 @@ HIGH PRIORITY
 - Methode deepCopy(int[][]) im Controller evtl fehlplatziert
 - Evaluieren von Eingaben im Controller nicht durch trySetValue() im Model
 
+
 LOW PRIORITY
 - Steuerung z
 - Steuerung y
