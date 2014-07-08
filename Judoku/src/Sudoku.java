@@ -95,7 +95,7 @@ public class Sudoku implements NumberPuzzle {
 	}
 
 	public boolean trySetValue(int x, int y, int val) {
-		if (val <= 0 || val > SIZE) {
+		/*if (val <= 0 || val > SIZE) {
 			return false;
 		}
 		if (x <= 0 || x >= SIZE) {
@@ -103,7 +103,7 @@ public class Sudoku implements NumberPuzzle {
 		}
 		if (y <= 0 || y >= SIZE) { 
 			return false;
-		}
+		}*/
 		if (this.startGrid[y][x] != 0) {
 			return false;
 		}

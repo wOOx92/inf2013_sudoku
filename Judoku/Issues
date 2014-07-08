@@ -4,6 +4,7 @@ MODEL:
 
 - Redos sollen nur nach Undos durchgeführt werden können
 - SInd Sudokus rechts-unten-lastig?
+- trySetValue() evaluation funktioniert nicht.
 
 GUI
 

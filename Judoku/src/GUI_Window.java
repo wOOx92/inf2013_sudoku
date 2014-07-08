@@ -3,6 +3,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -54,15 +56,10 @@ public class GUI_Window {
 	private JButton btnHard;
 	
 	/*
-	 * GridLayout Components
+	 * Other Components
 	 */
 	private JMenuBar mnbrTop;
 	private JMenu mnNewGame;
-	//private JPanel pnlCenter;
-	//private JPanel pnlSouth;
-	//private JPanel pnlSouthTop;
-	//private JPanel pnlSouthBottom;
-
 	private JProgressBar prgrBar; 
 	private JTextField txtTime;
 	
@@ -131,7 +128,7 @@ public class GUI_Window {
 		btnHard.setText("Hard");
 		btnHard.addActionListener(new ButtonLauscher());
 		mnNewGame.add(btnHard);
-		
+
 		mnbrTop.add(mnNewGame);
 		
 		btnReset = new JButton("Reset");
@@ -190,10 +187,10 @@ public class GUI_Window {
 		txtTime = new JTextField();
 		txtTime.setEnabled(false);
 		txtTime.setText("0s");
-		txtTime.setBackground(frame.getBackground());
+		txtTime.setBackground(Color.WHITE);
 		txtTime.setDisabledTextColor(Color.BLACK);
 		txtTime.setFont(new Font("DIALOG", Font.PLAIN, 14));
-		txtTime.setPreferredSize(new Dimension(60,25));
+		txtTime.setPreferredSize(new Dimension(80,25));
 		txtTime.setHorizontalAlignment(SwingConstants.RIGHT);
 		pnlSouthBottom.add(txtTime);
 		
@@ -208,13 +205,13 @@ public class GUI_Window {
 
 		UIManager.put("ProgressBar.background", Color.WHITE);
 		UIManager.put("ProgressBar.selectionBackground", Color.BLACK);
-		
+		UIManager.put("ProgressBar.selectionForeground", Color.BLACK);
+		UIManager.put("ProgressBar.font", new Font("DIALOG", Font.BOLD, 14));
 		prgrBar = new JProgressBar();
 		prgrBar.setPreferredSize(new Dimension(200, 25));
 		prgrBar.setStringPainted(true);
 		prgrBar.setBorderPainted(false);
 		prgrBar.setForeground(new Color(255, 200, 200));
-		prgrBar.setValue(40);
 		pnlSouthBottom.add(prgrBar);
 		
 		frame.getContentPane().add(mnbrTop, BorderLayout.PAGE_START);
@@ -242,12 +239,12 @@ public class GUI_Window {
 
 				// CAUTION: i= Y und J = X
 				gameField[y][x] = new JudokuJTextField(x, y);
+				gameField[y][x].setBorder(BorderFactory.createEmptyBorder());
 				gameField[y][x].setDocument(new JTextFieldLimit(1));
 				// gameField[y][x].setText("");
 				gameField[y][x].setColumns(10);
 				// set font size in gameField
-				Font font = new Font("Arial", Font.BOLD, 38);
-				gameField[y][x].setFont(font);
+				gameField[y][x].setFont(new Font("Arial", Font.BOLD, 38));
 				gameField[y][x].setHorizontalAlignment(JTextField.CENTER);
 				gameField[y][x].setBounds(xPosition, yPosition, width, height);
 
@@ -274,22 +271,33 @@ public class GUI_Window {
 	public void refreshView() {
 		int recentGrid[][] = this.puzzle.getRecentGrid();
 		int startGrid[][] = this.puzzle.getStartGrid();
-	
+		int startFilledFields = 0;
+		int userFilledFields = 0;
 		for (int y = 0; y < 9; y++) {
 			for (int x = 0; x < 9; x++) {
 				if (startGrid[y][x] != 0) {
 					gameField[y][x].setText(String.valueOf(startGrid[y][x]));
 					gameField[y][x].setEnabled(false);
 					gameField[y][x].setDisabledTextColor(Color.GRAY);
+					startFilledFields++;
 				} else if (recentGrid[y][x] != 0) {
 					gameField[y][x].setText(String.valueOf(recentGrid[y][x]));
 					gameField[y][x].setEnabled(true);
+					userFilledFields++;
 				} else {
 					gameField[y][x].setText("");
 					gameField[y][x].setEnabled(true);
 				}
 			}
 		}
+		if(startFilledFields + userFilledFields == 81){
+			btnValidate.setEnabled(true);
+		} else {
+			btnValidate.setEnabled(false);
+		}
+		
+		prgrBar.setValue(100*userFilledFields / (81 - startFilledFields));
+		prgrBar.getRootPane().repaint();
 	}
 
 	public void displayMistake(int x, int y) {
@@ -354,6 +362,7 @@ public class GUI_Window {
 								Integer.parseInt(currentTextField.getText())));
 
 			}
+			refreshView();
 		}
 	}
 
@@ -374,7 +383,6 @@ public class GUI_Window {
 			} else {
 				txtTime.setText(hours + "h " + minutes + "m " + seconds + "s");
 			}
-			
 			txtTime.getRootPane().repaint();
 		}
 		

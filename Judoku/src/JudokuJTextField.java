@@ -8,13 +8,6 @@ public class JudokuJTextField extends JTextField {
 	final public int X;
 	final public int Y;
 	private Color initialColor;
-
-	@Override
-	public void setBorder(Border b){
-		/*
-		 * No Border needed
-		 */
-	}
 	
 	public JudokuJTextField(int x, int y) {
 		this.X = x;
