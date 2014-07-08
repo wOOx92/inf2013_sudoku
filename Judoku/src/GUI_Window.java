@@ -448,6 +448,15 @@ public class GUI_Window {
 					controller.giveHintPuzzle(puzzle);
 					refreshView();
 				}
+			} else if (e.getSource() == btnValidate){
+				int mistakes = controller.validateUserSolution(puzzle);
+				if(mistakes == 0){
+					//TODO	
+				}
+				else{
+					//TODO
+					System.out.println(mistakes + " mistakes");
+				}
 			}
 		}
 	}

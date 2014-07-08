@@ -42,6 +42,18 @@ public class Controller{
 		puzzle.redo();
 	}
 	
+	public int validateUserSolution(NumberPuzzle puzzle){
+		int mistakes = 0;
+		for(int x = 0; x < 9; x++) {
+			for(int y = 0; y < 9; y++) {
+				if(puzzle.getRecentGrid()[y][x] != puzzle.getSolvedGird()[y][x]){
+					mistakes++;
+				}
+			}
+		}
+		return mistakes;
+	}
+	
 	public void giveHintPuzzle(NumberPuzzle puzzle){
 		int[] coords = puzzle.searchMistake();
 		if(coords.length == 0){

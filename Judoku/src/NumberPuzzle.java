@@ -19,6 +19,8 @@ public interface NumberPuzzle {
 	 */
 	public int[][] getStartGrid();
 
+	public int[][] getSolvedGird();
+	
 	/**
 	 * Tries to set a value in a certain cell in the NumberPuzzle.
 	 * 

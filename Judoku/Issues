@@ -1,27 +1,19 @@
 Issues:
 
-MODEL:
-
-- Redos sollen nur nach Undos durchgeführt werden können
+HIGH PRIORITY
 - SInd Sudokus rechts-unten-lastig?
-- trySetValue() evaluation funktioniert nicht.
-
-GUI
-
 - Disable redo / undo button wenn redo / undo nicht möglich
 - puzzle != null
-- Buttons on right
 - Buttons sizes
 - Mark Mistake bleibt dauerhaft
-- Steuerung z
-- Steuerung y
-- Anstatt setBorder() zu überschreiben lieber javax.swing.BorderFactory.createEmptyBorder()?
-- Timer format
-
-CONTROLLER
-
 - Methode deepCopy(int[][]) im Controller evtl fehlplatziert
 - Evaluieren von Eingaben im Controller nicht durch trySetValue() im Model
+
+LOW PRIORITY
+- Steuerung z
+- Steuerung y
+- Buttons on right
+- Timer format
 
 NOTES:
 	-Builder pattern benutzen?

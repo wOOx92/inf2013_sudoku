@@ -95,15 +95,15 @@ public class Sudoku implements NumberPuzzle {
 	}
 
 	public boolean trySetValue(int x, int y, int val) {
-		/*if (val <= 0 || val > SIZE) {
+		if (val < 0 || val > SIZE) {
 			return false;
 		}
-		if (x <= 0 || x >= SIZE) {
+		if (x < 0 || x >= SIZE) {
 			return false;
 		}
-		if (y <= 0 || y >= SIZE) { 
+		if (y < 0 || y >= SIZE) { 
 			return false;
-		}*/
+		}
 		if (this.startGrid[y][x] != 0) {
 			return false;
 		}
@@ -121,6 +121,10 @@ public class Sudoku implements NumberPuzzle {
 		return this.recentGrid;
 	}
 
+	public int[][] getSolvedGird() {
+		return this.solvedGrid;
+	}
+	
 	public int[] searchMistake() {
 		for (int x = 0; x < SIZE; x++) {
 			for (int y = 0; y < SIZE; y++) {
