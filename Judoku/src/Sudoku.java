@@ -29,7 +29,7 @@ public class Sudoku implements NumberPuzzle {
 	 * This field saves the rating of the difficulty of this Sudoku.
 	 */
 	public final Difficulty DIFFICULTY;
-
+	
 	/**
 	 * This field is the side-length of a carree in a Sudoku. 
 	 */

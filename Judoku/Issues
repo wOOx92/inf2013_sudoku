@@ -3,6 +3,7 @@ Issues:
 MODEL:
 
 - Redos sollen nur nach Undos durchgeführt werden können
+- SInd Sudokus rechts-unten-lastig?
 
 GUI
 
@@ -10,10 +11,11 @@ GUI
 - puzzle != null
 - Buttons on right
 - Buttons sizes
-- Window minimum size
 - Mark Mistake bleibt dauerhaft
 - Steuerung z
 - Steuerung y
+- Anstatt setBorder() zu überschreiben lieber javax.swing.BorderFactory.createEmptyBorder()?
+- Timer format
 
 CONTROLLER
 

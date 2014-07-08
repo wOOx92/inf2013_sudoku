@@ -7,7 +7,11 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.lang.management.GarbageCollectorMXBean;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -18,6 +22,9 @@ import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.MenuSelectionManager;
+import javax.swing.SwingConstants;
+import javax.swing.Timer;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.text.MaskFormatter;
 
@@ -29,7 +36,8 @@ public class GUI_Window {
 	private NumberPuzzle puzzle;
 	private Controller controller;
 	private JudokuJTextField[][] gameField = new JudokuJTextField[9][9];
-
+	private Timer swingTimer = new Timer(1000, new JudokuTimeListener());;
+	
 	/*
 	 * Buttons
 	 */
@@ -50,13 +58,13 @@ public class GUI_Window {
 	 */
 	private JMenuBar mnbrTop;
 	private JMenu mnNewGame;
-	private JPanel pnlCenter;
-	private JPanel pnlSouth;
-	private JPanel pnlSouthTop;
-	private JPanel pnlSouthBottom;
+	//private JPanel pnlCenter;
+	//private JPanel pnlSouth;
+	//private JPanel pnlSouthTop;
+	//private JPanel pnlSouthBottom;
 
 	private JProgressBar prgrBar; 
-	private JTextArea txtTime;
+	private JTextField txtTime;
 	
 	/**
 	 * Create the application.
@@ -77,28 +85,29 @@ public class GUI_Window {
 		icon = new ImageIcon("judku_icon.png");
 		// frame.setIconImage(icon.getImage());
 		frame = new JFrame();
-		frame.setBounds(100, 100, 497, 413);
+		frame.setBounds(200, 200, 450, 620);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setMinimumSize(new Dimension(450,620));
 		frame.getContentPane().setLayout(new BorderLayout());
 		frame.setTitle("Judoku 0.0.0.1");
 		
-		pnlCenter = new JPanel();	
+		JPanel pnlCenter = new JPanel();	
 		pnlCenter.setLayout(new GridLayout(9,9,2,2));
-		pnlSouth = new JPanel();
+		JPanel pnlSouth = new JPanel();
 		pnlSouth.setLayout(new GridLayout(2,1));
-		pnlSouthTop = new JPanel();
+		JPanel pnlSouthTop = new JPanel();
 		pnlSouthTop.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
-		pnlSouthBottom = new JPanel();
+		JPanel pnlSouthBottom = new JPanel();
 		pnlSouthBottom.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
 		pnlSouth.add(pnlSouthTop);
 		pnlSouth.add(pnlSouthBottom);
 		
 		// positioning and sizing the text fields
-		initializeGameField();
+		initializeGameField(pnlCenter);
 
 		// draw the gamefield
 		mnbrTop = new JMenuBar();
-		//mnbrTop.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+		mnbrTop.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
 		
 		mnNewGame = new JMenu("New Game");
 		
@@ -125,19 +134,18 @@ public class GUI_Window {
 		
 		mnbrTop.add(mnNewGame);
 		
-		btnHint = new JButton("Give Hint");
-		btnHint.setContentAreaFilled(false);
-		btnHint.setBorderPainted(false);
-		btnHint.addActionListener(new ButtonLauscher());
-		btnHint.setEnabled(false);
-		mnbrTop.add(btnHint);
-		
 		btnReset = new JButton("Reset");
 		btnReset.setContentAreaFilled(false);
 		btnReset.setBorderPainted(false);
 		btnReset.addActionListener(new ButtonLauscher());
 		btnReset.setEnabled(false);
 		mnbrTop.add(btnReset);
+		
+		btnQuit = new JButton("Exit");
+		btnQuit.setContentAreaFilled(false);
+		btnQuit.addActionListener(new ButtonLauscher());
+		btnQuit.setBorderPainted(false);
+		mnbrTop.add(btnQuit);
 		
 		btnLangDEU = new JButton("DEU");
 		btnLangDEU.setContentAreaFilled(false);
@@ -165,32 +173,48 @@ public class GUI_Window {
 		btnRedo.setEnabled(false);
 		pnlSouthTop.add(btnRedo);
 
+		btnHint = new JButton("Give Hint");
+		btnHint.setContentAreaFilled(false);
+		btnHint.setPreferredSize(new Dimension(90, 35));
+		btnHint.addActionListener(new ButtonLauscher());
+		btnHint.setEnabled(false);
+		pnlSouthTop.add(btnHint);
+		
 		btnValidate = new JButton("Validate");
 		btnValidate.setContentAreaFilled(false);
 		btnValidate.setPreferredSize(new Dimension(90, 35));
 		btnValidate.addActionListener(new ButtonLauscher());
 		btnValidate.setEnabled(false);
 		pnlSouthTop.add(btnValidate);
-
-		btnQuit = new JButton("Exit");
-		btnQuit.setContentAreaFilled(false);
-		btnQuit.setPreferredSize(new Dimension(90, 35));
-		pnlSouthTop.add(btnQuit);
-		btnQuit.addActionListener(new ButtonLauscher());
-
-		txtTime = new JTextArea();
+		
+		txtTime = new JTextField();
 		txtTime.setEnabled(false);
-		txtTime.setText("19 Sekunden");
+		txtTime.setText("0s");
+		txtTime.setBackground(frame.getBackground());
+		txtTime.setDisabledTextColor(Color.BLACK);
+		txtTime.setFont(new Font("DIALOG", Font.PLAIN, 14));
+		txtTime.setPreferredSize(new Dimension(60,25));
+		txtTime.setHorizontalAlignment(SwingConstants.RIGHT);
 		pnlSouthBottom.add(txtTime);
 		
-		JTextArea progressTxt = new JTextArea();
+		JTextField progressTxt = new JTextField();
 		progressTxt.setText("Progress");
 		progressTxt.setEnabled(false);
+		progressTxt.setBackground(frame.getBackground());
+		progressTxt.setBorder(BorderFactory.createEmptyBorder());
+		progressTxt.setDisabledTextColor(Color.BLACK);
+		progressTxt.setFont(new Font("DIALOG", Font.PLAIN, 14));
 		pnlSouthBottom.add(progressTxt);
+
+		UIManager.put("ProgressBar.background", Color.WHITE);
+		UIManager.put("ProgressBar.selectionBackground", Color.BLACK);
 		
 		prgrBar = new JProgressBar();
-		prgrBar.setPreferredSize(new Dimension(200, 20));
-		prgrBar.setValue(33);
+		prgrBar.setPreferredSize(new Dimension(200, 25));
+		prgrBar.setStringPainted(true);
+		prgrBar.setBorderPainted(false);
+		prgrBar.setForeground(new Color(255, 200, 200));
+		prgrBar.setValue(40);
 		pnlSouthBottom.add(prgrBar);
 		
 		frame.getContentPane().add(mnbrTop, BorderLayout.PAGE_START);
@@ -198,18 +222,7 @@ public class GUI_Window {
 		frame.getContentPane().add(pnlSouth, BorderLayout.SOUTH);
 	}
 
-	private MaskFormatter createFormatter(String s) {
-		MaskFormatter formatter = null;
-		try {
-			formatter = new MaskFormatter(s);
-
-		} catch (java.text.ParseException exc) {
-			formatter = new MaskFormatter();
-		}
-		return formatter;
-	}
-
-	public void initializeGameField() {
+	public void initializeGameField(JPanel pane) {
 		int xPosition = 10;
 		int yPosition = 10;
 		final int width = 37;
@@ -233,7 +246,7 @@ public class GUI_Window {
 				// gameField[y][x].setText("");
 				gameField[y][x].setColumns(10);
 				// set font size in gameField
-				Font font = new Font("Arial", Font.BOLD, 32);
+				Font font = new Font("Arial", Font.BOLD, 38);
 				gameField[y][x].setFont(font);
 				gameField[y][x].setHorizontalAlignment(JTextField.CENTER);
 				gameField[y][x].setBounds(xPosition, yPosition, width, height);
@@ -245,7 +258,7 @@ public class GUI_Window {
 				gameField[y][x].addFocusListener(new JudokuFocusListener());
 				gameField[y][x].setEnabled(false);
 				
-				pnlCenter.add(gameField[y][x]);
+				pane.add(gameField[y][x]);
 				//frame.getContentPane().add(gameField[y][x]);
 				yPosition = yPosition + 38;
 			}
@@ -261,12 +274,10 @@ public class GUI_Window {
 	public void refreshView() {
 		int recentGrid[][] = this.puzzle.getRecentGrid();
 		int startGrid[][] = this.puzzle.getStartGrid();
-
+	
 		for (int y = 0; y < 9; y++) {
 			for (int x = 0; x < 9; x++) {
 				if (startGrid[y][x] != 0) {
-					// New Game / Give Hint / Undo / Redo
-					// gameField[y][x].setBackground(Color.RED);
 					gameField[y][x].setText(String.valueOf(startGrid[y][x]));
 					gameField[y][x].setEnabled(false);
 					gameField[y][x].setDisabledTextColor(Color.GRAY);
@@ -343,11 +354,38 @@ public class GUI_Window {
 								Integer.parseInt(currentTextField.getText())));
 
 			}
-
 		}
 	}
 
+	class JudokuTimeListener implements ActionListener{
+		private int secondsPassed = 0;
+		
+		@Override
+		public void actionPerformed(ActionEvent e){
+			secondsPassed++;
+			int hours = secondsPassed/3600;
+			int minutes = secondsPassed/60 - hours*60;
+			int seconds = secondsPassed - 60*minutes - hours*3600;
+		
+			if(hours == 0 && minutes == 0){
+				txtTime.setText(seconds + "s");
+			} else if(hours == 0){
+				txtTime.setText(minutes + "m " + seconds + "s");
+			} else {
+				txtTime.setText(hours + "h " + minutes + "m " + seconds + "s");
+			}
+			
+			txtTime.getRootPane().repaint();
+		}
+		
+		public void reset(){
+			secondsPassed = 0;
+			txtTime.setText(secondsPassed + "s");
+		}
+	}
+	
 	class ButtonLauscher implements ActionListener {
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			JudokuSwingWorker sWork = null;
 			if (e.getSource() == btnQuit) {
@@ -358,6 +396,9 @@ public class GUI_Window {
 				puzzle = sWork.easyGet();
 				enableButtons(true);
 				MenuSelectionManager.defaultManager().clearSelectedPath();
+				JudokuTimeListener jtl = (JudokuTimeListener)swingTimer.getActionListeners()[0];
+				jtl.reset();
+				swingTimer.restart();
 				refreshView();
 			} else if (e.getSource() == btnMedium){
 				sWork = new JudokuSwingWorker(Difficulty.MEDIUM);
@@ -365,6 +406,9 @@ public class GUI_Window {
 				puzzle = sWork.easyGet();
 				enableButtons(true);
 				MenuSelectionManager.defaultManager().clearSelectedPath();
+				JudokuTimeListener jtl = (JudokuTimeListener)swingTimer.getActionListeners()[0];
+				jtl.reset();
+				swingTimer.restart();
 				refreshView();
 			} else if (e.getSource() == btnHard){
 				sWork = new JudokuSwingWorker(Difficulty.HARD);
@@ -372,6 +416,9 @@ public class GUI_Window {
 				puzzle = sWork.easyGet();
 				enableButtons(true);
 				MenuSelectionManager.defaultManager().clearSelectedPath();
+				JudokuTimeListener jtl = (JudokuTimeListener)swingTimer.getActionListeners()[0];
+				jtl.reset();
+				swingTimer.restart();
 				refreshView();
 			} else if (e.getSource() == btnReset) {
 				if (puzzle != null) {
@@ -396,4 +443,5 @@ public class GUI_Window {
 			}
 		}
 	}
+
 }
