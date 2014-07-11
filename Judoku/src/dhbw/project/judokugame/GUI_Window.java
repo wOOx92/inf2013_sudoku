@@ -126,21 +126,21 @@ public class GUI_Window {
 		btnEasy.setText("Easy");
 		btnEasy.setContentAreaFilled(false);
 		btnEasy.setBorderPainted(false);
-		btnEasy.addActionListener(new ButtonLauscher());
+		btnEasy.addActionListener(new JudokuButtonListener());
 		mnNewGame.add(btnEasy);
 
 		btnMedium = new JButton("MEDIUM");
 		btnMedium.setText("Medium");
 		btnMedium.setContentAreaFilled(false);
 		btnMedium.setBorderPainted(false);
-		btnMedium.addActionListener(new ButtonLauscher());
+		btnMedium.addActionListener(new JudokuButtonListener());
 		mnNewGame.add(btnMedium);
 
 		btnHard = new JButton("HARD");
 		btnHard.setContentAreaFilled(false);
 		btnHard.setBorderPainted(false);
 		btnHard.setText("Hard");
-		btnHard.addActionListener(new ButtonLauscher());
+		btnHard.addActionListener(new JudokuButtonListener());
 		mnNewGame.add(btnHard);
 
 		mnbrTop.add(mnNewGame);
@@ -148,53 +148,53 @@ public class GUI_Window {
 		btnReset = new JButton("Reset");
 		btnReset.setContentAreaFilled(false);
 		btnReset.setBorderPainted(false);
-		btnReset.addActionListener(new ButtonLauscher());
+		btnReset.addActionListener(new JudokuButtonListener());
 		btnReset.setEnabled(false);
 		mnbrTop.add(btnReset);
 
 		btnQuit = new JButton("Exit");
 		btnQuit.setContentAreaFilled(false);
-		btnQuit.addActionListener(new ButtonLauscher());
+		btnQuit.addActionListener(new JudokuButtonListener());
 		btnQuit.setBorderPainted(false);
 		mnbrTop.add(btnQuit);
 
 		btnLangDEU = new JButton("DEU");
 		btnLangDEU.setContentAreaFilled(false);
 		btnLangDEU.setBorderPainted(false);
-		btnLangDEU.addActionListener(new ButtonLauscher());
+		btnLangDEU.addActionListener(new JudokuButtonListener());
 		mnbrTop.add(btnLangDEU);
 
 		btnLangENG = new JButton("ENG");
 		btnLangENG.setContentAreaFilled(false);
 		btnLangENG.setBorderPainted(false);
-		btnLangENG.addActionListener(new ButtonLauscher());
+		btnLangENG.addActionListener(new JudokuButtonListener());
 		mnbrTop.add(btnLangENG);
 
 		btnUndo = new JButton("Undo");
 		btnUndo.setContentAreaFilled(false);
 		btnUndo.setPreferredSize(new Dimension(90, 35));
-		btnUndo.addActionListener(new ButtonLauscher());
+		btnUndo.addActionListener(new JudokuButtonListener());
 		btnUndo.setEnabled(false);
 		pnlSouthTop.add(btnUndo);
 
 		btnRedo = new JButton("Redo");
 		btnRedo.setContentAreaFilled(false);
 		btnRedo.setPreferredSize(new Dimension(90, 35));
-		btnRedo.addActionListener(new ButtonLauscher());
+		btnRedo.addActionListener(new JudokuButtonListener());
 		btnRedo.setEnabled(false);
 		pnlSouthTop.add(btnRedo);
 
 		btnHint = new JButton("Give Hint");
 		btnHint.setContentAreaFilled(false);
 		btnHint.setPreferredSize(new Dimension(90, 35));
-		btnHint.addActionListener(new ButtonLauscher());
+		btnHint.addActionListener(new JudokuButtonListener());
 		btnHint.setEnabled(false);
 		pnlSouthTop.add(btnHint);
 
 		btnValidate = new JButton("Validate");
 		btnValidate.setContentAreaFilled(false);
 		btnValidate.setPreferredSize(new Dimension(90, 35));
-		btnValidate.addActionListener(new ButtonLauscher());
+		btnValidate.addActionListener(new JudokuButtonListener());
 		btnValidate.setEnabled(false);
 		pnlSouthTop.add(btnValidate);
 
@@ -305,6 +305,7 @@ public class GUI_Window {
 					gameField[y][x].setText("");
 					gameField[y][x].setEnabled(true);
 				}
+
 			}
 		}
 		if (startFilledFields + userFilledFields == 81) {
@@ -382,13 +383,13 @@ public class GUI_Window {
 		public void focusGained(java.awt.event.FocusEvent evt) {
 			JudokuJTextField currentTextField = (JudokuJTextField) evt
 					.getSource();
-			currentTextField.setBorder(BorderFactory.createMatteBorder(2,2,2,2,Color.red));
+			currentTextField.setBorder(BorderFactory.createMatteBorder(2, 2, 2,
+					2, Color.red));
 			// Only allow numeric input from 0 to 9
 			try {
 				oldValue = Integer.parseInt(currentTextField.getText());
 			} catch (NumberFormatException nfe) {
-				System.out.println("'" + currentTextField.getText() + "'"
-						+ " Is no number.");
+				// Its Ok, let him try to put characters in - but it won't work.
 			}
 			currentTextField.selectAll();
 		}
@@ -414,6 +415,7 @@ public class GUI_Window {
 			}
 			refreshView();
 			currentTextField.setBorder(BorderFactory.createEmptyBorder());
+
 		}
 	}
 
@@ -471,7 +473,7 @@ public class GUI_Window {
 		}
 	}
 
-	class ButtonLauscher implements ActionListener {
+	class JudokuButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			JudokuSwingWorker sWork = null;
