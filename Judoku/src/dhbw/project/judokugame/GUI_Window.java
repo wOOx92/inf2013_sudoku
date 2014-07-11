@@ -10,8 +10,8 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusListener;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -64,7 +64,7 @@ public class GUI_Window {
 	private JTextField txtTime;
 
 	private JPanel pnlCenter;
-	
+
 	/**
 	 * Create the application.
 	 */
@@ -92,15 +92,15 @@ public class GUI_Window {
 
 		pnlCenter = new JPanel();
 		pnlCenter.setLayout(new CardLayout());
-		
+
 		JPanel pnlWon = new JPanel();
 		JTextArea test = new JTextArea();
 		test.setText("afjrgkjehflkehgtluehlrugeuheihgliuerghliu");
 		pnlWon.add(test);
-		
+
 		JPanel pnlGameField = new JPanel();
 		pnlGameField.setLayout(new GridLayout(9, 9, 2, 2));
-		
+
 		JPanel pnlSouth = new JPanel();
 		pnlSouth.setLayout(new GridLayout(2, 1));
 		JPanel pnlSouthTop = new JPanel();
@@ -112,7 +112,7 @@ public class GUI_Window {
 
 		// positioning and sizing the text fields
 		initializeGameField(pnlGameField);
-		
+
 		pnlCenter.add(pnlGameField, "gameField");
 		pnlCenter.add(pnlWon, "won");
 
@@ -128,7 +128,7 @@ public class GUI_Window {
 		btnEasy.setBorderPainted(false);
 		btnEasy.addActionListener(new ButtonLauscher());
 		mnNewGame.add(btnEasy);
-		
+
 		btnMedium = new JButton("MEDIUM");
 		btnMedium.setText("Medium");
 		btnMedium.setContentAreaFilled(false);
@@ -262,23 +262,14 @@ public class GUI_Window {
 				gameField[y][x].setHorizontalAlignment(JTextField.CENTER);
 				gameField[y][x].setBounds(xPosition, yPosition, width, height);
 				gameField[y][x].setInitialColor(active);
+				gameField[y][x].setSelectionColor(new Color(0, 0, 0, 0));
+				gameField[y][x].setCaretColor(gameField[y][x].getBackground());
+				gameField[y][x].getCaret().setBlinkRate(0);
 
 				// Add the required listeners
 				gameField[y][x].addFocusListener(new JudokuFocusListener());
-
 				gameField[y][x].addMouseListener(new JudokuMouseListener());
-
-				// add key listener, but allow only numeric "strings" from 0 to
-				// 9
-				gameField[y][x].addKeyListener(new KeyAdapter() {
-					public void keyTyped(KeyEvent e) {
-						char c = e.getKeyChar();
-						if (((c < '0') || (c > '9'))
-								&& (c != KeyEvent.VK_BACK_SPACE)) {
-							e.consume(); // ignore event
-						}
-					}
-				});
+				gameField[y][x].addKeyListener(new JudokuKeyListener());
 
 				gameField[y][x].setEnabled(false);
 
@@ -391,7 +382,8 @@ public class GUI_Window {
 		public void focusGained(java.awt.event.FocusEvent evt) {
 			JudokuJTextField currentTextField = (JudokuJTextField) evt
 					.getSource();
-			// is the current value numeric?
+			currentTextField.setBorder(BorderFactory.createMatteBorder(2,2,2,2,Color.red));
+			// Only allow numeric input from 0 to 9
 			try {
 				oldValue = Integer.parseInt(currentTextField.getText());
 			} catch (NumberFormatException nfe) {
@@ -421,7 +413,36 @@ public class GUI_Window {
 
 			}
 			refreshView();
+			currentTextField.setBorder(BorderFactory.createEmptyBorder());
 		}
+	}
+
+	class JudokuKeyListener implements KeyListener {
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+			// do nothing
+
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// do nothing
+
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			JudokuJTextField currentTextField = (JudokuJTextField) e
+					.getSource();
+
+			char c = e.getKeyChar();
+			if (((c < '0') || (c > '9')) && (c != KeyEvent.VK_BACK_SPACE)) {
+				e.consume(); // ignore event
+			}
+			currentTextField.selectAll();
+		}
+
 	}
 
 	class JudokuTimeListener implements ActionListener {
@@ -490,23 +511,23 @@ public class GUI_Window {
 				swingTimer.restart();
 				refreshView();
 			} else if (e.getSource() == btnReset) {
-					controller.resetPuzzle(puzzle);
-					refreshView();
+				controller.resetPuzzle(puzzle);
+				refreshView();
 			} else if (e.getSource() == btnUndo) {
-					controller.undoPuzzle(puzzle);
-					refreshView();
+				controller.undoPuzzle(puzzle);
+				refreshView();
 			} else if (e.getSource() == btnRedo) {
-					controller.redoPuzzle(puzzle);
-					refreshView();
+				controller.redoPuzzle(puzzle);
+				refreshView();
 			} else if (e.getSource() == btnHint) {
-					controller.giveHintPuzzle(puzzle);
-					refreshView();
+				controller.giveHintPuzzle(puzzle);
+				refreshView();
 			} else if (e.getSource() == btnValidate) {
 				int mistakes = controller.validateUserSolution(puzzle);
 				if (mistakes == 0) {
 					CardLayout cl = (CardLayout) pnlCenter.getLayout();
 					cl.show(pnlCenter, "won");
-					
+
 				} else {
 					// TODO
 					System.out.println(mistakes + " mistakes");
