@@ -1,4 +1,4 @@
-package dhbw.project.JudokuGame;
+package dhbw.project.judokugame;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

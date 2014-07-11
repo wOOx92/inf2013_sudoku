@@ -1,4 +1,4 @@
-package dhbw.project.JudokuGame;
+package dhbw.project.judokugame;
 /**
  * Every class implementing this interface can be presented by the Gui.
  * 
