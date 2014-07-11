@@ -10,6 +10,10 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -251,22 +255,34 @@ public class GUI_Window {
 				gameField[y][x] = new JudokuJTextField(x, y);
 				gameField[y][x].setBorder(BorderFactory.createEmptyBorder());
 				gameField[y][x].setDocument(new JTextFieldLimit(1));
-				// gameField[y][x].setText("");
+
+				// Format the JTextFields
 				gameField[y][x].setColumns(10);
-				// set font size in gameField
 				gameField[y][x].setFont(new Font("Arial", Font.BOLD, 38));
 				gameField[y][x].setHorizontalAlignment(JTextField.CENTER);
 				gameField[y][x].setBounds(xPosition, yPosition, width, height);
-
-				// gameField[y][x].setBackground(active);
-				// set Color
 				gameField[y][x].setInitialColor(active);
-				// gameField[i][j].getDocument().addDocumentListener(myDocumentListener);
+
+				// Add the required listeners
 				gameField[y][x].addFocusListener(new JudokuFocusListener());
+
+				gameField[y][x].addMouseListener(new JudokuMouseListener());
+
+				// add key listener, but allow only numeric "strings" from 0 to
+				// 9
+				gameField[y][x].addKeyListener(new KeyAdapter() {
+					public void keyTyped(KeyEvent e) {
+						char c = e.getKeyChar();
+						if (((c < '0') || (c > '9'))
+								&& (c != KeyEvent.VK_BACK_SPACE)) {
+							e.consume(); // ignore event
+						}
+					}
+				});
+
 				gameField[y][x].setEnabled(false);
 
 				pane.add(gameField[y][x]);
-				// frame.getContentPane().add(gameField[y][x]);
 				yPosition = yPosition + 38;
 			}
 			if ((y + 1) % 3 != 0) {
@@ -330,11 +346,49 @@ public class GUI_Window {
 		btnReset.setEnabled(enabled);
 	}
 
+	class JudokuMouseListener implements MouseListener {
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			JudokuJTextField currentTextField = (JudokuJTextField) e
+					.getSource();
+			currentTextField.selectAll();
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			JudokuJTextField currentTextField = (JudokuJTextField) e
+					.getSource();
+			currentTextField.selectAll();
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			JudokuJTextField currentTextField = (JudokuJTextField) e
+					.getSource();
+			currentTextField.selectAll();
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			JudokuJTextField currentTextField = (JudokuJTextField) e
+					.getSource();
+			currentTextField.selectAll();
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			JudokuJTextField currentTextField = (JudokuJTextField) e
+					.getSource();
+			currentTextField.selectAll();
+		}
+
+	}
+
 	class JudokuFocusListener implements FocusListener {
 		int oldValue;
 
 		public void focusGained(java.awt.event.FocusEvent evt) {
-
 			JudokuJTextField currentTextField = (JudokuJTextField) evt
 					.getSource();
 			// is the current value numeric?
