@@ -17,6 +17,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -80,8 +81,8 @@ public class GUI_Window {
 		initialize();
 	}
 
-	public JFrame getJFrame() {
-		return this.frame;
+	public void setVisible(boolean visibility) {
+		frame.setVisible(visibility);
 	}
 
 	/**
@@ -120,6 +121,7 @@ public class GUI_Window {
 		txtWonMsg.setBackground(frame.getBackground());
 		txtWonMsg.setDisabledTextColor(Color.BLACK);
 		txtWonMsg.setBorder(BorderFactory.createEmptyBorder());
+		txtWonMsg.setHorizontalAlignment(SwingConstants.CENTER);
 		pnlWon.add(txtWonMsg, BorderLayout.NORTH);
 		pnlWon.add(btnWonGoBack, BorderLayout.SOUTH);
 
@@ -129,7 +131,8 @@ public class GUI_Window {
 		txtLostMsg.setPreferredSize(new Dimension(200, 60));
 		txtLostMsg.setBackground(frame.getBackground());
 		txtLostMsg.setEnabled(false);
-		txtWonMsg.setBackground(frame.getBackground());
+		txtLostMsg.setHorizontalAlignment(SwingConstants.CENTER);
+		txtLostMsg.setBackground(frame.getBackground());
 		txtLostMsg.setDisabledTextColor(Color.BLACK);
 		txtLostMsg.setBorder(BorderFactory.createEmptyBorder());
 		pnlLost.add(txtLostMsg, BorderLayout.NORTH);
@@ -369,7 +372,7 @@ public class GUI_Window {
 		prgrBar.setValue(100 * userFilledFields / (81 - startFilledFields));
 		prgrBar.getRootPane().repaint();
 	}
-
+	
 	public void displayMistake(int x, int y) {
 		this.gameField[y][x].mark();
 		gameField[y][x].setCaretColor(gameField[y][x].getBackground());
@@ -585,17 +588,20 @@ public class GUI_Window {
 							+ txtTime.getText() + "!");
 					CardLayout cl = (CardLayout) pnlCenter.getLayout();
 					cl.show(pnlCenter, "won");
-
+					swingTimer.stop();
 				} else {
 					txtLostMsg.setText("Oh no! You still have " + mistakes
 							+ " mistakes.");
 					CardLayout cl = (CardLayout) pnlCenter.getLayout();
 					cl.show(pnlCenter, "lost");
 				}
+				enableButtons(false);
+				btnValidate.setEnabled(false);
 			} else if (e.getSource() == btnLostGoBack
 					|| e.getSource() == btnWonGoBack) {
 				CardLayout cl = (CardLayout) pnlCenter.getLayout();
 				cl.show(pnlCenter, "gameField");
+				enableButtons(true);
 			}
 		}
 	}

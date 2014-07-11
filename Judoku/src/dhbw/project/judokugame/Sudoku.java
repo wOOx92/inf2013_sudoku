@@ -64,9 +64,9 @@ public class Sudoku implements NumberPuzzle {
 	 */
 	public Sudoku(int[][] sudokuGrid, int[][] solvedGrid, Difficulty diff){
 		this.DIFFICULTY = diff;
-		this.recentGrid = Controller.deepCopy(sudokuGrid);
-		this.startGrid = Controller.deepCopy(sudokuGrid);
-		this.solvedGrid = Controller.deepCopy(solvedGrid);
+		this.recentGrid = SudokuBuilder.deepCopy(sudokuGrid);
+		this.startGrid = SudokuBuilder.deepCopy(sudokuGrid);
+		this.solvedGrid = SudokuBuilder.deepCopy(solvedGrid);
 	}
 
     public static boolean legal(int i, int j, int val, int[][] cells) {
@@ -89,9 +89,9 @@ public class Sudoku implements NumberPuzzle {
     }
     
 	public void reset() {
-		undoStorage.push(Controller.deepCopy(recentGrid));
+		undoStorage.push(SudokuBuilder.deepCopy(recentGrid));
 		limitStack(undoStorage);
-		this.recentGrid = Controller.deepCopy(this.startGrid);
+		this.recentGrid = SudokuBuilder.deepCopy(this.startGrid);
 		
 	}
 
@@ -108,7 +108,7 @@ public class Sudoku implements NumberPuzzle {
 		if (this.startGrid[y][x] != 0) {
 			return false;
 		}
-		undoStorage.push(Controller.deepCopy(recentGrid));
+		undoStorage.push(SudokuBuilder.deepCopy(recentGrid));
 		limitStack(undoStorage);
 		this.recentGrid[y][x] = val;
 		redoStorage.clear();
@@ -145,7 +145,7 @@ public class Sudoku implements NumberPuzzle {
 
 	public void giveHint() {
 		//TODO theoretisch unendliche laufzeit wegen random
-		undoStorage.push(Controller.deepCopy(recentGrid));
+		undoStorage.push(SudokuBuilder.deepCopy(recentGrid));
 		Random prng = new Random();
 		while(SudokuBuilder.getNumberOfClues(recentGrid) < 81){
 			//todo: alle leeren Felder speichern, und DANN erst zufällig eines auswählen (so dass, der Random nicht mehr auf ausgefällt stoßt).
@@ -162,7 +162,7 @@ public class Sudoku implements NumberPuzzle {
 
 	public void undo(){
 		if(!undoStorage.empty()){
-			redoStorage.push(Controller.deepCopy(recentGrid));
+			redoStorage.push(SudokuBuilder.deepCopy(recentGrid));
 			limitStack(redoStorage);
 			recentGrid = undoStorage.pop();
 		}
@@ -171,7 +171,7 @@ public class Sudoku implements NumberPuzzle {
 
 	public void redo(){
 		if(!redoStorage.empty()){
-			undoStorage.push(Controller.deepCopy(recentGrid));
+			undoStorage.push(SudokuBuilder.deepCopy(recentGrid));
 			limitStack(undoStorage);
 			recentGrid = redoStorage.pop();
 		}

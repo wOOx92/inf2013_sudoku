@@ -18,23 +18,9 @@ public enum Difficulty{
 			return 0;
 		}
 		if(this == MEDIUM){
-			return 11;
+			return 13;
 		}
-		return 27;
+		return 29;
 	}
 	
-	/**
-	 * Returns the minimum number of clues a Sudoku needs to possess the specified Difficulty.
-	 * @return The minimum number of clues.
-	 */
-	public int minNumberOfClues(){
-		if(this == EASY){
-			return 32;
-		}
-		if(this == MEDIUM){
-			return 25;
-		}
-		//17 because there are no uniquely solvable Sudokus with less clues;
-		return 17;
-	}
 }

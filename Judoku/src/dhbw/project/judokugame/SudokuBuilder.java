@@ -1,4 +1,5 @@
 package dhbw.project.judokugame;
+import java.util.Arrays;
 import java.util.Random;
 
 public class SudokuBuilder {
@@ -38,7 +39,7 @@ public class SudokuBuilder {
 		 * further manipulation.
 		 */
 		int[][] solvedGrid = generateSolvedGrid(prng);
-		int[][] templateSdk = Controller.deepCopy(solvedGrid);
+		int[][] templateSdk = SudokuBuilder.deepCopy(solvedGrid);
 
 		/*
 		 * Step 2: Remove 3 elements at random for more randomness in the
@@ -85,29 +86,7 @@ public class SudokuBuilder {
 		doRandomCutting(templateSdk, diff);
 		System.out.println(c - getNumberOfClues(templateSdk));
 
-		// TODO: commenting
-		int clues = getNumberOfClues(templateSdk);
-		Sudoku build;
-		// no random cutting has been done so its easy
-		if (clues >= Difficulty.EASY.minNumberOfClues()) {
-			build = new Sudoku(templateSdk, solvedGrid, Difficulty.EASY);
-		}
-		// if random cutting has been done and it has less clues than a medium
-		// rated Sudoku
-		else if (clues < Difficulty.MEDIUM.minNumberOfClues()
-				&& diff == Difficulty.HARD) {
-			build = new Sudoku(templateSdk, solvedGrid, Difficulty.HARD);
-		}
-		// If its neither easy nor hard its medium
-		else {
-			build = new Sudoku(templateSdk, solvedGrid, Difficulty.MEDIUM);
-		}
-
-		int missingClues = diff.minNumberOfClues() - clues;
-		for (int j = 0; j < missingClues; j++) {
-			build.giveHint();
-		}
-		return build;
+		return new Sudoku(templateSdk, solvedGrid, diff);
 	}
 
 	/**
@@ -475,7 +454,7 @@ public class SudokuBuilder {
 	 *         multiple solutions.
 	 */
 	private static boolean hasUniqueSolution(int[][] sudoku, Difficulty diff) {
-		int[][] copy = Controller.deepCopy(sudoku);
+		int[][] copy = SudokuBuilder.deepCopy(sudoku);
 		return (checkSolutions(0, 0, copy, 0, diff.maxRecursionDepth()) == 1);
 	}
 
@@ -519,5 +498,13 @@ public class SudokuBuilder {
 		}
 		sudoku[x][y] = 0; // reset on backtrack
 		return solutionsFound;
+	}
+	
+	public static int[][] deepCopy(int [][] template){
+		int[][] copy = new int[template.length][0];
+		for(int i = 0; i < template.length; i++){
+			copy[i] = Arrays.copyOf(template[i], template[i].length);
+		}
+		return copy;
 	}
 }

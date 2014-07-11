@@ -16,20 +16,12 @@ public class Controller {
 				try {
 					GUI_Window window = new GUI_Window(c);
 					spielfeld = window;
-					window.getJFrame().setVisible(true);
+					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
-	}
-	
-	public static int[][] deepCopy(int [][] template){
-		int[][] copy = new int[template.length][0];
-		for(int i = 0; i < template.length; i++){
-			copy[i] = Arrays.copyOf(template[i], template[i].length);
-		}
-		return copy;
 	}
 	
 	public void resetPuzzle(NumberPuzzle puzzle){

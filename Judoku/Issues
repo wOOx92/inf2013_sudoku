@@ -1,18 +1,17 @@
 Issues:
 
 HIGH PRIORITY
+- Läuft jeder Button bereits durch den Controller?
 - SInd Sudokus rechts-unten-lastig?
 - Disable redo / undo button wenn redo / undo nicht möglich
 - Buttons sizes
-- Methode deepCopy(int[][]) im Controller evtl fehlplatziert
 - Evaluieren von Eingaben im Controller nicht durch trySetValue() im Model
-
-- Kommen die Schwarzen Hints am Anfang davon, dass im Sudoku Builder nachträglich geaddet wird
-
+- Nach erfolgreichem Validate fängt der Timer nicht mehr an zu laufen (an sich nicht falsch, aber evtl unschön)
 
 LOW PRIORITY
 - Steuerung z
 - Steuerung y
+- Navigation mit Pfeiltasten
 - Buttons on right
 - Timer format
 
