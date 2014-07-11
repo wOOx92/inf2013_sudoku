@@ -1,3 +1,4 @@
+package dhbw.project.JudokuGame;
 import java.awt.EventQueue;
 import java.util.Arrays;
 

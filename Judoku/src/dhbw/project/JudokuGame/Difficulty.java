@@ -1,3 +1,4 @@
+package dhbw.project.JudokuGame;
 /**
  * This enum contains the difficulties which Sudokus can be classified in. A sudokus' difficulty is determined by a) the number of clues and b) the amount of random cutting done during its generation.
  * @author Dennis Uteg, Florian Steurer, Markus Wingler, Michael Jauch

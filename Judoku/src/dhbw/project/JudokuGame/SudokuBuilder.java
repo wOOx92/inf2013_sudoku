@@ -1,3 +1,4 @@
+package dhbw.project.JudokuGame;
 import java.util.Random;
 
 public class SudokuBuilder {

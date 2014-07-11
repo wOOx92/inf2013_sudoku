@@ -1,3 +1,4 @@
+package dhbw.project.JudokuGame;
 import javax.swing.SwingWorker;
 
 public class JudokuSwingWorker extends SwingWorker<Sudoku,Void>{

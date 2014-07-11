@@ -1,3 +1,4 @@
+package dhbw.project.JudokuGame;
 import java.util.Random;
 import java.util.Stack;
 

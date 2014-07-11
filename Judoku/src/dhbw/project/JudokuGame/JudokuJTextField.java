@@ -1,7 +1,7 @@
+package dhbw.project.JudokuGame;
 import java.awt.Color;
 
 import javax.swing.JTextField;
-import javax.swing.border.Border;
 
 public class JudokuJTextField extends JTextField {
 
