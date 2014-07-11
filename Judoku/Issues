@@ -7,6 +7,8 @@ HIGH PRIORITY
 - Methode deepCopy(int[][]) im Controller evtl fehlplatziert
 - Evaluieren von Eingaben im Controller nicht durch trySetValue() im Model
 
+- Kommen die Schwarzen Hints am Anfang davon, dass im Sudoku Builder nachträglich geaddet wird
+
 
 LOW PRIORITY
 - Steuerung z
