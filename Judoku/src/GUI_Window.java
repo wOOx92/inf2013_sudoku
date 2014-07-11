@@ -39,7 +39,7 @@ public class GUI_Window {
 	private Controller controller;
 	private JudokuJTextField[][] gameField = new JudokuJTextField[9][9];
 	private Timer swingTimer = new Timer(1000, new JudokuTimeListener());;
-	
+
 	/*
 	 * Buttons
 	 */
@@ -54,15 +54,15 @@ public class GUI_Window {
 	private JButton btnEasy;
 	private JButton btnMedium;
 	private JButton btnHard;
-	
+
 	/*
 	 * Other Components
 	 */
 	private JMenuBar mnbrTop;
 	private JMenu mnNewGame;
-	private JProgressBar prgrBar; 
+	private JProgressBar prgrBar;
 	private JTextField txtTime;
-	
+
 	/**
 	 * Create the application.
 	 */
@@ -84,44 +84,44 @@ public class GUI_Window {
 		frame = new JFrame();
 		frame.setBounds(200, 200, 450, 620);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setMinimumSize(new Dimension(450,620));
+		frame.setMinimumSize(new Dimension(450, 620));
 		frame.getContentPane().setLayout(new BorderLayout());
 		frame.setTitle("Judoku 0.0.0.1");
-		
-		JPanel pnlCenter = new JPanel();	
-		pnlCenter.setLayout(new GridLayout(9,9,2,2));
+
+		JPanel pnlCenter = new JPanel();
+		pnlCenter.setLayout(new GridLayout(9, 9, 2, 2));
 		JPanel pnlSouth = new JPanel();
-		pnlSouth.setLayout(new GridLayout(2,1));
+		pnlSouth.setLayout(new GridLayout(2, 1));
 		JPanel pnlSouthTop = new JPanel();
 		pnlSouthTop.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
 		JPanel pnlSouthBottom = new JPanel();
 		pnlSouthBottom.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
 		pnlSouth.add(pnlSouthTop);
 		pnlSouth.add(pnlSouthBottom);
-		
+
 		// positioning and sizing the text fields
 		initializeGameField(pnlCenter);
 
 		// draw the gamefield
 		mnbrTop = new JMenuBar();
 		mnbrTop.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
-		
+
 		mnNewGame = new JMenu("New Game");
-		
+
 		btnEasy = new JButton("EASY");
 		btnEasy.setText("Easy");
 		btnEasy.setContentAreaFilled(false);
 		btnEasy.setBorderPainted(false);
 		btnEasy.addActionListener(new ButtonLauscher());
 		mnNewGame.add(btnEasy);
-		
+
 		btnMedium = new JButton("MEDIUM");
 		btnMedium.setText("Medium");
 		btnMedium.setContentAreaFilled(false);
 		btnMedium.setBorderPainted(false);
 		btnMedium.addActionListener(new ButtonLauscher());
 		mnNewGame.add(btnMedium);
-		
+
 		btnHard = new JButton("HARD");
 		btnHard.setContentAreaFilled(false);
 		btnHard.setBorderPainted(false);
@@ -130,39 +130,39 @@ public class GUI_Window {
 		mnNewGame.add(btnHard);
 
 		mnbrTop.add(mnNewGame);
-		
+
 		btnReset = new JButton("Reset");
 		btnReset.setContentAreaFilled(false);
 		btnReset.setBorderPainted(false);
 		btnReset.addActionListener(new ButtonLauscher());
 		btnReset.setEnabled(false);
 		mnbrTop.add(btnReset);
-		
+
 		btnQuit = new JButton("Exit");
 		btnQuit.setContentAreaFilled(false);
 		btnQuit.addActionListener(new ButtonLauscher());
 		btnQuit.setBorderPainted(false);
 		mnbrTop.add(btnQuit);
-		
+
 		btnLangDEU = new JButton("DEU");
 		btnLangDEU.setContentAreaFilled(false);
 		btnLangDEU.setBorderPainted(false);
 		btnLangDEU.addActionListener(new ButtonLauscher());
 		mnbrTop.add(btnLangDEU);
-		
+
 		btnLangENG = new JButton("ENG");
 		btnLangENG.setContentAreaFilled(false);
 		btnLangENG.setBorderPainted(false);
 		btnLangENG.addActionListener(new ButtonLauscher());
 		mnbrTop.add(btnLangENG);
-		
+
 		btnUndo = new JButton("Undo");
 		btnUndo.setContentAreaFilled(false);
 		btnUndo.setPreferredSize(new Dimension(90, 35));
 		btnUndo.addActionListener(new ButtonLauscher());
 		btnUndo.setEnabled(false);
 		pnlSouthTop.add(btnUndo);
-		
+
 		btnRedo = new JButton("Redo");
 		btnRedo.setContentAreaFilled(false);
 		btnRedo.setPreferredSize(new Dimension(90, 35));
@@ -176,24 +176,24 @@ public class GUI_Window {
 		btnHint.addActionListener(new ButtonLauscher());
 		btnHint.setEnabled(false);
 		pnlSouthTop.add(btnHint);
-		
+
 		btnValidate = new JButton("Validate");
 		btnValidate.setContentAreaFilled(false);
 		btnValidate.setPreferredSize(new Dimension(90, 35));
 		btnValidate.addActionListener(new ButtonLauscher());
 		btnValidate.setEnabled(false);
 		pnlSouthTop.add(btnValidate);
-		
+
 		txtTime = new JTextField();
 		txtTime.setEnabled(false);
 		txtTime.setText("0s");
 		txtTime.setBackground(Color.WHITE);
 		txtTime.setDisabledTextColor(Color.BLACK);
 		txtTime.setFont(new Font("DIALOG", Font.PLAIN, 14));
-		txtTime.setPreferredSize(new Dimension(80,25));
+		txtTime.setPreferredSize(new Dimension(80, 25));
 		txtTime.setHorizontalAlignment(SwingConstants.RIGHT);
 		pnlSouthBottom.add(txtTime);
-		
+
 		JTextField progressTxt = new JTextField();
 		progressTxt.setText("Progress");
 		progressTxt.setEnabled(false);
@@ -213,7 +213,7 @@ public class GUI_Window {
 		prgrBar.setBorderPainted(false);
 		prgrBar.setForeground(new Color(255, 200, 200));
 		pnlSouthBottom.add(prgrBar);
-		
+
 		frame.getContentPane().add(mnbrTop, BorderLayout.PAGE_START);
 		frame.getContentPane().add(pnlCenter, BorderLayout.CENTER);
 		frame.getContentPane().add(pnlSouth, BorderLayout.SOUTH);
@@ -254,9 +254,9 @@ public class GUI_Window {
 				// gameField[i][j].getDocument().addDocumentListener(myDocumentListener);
 				gameField[y][x].addFocusListener(new JudokuFocusListener());
 				gameField[y][x].setEnabled(false);
-				
+
 				pane.add(gameField[y][x]);
-				//frame.getContentPane().add(gameField[y][x]);
+				// frame.getContentPane().add(gameField[y][x]);
 				yPosition = yPosition + 38;
 			}
 			if ((y + 1) % 3 != 0) {
@@ -290,13 +290,13 @@ public class GUI_Window {
 				}
 			}
 		}
-		if(startFilledFields + userFilledFields == 81){
+		if (startFilledFields + userFilledFields == 81) {
 			btnValidate.setEnabled(true);
 		} else {
 			btnValidate.setEnabled(false);
 		}
-		
-		prgrBar.setValue(100*userFilledFields / (81 - startFilledFields));
+
+		prgrBar.setValue(100 * userFilledFields / (81 - startFilledFields));
 		prgrBar.getRootPane().repaint();
 	}
 
@@ -313,85 +313,79 @@ public class GUI_Window {
 		refreshView();
 	}
 
-	public void enableButtons(boolean enabled){
+	public void enableButtons(boolean enabled) {
 		btnHint.setEnabled(enabled);
 		btnUndo.setEnabled(enabled);
 		btnRedo.setEnabled(enabled);
-		btnReset.setEnabled(enabled);		
+		btnReset.setEnabled(enabled);
 	}
-	
+
 	class JudokuFocusListener implements FocusListener {
+		int oldValue;
+
 		public void focusGained(java.awt.event.FocusEvent evt) {
 
-			System.out.println("-------- FOCUS GAINED---------\n");
 			JudokuJTextField currentTextField = (JudokuJTextField) evt
 					.getSource();
+			// is the current value numeric?
+			try {
+				oldValue = Integer.parseInt(currentTextField.getText());
+			} catch (NumberFormatException nfe) {
+				System.out.println("'" + currentTextField.getText() + "'"
+						+ " Is no number.");
+			}
 			currentTextField.selectAll();
 		}
 
 		public void focusLost(java.awt.event.FocusEvent evt) {
 			JudokuJTextField currentTextField = (JudokuJTextField) evt
 					.getSource();
-			System.out.println("Was steht in dem Scheiss JTextField? "
-					+ currentTextField.getText());
-			// this.gameField[y][x].setBackground(Color.RED);
 
-			/** FOR DEBUGGING **/
-
-			if (currentTextField.getText().equals("") || currentTextField.getText().equals(" ") || currentTextField.getText().equals(null)) {
-				System.out.println("-------- FOCUS LOST---------\nX-Value: "
-						+ currentTextField.X
-						+ "\nY-Value: "
-						+ currentTextField.Y
-						+ "\nCurrent value: "
-						+ ""
-						+ "\nValue successfully set: "
-						+ puzzle.trySetValue(currentTextField.X,
-								currentTextField.Y, 0));
-
+			if (currentTextField.getText().equals("")
+					|| currentTextField.getText().equals(" ")
+					|| currentTextField.getText().equals(null)) {
+				puzzle.trySetValue(currentTextField.X, currentTextField.Y, 0);
+				currentTextField.unmmark();
 			} else {
-				System.out.println("-------- FOCUS LOST---------\nX-Value: "
-						+ currentTextField.X
-						+ "\nY-Value: "
-						+ currentTextField.Y
-						+ "\nCurrent value: "
-						+ ""
-						+ "\nValue successfully set: "
-						+ puzzle.trySetValue(currentTextField.X,
-								currentTextField.Y,
-								Integer.parseInt(currentTextField.getText())));
+				System.out.println("NewValue: " + currentTextField.getText());
+				if (oldValue != Integer.parseInt(currentTextField.getText())) {
+					currentTextField.unmmark();
+				}
+
+				puzzle.trySetValue(currentTextField.X, currentTextField.Y,
+						Integer.parseInt(currentTextField.getText()));
 
 			}
 			refreshView();
 		}
 	}
 
-	class JudokuTimeListener implements ActionListener{
+	class JudokuTimeListener implements ActionListener {
 		private int secondsPassed = 0;
-		
+
 		@Override
-		public void actionPerformed(ActionEvent e){
+		public void actionPerformed(ActionEvent e) {
 			secondsPassed++;
-			int hours = secondsPassed/3600;
-			int minutes = secondsPassed/60 - hours*60;
-			int seconds = secondsPassed - 60*minutes - hours*3600;
-		
-			if(hours == 0 && minutes == 0){
+			int hours = secondsPassed / 3600;
+			int minutes = secondsPassed / 60 - hours * 60;
+			int seconds = secondsPassed - 60 * minutes - hours * 3600;
+
+			if (hours == 0 && minutes == 0) {
 				txtTime.setText(seconds + "s");
-			} else if(hours == 0){
+			} else if (hours == 0) {
 				txtTime.setText(minutes + "m " + seconds + "s");
 			} else {
 				txtTime.setText(hours + "h " + minutes + "m " + seconds + "s");
 			}
 			txtTime.getRootPane().repaint();
 		}
-		
-		public void reset(){
+
+		public void reset() {
 			secondsPassed = 0;
 			txtTime.setText(secondsPassed + "s");
 		}
 	}
-	
+
 	class ButtonLauscher implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -404,27 +398,30 @@ public class GUI_Window {
 				puzzle = sWork.easyGet();
 				enableButtons(true);
 				MenuSelectionManager.defaultManager().clearSelectedPath();
-				JudokuTimeListener jtl = (JudokuTimeListener)swingTimer.getActionListeners()[0];
+				JudokuTimeListener jtl = (JudokuTimeListener) swingTimer
+						.getActionListeners()[0];
 				jtl.reset();
 				swingTimer.restart();
 				refreshView();
-			} else if (e.getSource() == btnMedium){
+			} else if (e.getSource() == btnMedium) {
 				sWork = new JudokuSwingWorker(Difficulty.MEDIUM);
 				sWork.execute();
 				puzzle = sWork.easyGet();
 				enableButtons(true);
 				MenuSelectionManager.defaultManager().clearSelectedPath();
-				JudokuTimeListener jtl = (JudokuTimeListener)swingTimer.getActionListeners()[0];
+				JudokuTimeListener jtl = (JudokuTimeListener) swingTimer
+						.getActionListeners()[0];
 				jtl.reset();
 				swingTimer.restart();
 				refreshView();
-			} else if (e.getSource() == btnHard){
+			} else if (e.getSource() == btnHard) {
 				sWork = new JudokuSwingWorker(Difficulty.HARD);
 				sWork.execute();
 				puzzle = sWork.easyGet();
 				enableButtons(true);
 				MenuSelectionManager.defaultManager().clearSelectedPath();
-				JudokuTimeListener jtl = (JudokuTimeListener)swingTimer.getActionListeners()[0];
+				JudokuTimeListener jtl = (JudokuTimeListener) swingTimer
+						.getActionListeners()[0];
 				jtl.reset();
 				swingTimer.restart();
 				refreshView();
@@ -448,13 +445,12 @@ public class GUI_Window {
 					controller.giveHintPuzzle(puzzle);
 					refreshView();
 				}
-			} else if (e.getSource() == btnValidate){
+			} else if (e.getSource() == btnValidate) {
 				int mistakes = controller.validateUserSolution(puzzle);
-				if(mistakes == 0){
-					//TODO	
-				}
-				else{
-					//TODO
+				if (mistakes == 0) {
+					// TODO
+				} else {
+					// TODO
 					System.out.println(mistakes + " mistakes");
 				}
 			}
