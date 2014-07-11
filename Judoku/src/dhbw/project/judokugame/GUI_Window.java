@@ -54,6 +54,8 @@ public class GUI_Window {
 	private JButton btnEasy;
 	private JButton btnMedium;
 	private JButton btnHard;
+	private JButton btnWonGoBack;
+	private JButton btnLostGoBack;
 
 	/*
 	 * Other Components
@@ -62,7 +64,11 @@ public class GUI_Window {
 	private JMenu mnNewGame;
 	private JProgressBar prgrBar;
 	private JTextField txtTime;
-
+	private JTextField txtLostMsg;
+	private JTextField txtWonMsg;
+	
+	private JPanel pnlLost;
+	private JPanel pnlWon;
 	private JPanel pnlCenter;
 
 	/**
@@ -93,11 +99,41 @@ public class GUI_Window {
 		pnlCenter = new JPanel();
 		pnlCenter.setLayout(new CardLayout());
 
-		JPanel pnlWon = new JPanel();
-		JTextArea test = new JTextArea();
-		test.setText("afjrgkjehflkehgtluehlrugeuheihgliuerghliu");
-		pnlWon.add(test);
-
+		btnLostGoBack = new JButton("Go back");
+		btnLostGoBack.setContentAreaFilled(true);
+		btnLostGoBack.addActionListener(new JudokuButtonListener());
+		btnLostGoBack.setEnabled(true);
+		btnLostGoBack.setPreferredSize(new Dimension(200,200));
+		
+		btnWonGoBack = new JButton("Go back");
+		btnWonGoBack.setContentAreaFilled(true);
+		btnWonGoBack.addActionListener(new JudokuButtonListener());
+		btnWonGoBack.setEnabled(true);
+		btnWonGoBack.setPreferredSize(new Dimension(200,200));
+		
+		pnlWon = new JPanel(new BorderLayout());
+		txtWonMsg = new JTextField();
+		txtWonMsg.setFont(new Font("DIALOG", Font.BOLD, 20));
+		txtWonMsg.setPreferredSize(new Dimension(200, 60));
+		txtWonMsg.setEnabled(false);
+		txtWonMsg.setBackground(frame.getBackground());
+		txtWonMsg.setDisabledTextColor(Color.BLACK);
+		txtWonMsg.setBorder(BorderFactory.createEmptyBorder());
+		pnlWon.add(txtWonMsg, BorderLayout.NORTH);
+		pnlWon.add(btnWonGoBack, BorderLayout.SOUTH);
+		
+		pnlLost = new JPanel(new BorderLayout());
+		txtLostMsg = new JTextField();
+		txtLostMsg.setFont(new Font("DIALOG", Font.BOLD, 20));
+		txtLostMsg.setPreferredSize(new Dimension(200, 60));
+		txtLostMsg.setBackground(frame.getBackground());
+		txtLostMsg.setEnabled(false);
+		txtWonMsg.setBackground(frame.getBackground());
+		txtLostMsg.setDisabledTextColor(Color.BLACK);
+		txtLostMsg.setBorder(BorderFactory.createEmptyBorder());
+		pnlLost.add(txtLostMsg, BorderLayout.NORTH);
+		pnlLost.add(btnLostGoBack, BorderLayout.SOUTH);
+		
 		JPanel pnlGameField = new JPanel();
 		pnlGameField.setLayout(new GridLayout(9, 9, 2, 2));
 
@@ -115,6 +151,7 @@ public class GUI_Window {
 
 		pnlCenter.add(pnlGameField, "gameField");
 		pnlCenter.add(pnlWon, "won");
+		pnlCenter.add(pnlLost, "lost");
 
 		// draw the gamefield
 		mnbrTop = new JMenuBar();
@@ -527,13 +564,19 @@ public class GUI_Window {
 			} else if (e.getSource() == btnValidate) {
 				int mistakes = controller.validateUserSolution(puzzle);
 				if (mistakes == 0) {
+					txtWonMsg.setText("Congratulations! You have won in " + txtTime.getText() + "!");
 					CardLayout cl = (CardLayout) pnlCenter.getLayout();
 					cl.show(pnlCenter, "won");
 
 				} else {
-					// TODO
-					System.out.println(mistakes + " mistakes");
+					txtLostMsg.setText("Oh no! You still have " + mistakes + " mistakes.");
+					CardLayout cl = (CardLayout) pnlCenter.getLayout();
+					cl.show(pnlCenter, "lost");			
 				}
+			}
+			else if (e.getSource() == btnLostGoBack || e.getSource() == btnWonGoBack) {
+				CardLayout cl = (CardLayout) pnlCenter.getLayout();
+				cl.show(pnlCenter, "gameField");
 			}
 		}
 	}
