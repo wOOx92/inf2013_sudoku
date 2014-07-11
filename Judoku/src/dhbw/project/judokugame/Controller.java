@@ -1,7 +1,5 @@
 package dhbw.project.judokugame;
 import java.awt.EventQueue;
-import java.util.Arrays;
-
 
 public class Controller {
 	private GUI_Window spielfeld;

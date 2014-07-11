@@ -130,7 +130,7 @@ public class SudokuBuilder {
 	 * @param y
 	 *            The y-value of the cell where possibilities will be applied.
 	 * @param sudoku
-	 *            The sudoku grid to be checked for solutions.
+	 *            The Sudoku grid to be checked for solutions.
 	 * @return True if a solution was found, false if not.
 	 */
 	private static boolean solve(int i, int j, int[][] cells) {
@@ -372,9 +372,7 @@ public class SudokuBuilder {
 				if (sudoku[yos + y1][xos + x1] == 0) {
 					if (xos + x1 != x || yos + y1 != y) {
 						if (!isNeighbouredBy(xos + x1, yos + y1, cutCandidate,
-								sudoku))
-							;
-						{
+								sudoku)) {
 							sudoku[y][x] = cutCandidate;
 							return false;
 						}

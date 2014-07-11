@@ -1,6 +1,8 @@
 Issues:
 
 HIGH PRIORITY
+
+- Validate Button als  Go Back Button benutzen
 - Läuft jeder Button bereits durch den Controller?
 - SInd Sudokus rechts-unten-lastig?
 - Disable redo / undo button wenn redo / undo nicht möglich
