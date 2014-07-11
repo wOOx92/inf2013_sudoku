@@ -3,6 +3,7 @@ package dhbw.project.judokugame;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -66,7 +67,7 @@ public class GUI_Window {
 	private JTextField txtTime;
 	private JTextField txtLostMsg;
 	private JTextField txtWonMsg;
-	
+
 	private JPanel pnlLost;
 	private JPanel pnlWon;
 	private JPanel pnlCenter;
@@ -103,14 +104,14 @@ public class GUI_Window {
 		btnLostGoBack.setContentAreaFilled(true);
 		btnLostGoBack.addActionListener(new JudokuButtonListener());
 		btnLostGoBack.setEnabled(true);
-		btnLostGoBack.setPreferredSize(new Dimension(200,200));
-		
+		btnLostGoBack.setPreferredSize(new Dimension(200, 200));
+
 		btnWonGoBack = new JButton("Go back");
 		btnWonGoBack.setContentAreaFilled(true);
 		btnWonGoBack.addActionListener(new JudokuButtonListener());
 		btnWonGoBack.setEnabled(true);
-		btnWonGoBack.setPreferredSize(new Dimension(200,200));
-		
+		btnWonGoBack.setPreferredSize(new Dimension(200, 200));
+
 		pnlWon = new JPanel(new BorderLayout());
 		txtWonMsg = new JTextField();
 		txtWonMsg.setFont(new Font("DIALOG", Font.BOLD, 20));
@@ -121,7 +122,7 @@ public class GUI_Window {
 		txtWonMsg.setBorder(BorderFactory.createEmptyBorder());
 		pnlWon.add(txtWonMsg, BorderLayout.NORTH);
 		pnlWon.add(btnWonGoBack, BorderLayout.SOUTH);
-		
+
 		pnlLost = new JPanel(new BorderLayout());
 		txtLostMsg = new JTextField();
 		txtLostMsg.setFont(new Font("DIALOG", Font.BOLD, 20));
@@ -133,7 +134,7 @@ public class GUI_Window {
 		txtLostMsg.setBorder(BorderFactory.createEmptyBorder());
 		pnlLost.add(txtLostMsg, BorderLayout.NORTH);
 		pnlLost.add(btnLostGoBack, BorderLayout.SOUTH);
-		
+
 		JPanel pnlGameField = new JPanel();
 		pnlGameField.setLayout(new GridLayout(9, 9, 2, 2));
 
@@ -158,12 +159,14 @@ public class GUI_Window {
 		mnbrTop.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
 
 		mnNewGame = new JMenu("New Game");
+		mnNewGame.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
 		btnEasy = new JButton("EASY");
 		btnEasy.setText("Easy");
 		btnEasy.setContentAreaFilled(false);
 		btnEasy.setBorderPainted(false);
 		btnEasy.addActionListener(new JudokuButtonListener());
+		btnEasy.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		mnNewGame.add(btnEasy);
 
 		btnMedium = new JButton("MEDIUM");
@@ -171,6 +174,8 @@ public class GUI_Window {
 		btnMedium.setContentAreaFilled(false);
 		btnMedium.setBorderPainted(false);
 		btnMedium.addActionListener(new JudokuButtonListener());
+		btnMedium.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		
 		mnNewGame.add(btnMedium);
 
 		btnHard = new JButton("HARD");
@@ -178,6 +183,7 @@ public class GUI_Window {
 		btnHard.setBorderPainted(false);
 		btnHard.setText("Hard");
 		btnHard.addActionListener(new JudokuButtonListener());
+		btnHard.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		mnNewGame.add(btnHard);
 
 		mnbrTop.add(mnNewGame);
@@ -187,24 +193,28 @@ public class GUI_Window {
 		btnReset.setBorderPainted(false);
 		btnReset.addActionListener(new JudokuButtonListener());
 		btnReset.setEnabled(false);
+		btnReset.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		mnbrTop.add(btnReset);
 
 		btnQuit = new JButton("Exit");
 		btnQuit.setContentAreaFilled(false);
 		btnQuit.addActionListener(new JudokuButtonListener());
 		btnQuit.setBorderPainted(false);
+		btnQuit.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		mnbrTop.add(btnQuit);
 
 		btnLangDEU = new JButton("DEU");
 		btnLangDEU.setContentAreaFilled(false);
 		btnLangDEU.setBorderPainted(false);
 		btnLangDEU.addActionListener(new JudokuButtonListener());
+		btnLangDEU.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		mnbrTop.add(btnLangDEU);
 
 		btnLangENG = new JButton("ENG");
 		btnLangENG.setContentAreaFilled(false);
 		btnLangENG.setBorderPainted(false);
 		btnLangENG.addActionListener(new JudokuButtonListener());
+		btnLangENG.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		mnbrTop.add(btnLangENG);
 
 		btnUndo = new JButton("Undo");
@@ -212,6 +222,7 @@ public class GUI_Window {
 		btnUndo.setPreferredSize(new Dimension(90, 35));
 		btnUndo.addActionListener(new JudokuButtonListener());
 		btnUndo.setEnabled(false);
+		btnUndo.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		pnlSouthTop.add(btnUndo);
 
 		btnRedo = new JButton("Redo");
@@ -219,6 +230,7 @@ public class GUI_Window {
 		btnRedo.setPreferredSize(new Dimension(90, 35));
 		btnRedo.addActionListener(new JudokuButtonListener());
 		btnRedo.setEnabled(false);
+		btnRedo.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		pnlSouthTop.add(btnRedo);
 
 		btnHint = new JButton("Give Hint");
@@ -226,6 +238,7 @@ public class GUI_Window {
 		btnHint.setPreferredSize(new Dimension(90, 35));
 		btnHint.addActionListener(new JudokuButtonListener());
 		btnHint.setEnabled(false);
+		btnHint.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		pnlSouthTop.add(btnHint);
 
 		btnValidate = new JButton("Validate");
@@ -233,6 +246,7 @@ public class GUI_Window {
 		btnValidate.setPreferredSize(new Dimension(90, 35));
 		btnValidate.addActionListener(new JudokuButtonListener());
 		btnValidate.setEnabled(false);
+		btnValidate.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		pnlSouthTop.add(btnValidate);
 
 		txtTime = new JTextField();
@@ -302,6 +316,7 @@ public class GUI_Window {
 				gameField[y][x].setSelectionColor(new Color(0, 0, 0, 0));
 				gameField[y][x].setCaretColor(gameField[y][x].getBackground());
 				gameField[y][x].getCaret().setBlinkRate(0);
+				gameField[y][x].setCursor(new Cursor(Cursor.HAND_CURSOR));
 
 				// Add the required listeners
 				gameField[y][x].addFocusListener(new JudokuFocusListener());
@@ -357,6 +372,8 @@ public class GUI_Window {
 
 	public void displayMistake(int x, int y) {
 		this.gameField[y][x].mark();
+		gameField[y][x].setCaretColor(gameField[y][x].getBackground());
+		// TODO change Cursor color!!
 	}
 
 	public NumberPuzzle getNumberPuzzle() {
@@ -421,7 +438,7 @@ public class GUI_Window {
 			JudokuJTextField currentTextField = (JudokuJTextField) evt
 					.getSource();
 			currentTextField.setBorder(BorderFactory.createMatteBorder(2, 2, 2,
-					2, Color.red));
+					2, new Color(0, 165, 255)));
 			// Only allow numeric input from 0 to 9
 			try {
 				oldValue = Integer.parseInt(currentTextField.getText());
@@ -564,17 +581,19 @@ public class GUI_Window {
 			} else if (e.getSource() == btnValidate) {
 				int mistakes = controller.validateUserSolution(puzzle);
 				if (mistakes == 0) {
-					txtWonMsg.setText("Congratulations! You have won in " + txtTime.getText() + "!");
+					txtWonMsg.setText("Congratulations! You have won in "
+							+ txtTime.getText() + "!");
 					CardLayout cl = (CardLayout) pnlCenter.getLayout();
 					cl.show(pnlCenter, "won");
 
 				} else {
-					txtLostMsg.setText("Oh no! You still have " + mistakes + " mistakes.");
+					txtLostMsg.setText("Oh no! You still have " + mistakes
+							+ " mistakes.");
 					CardLayout cl = (CardLayout) pnlCenter.getLayout();
-					cl.show(pnlCenter, "lost");			
+					cl.show(pnlCenter, "lost");
 				}
-			}
-			else if (e.getSource() == btnLostGoBack || e.getSource() == btnWonGoBack) {
+			} else if (e.getSource() == btnLostGoBack
+					|| e.getSource() == btnWonGoBack) {
 				CardLayout cl = (CardLayout) pnlCenter.getLayout();
 				cl.show(pnlCenter, "gameField");
 			}
