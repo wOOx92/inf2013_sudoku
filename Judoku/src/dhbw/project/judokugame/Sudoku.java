@@ -12,21 +12,6 @@ import java.util.Stack;
 public class Sudoku implements NumberPuzzle {
 	
 	/**
-	 * This array saves the state of the Sudoku at the beginning.
-	 */
-	private int[][] startGrid;
-	
-	/**
-	 * This array saves the state of the solved Sudoku. Every Sudoku is defined by its solved Grid.
-	 */
-	private final int[][] solvedGrid;
-	
-	/**
-	 * This array saves the recent state of the Sudoku.
-	 */
-	private int[][] recentGrid;
-	
-	/**
 	 * This field saves the rating of the difficulty of this Sudoku.
 	 */
 	public final Difficulty DIFFICULTY;
@@ -45,6 +30,21 @@ public class Sudoku implements NumberPuzzle {
 	 * The maximum of steps a user can go back and forth.
 	 */
 	private final static int UNDOLIMIT = 5;
+	
+	/**
+	 * This array saves the state of the solved Sudoku. Every Sudoku is defined by its solved Grid.
+	 */
+	private final int[][] solvedGrid;
+	
+	/**
+	 * This array saves the state of the Sudoku at the beginning.
+	 */
+	private int[][] startGrid;
+	
+	/**
+	 * This array saves the recent state of the Sudoku.
+	 */
+	private int[][] recentGrid;
 	
 	/**
 	 * Stores the previous states of this Sudoku

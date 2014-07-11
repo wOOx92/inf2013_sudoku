@@ -3,7 +3,7 @@ import java.awt.EventQueue;
 import java.util.Arrays;
 
 
-public class Controller{
+public class Controller {
 	private GUI_Window spielfeld;
 	
 	public static void main(String[] args) {

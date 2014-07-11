@@ -1,6 +1,7 @@
 package dhbw.project.judokugame;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -18,6 +19,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.MenuSelectionManager;
 import javax.swing.SwingConstants;
@@ -57,6 +59,8 @@ public class GUI_Window {
 	private JProgressBar prgrBar;
 	private JTextField txtTime;
 
+	private JPanel pnlCenter;
+	
 	/**
 	 * Create the application.
 	 */
@@ -82,8 +86,17 @@ public class GUI_Window {
 		frame.getContentPane().setLayout(new BorderLayout());
 		frame.setTitle("Judoku 0.0.0.1");
 
-		JPanel pnlCenter = new JPanel();
-		pnlCenter.setLayout(new GridLayout(9, 9, 2, 2));
+		pnlCenter = new JPanel();
+		pnlCenter.setLayout(new CardLayout());
+		
+		JPanel pnlWon = new JPanel();
+		JTextArea test = new JTextArea();
+		test.setText("afjrgkjehflkehgtluehlrugeuheihgliuerghliu");
+		pnlWon.add(test);
+		
+		JPanel pnlGameField = new JPanel();
+		pnlGameField.setLayout(new GridLayout(9, 9, 2, 2));
+		
 		JPanel pnlSouth = new JPanel();
 		pnlSouth.setLayout(new GridLayout(2, 1));
 		JPanel pnlSouthTop = new JPanel();
@@ -94,7 +107,10 @@ public class GUI_Window {
 		pnlSouth.add(pnlSouthBottom);
 
 		// positioning and sizing the text fields
-		initializeGameField(pnlCenter);
+		initializeGameField(pnlGameField);
+		
+		pnlCenter.add(pnlGameField, "gameField");
+		pnlCenter.add(pnlWon, "won");
 
 		// draw the gamefield
 		mnbrTop = new JMenuBar();
@@ -108,7 +124,7 @@ public class GUI_Window {
 		btnEasy.setBorderPainted(false);
 		btnEasy.addActionListener(new ButtonLauscher());
 		mnNewGame.add(btnEasy);
-
+		
 		btnMedium = new JButton("MEDIUM");
 		btnMedium.setText("Medium");
 		btnMedium.setContentAreaFilled(false);
@@ -420,29 +436,23 @@ public class GUI_Window {
 				swingTimer.restart();
 				refreshView();
 			} else if (e.getSource() == btnReset) {
-				if (puzzle != null) {
 					controller.resetPuzzle(puzzle);
 					refreshView();
-				}
 			} else if (e.getSource() == btnUndo) {
-				if (puzzle != null) {
 					controller.undoPuzzle(puzzle);
 					refreshView();
-				}
 			} else if (e.getSource() == btnRedo) {
-				if (puzzle != null) {
 					controller.redoPuzzle(puzzle);
 					refreshView();
-				}
 			} else if (e.getSource() == btnHint) {
-				if (puzzle != null) {
 					controller.giveHintPuzzle(puzzle);
 					refreshView();
-				}
 			} else if (e.getSource() == btnValidate) {
 				int mistakes = controller.validateUserSolution(puzzle);
 				if (mistakes == 0) {
-					// TODO
+					CardLayout cl = (CardLayout) pnlCenter.getLayout();
+					cl.show(pnlCenter, "won");
+					
 				} else {
 					// TODO
 					System.out.println(mistakes + " mistakes");

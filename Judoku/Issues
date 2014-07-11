@@ -3,9 +3,7 @@ Issues:
 HIGH PRIORITY
 - SInd Sudokus rechts-unten-lastig?
 - Disable redo / undo button wenn redo / undo nicht möglich
-- puzzle != null
 - Buttons sizes
-- Mark Mistake bleibt dauerhaft
 - Methode deepCopy(int[][]) im Controller evtl fehlplatziert
 - Evaluieren von Eingaben im Controller nicht durch trySetValue() im Model
 
