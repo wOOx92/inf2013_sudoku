@@ -64,9 +64,9 @@ public class Sudoku implements NumberPuzzle {
 	 */
 	public Sudoku(int[][] sudokuGrid, int[][] solvedGrid, Difficulty diff){
 		this.DIFFICULTY = diff;
-		this.recentGrid = SudokuBuilder.deepCopy(sudokuGrid);
-		this.startGrid = SudokuBuilder.deepCopy(sudokuGrid);
-		this.solvedGrid = SudokuBuilder.deepCopy(solvedGrid);
+		this.startGrid = sudokuGrid;
+		this.recentGrid = SudokuBuilder.deepCopy(startGrid);
+		this.solvedGrid = solvedGrid;
 	}
 
 	/**

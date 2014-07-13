@@ -29,7 +29,7 @@ public enum Difficulty {
 			return 0;
 		}
 		if (this == MEDIUM) {
-			return 13;
+			return 11;
 		}
 		return 28;
 	}
