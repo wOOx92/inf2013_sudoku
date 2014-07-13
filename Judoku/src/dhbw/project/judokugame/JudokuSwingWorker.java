@@ -1,36 +1,46 @@
 package dhbw.project.judokugame;
+
+import java.util.concurrent.ExecutionException;
 import javax.swing.SwingWorker;
 
-public class JudokuSwingWorker extends SwingWorker<Sudoku,Void>{
-	
-	final Difficulty diff;
-	
-	public JudokuSwingWorker(Difficulty diff){
-		this.diff = diff;
+/**
+ * The Judoku Swing worker outsources the generating of Sudoku object to a
+ * separate worker thread.
+ * 
+ * @author Dennis Uteg, Florian Steurer, Markus Wingler, Michael Jauch
+ * 
+ */
+public class JudokuSwingWorker extends SwingWorker<Sudoku, Void> {
+
+	private final Difficulty requestedDifficulty;
+
+	/**
+	 * Creates a new JudokuSwingWorker object.
+	 * 
+	 * @param sudokuDifficulty
+	 *            The favored Difficulty of the Sudoku.
+	 */
+	public JudokuSwingWorker(Difficulty sudokuDifficulty) {
+		this.requestedDifficulty = sudokuDifficulty;
 	}
-	
+
 	@Override
-	public Sudoku doInBackground(){
-		return new SudokuBuilder().newSudoku(diff);
+	public Sudoku doInBackground() {
+		return new SudokuBuilder().newSudoku(requestedDifficulty);
 	}
-	
-	public Sudoku easyGet(){
-		try{
+
+	/**
+	 * Provides an easy way (without using try and catch in the calling method)
+	 * to get the result of the worker thread.
+	 * 
+	 * @see SwingWorker#get()
+	 * @return The Sudoku object, if exceptions occurred, returns null
+	 */
+	public Sudoku easyGet() {
+		try {
 			return this.get();
-		}
-		catch(Exception e){
+		} catch (InterruptedException | ExecutionException ex) {
 			return null;
 		}
 	}
-	
-	/*@Override
-	public void done(){
-		try{
-			this.guiWndw.setNumberPuzzle(get());
-		}
-		catch(Exception ignore){
-			//Ignore Exceptions;	
-		}
-	}*/
-	
 }

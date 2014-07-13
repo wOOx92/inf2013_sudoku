@@ -1,26 +1,36 @@
 package dhbw.project.judokugame;
+
 /**
- * This enum contains the difficulties which Sudokus can be classified in. A sudokus' difficulty is determined by a) the number of clues and b) the amount of random cutting done during its generation.
+ * This enumeration contains the difficulties for NumberPuzzles. Difficulties
+ * are defined by a recursion depth. Difference in the recursion depth affects
+ * the amount of the cutting of clues during the generation of NumberPuzzles
+ * (the deeper the recursion, the more cutting can be done, the harder the
+ * NumberPuzzle will get).
+ * 
  * @author Dennis Uteg, Florian Steurer, Markus Wingler, Michael Jauch
  * 
  */
-public enum Difficulty{
-	EASY,
-	MEDIUM,
+public enum Difficulty {
+	EASY, 
+	MEDIUM, 
 	HARD;
-	
+
 	/**
-	 * Determines how much numbers will be cut out by the "cut-and-test" Method.
-	 * @return The integer value of the recursion depth used by the backtracking algorithm.
+	 * The value of the recursion depth will directly influence the amount of
+	 * clues cut out by "cut-and-test-backtracking". The higher the value, the
+	 * more cutting can be done. Tests show that a recursion depth up to 30
+	 * yield a appropriate time.
+	 * 
+	 * @return The positive integer that is used as an upper limit for the
+	 *         recursion depth.
 	 */
-	public int maxRecursionDepth(){
-		if(this == EASY){
+	public int maxRecursionDepth() {
+		if (this == EASY) {
 			return 0;
 		}
-		if(this == MEDIUM){
+		if (this == MEDIUM) {
 			return 13;
 		}
 		return 28;
 	}
-	
 }

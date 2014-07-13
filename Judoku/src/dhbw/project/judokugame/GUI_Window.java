@@ -152,7 +152,7 @@ public class GUI_Window {
 		JPanel pnlSouth = new JPanel();
 		pnlSouth.setLayout(new GridLayout(2, 1));
 		JPanel pnlSouthTop = new JPanel();
-		pnlSouthTop.setLayout(new GridLayout(1, 4, 10, 10));
+		pnlSouthTop.setLayout(new GridLayout(1, 4, 25, 20));
 		JPanel pnlSouthBottom = new JPanel();
 		pnlSouthBottom.setLayout(new FlowLayout(FlowLayout.LEFT, 10,10));
 		pnlSouth.add(pnlSouthTop);
@@ -470,11 +470,11 @@ public class GUI_Window {
 					|| currentTextField.getText().equals(" ")
 					|| currentTextField.getText().equals(null)) {
 				puzzle.trySetValue(currentTextField.X, currentTextField.Y, 0);
-				currentTextField.unmmark();
+				currentTextField.unmark();
 			} else {
 				System.out.println("NewValue: " + currentTextField.getText());
 				if (oldValue != Integer.parseInt(currentTextField.getText())) {
-					currentTextField.unmmark();
+					currentTextField.unmark();
 				}
 
 				puzzle.trySetValue(currentTextField.X, currentTextField.Y,

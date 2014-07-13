@@ -3,18 +3,13 @@ import java.util.Random;
 import java.util.Stack;
 
 /**
- * This class represents Sudokus.
+ * This class represents Sudokus. It implements NumberPuzzle.
  * @author Dennis Uteg, Florian Steurer, Markus Wingler, Michael Jauch
  * The generate and solving algorithms used originate from:
  * https://www.hochschule-trier.de/uploads/tx_rfttheses/Eckart_Sussenburger_-_Loesungs-_und_Generierungsalgorithmen_fuer_Sudoku.pdf
  * http://www.sudokuwiki.org/sudoku.htm
  */
-public class Sudoku implements NumberPuzzle {
-	
-	/**
-	 * This field saves the rating of the difficulty of this Sudoku.
-	 */
-	public final Difficulty DIFFICULTY;
+public class Sudoku implements NumberPuzzle {	
 	
 	/**
 	 * This field is the side-length of a carree in a Sudoku. 
@@ -27,17 +22,22 @@ public class Sudoku implements NumberPuzzle {
 	public final static int SIZE = 9;
 	
 	/**
-	 * The maximum of steps a user can go back and forth.
+	 * The maximum number of steps a user can use {@link Sudoku#undo()} and {@link Sudoku#undo()}.
 	 */
-	private final static int UNDOLIMIT = 5;
+	public final static int UNDOLIMIT = 5;
 	
 	/**
-	 * This array saves the state of the solved Sudoku. Every Sudoku is defined by its solved Grid.
+	 * The difficulty rating of the Sudoku.
+	 */
+	public final Difficulty DIFFICULTY;
+	
+	/**
+	 * The solution of the Sudoku.
 	 */
 	private final int[][] solvedGrid;
 	
 	/**
-	 * This array saves the state of the Sudoku at the beginning.
+	 * The initial state of the Sudoku.
 	 */
 	private int[][] startGrid;
 	
@@ -52,7 +52,7 @@ public class Sudoku implements NumberPuzzle {
 	private Stack<int[][]> undoStorage = new Stack<int[][]>();
 	
 	/**
-	 * Stores the states of the Sudoku for redoing.
+	 * Stores the undone states of the Sudoku for redoing.
 	 */
 	private Stack<int[][]> redoStorage = new Stack<int[][]>();
 	
@@ -69,6 +69,14 @@ public class Sudoku implements NumberPuzzle {
 		this.solvedGrid = SudokuBuilder.deepCopy(solvedGrid);
 	}
 
+	/**
+	 * Checks whether it is possible to place a given value at a certain point in an Sudoku grid, or if this would result in an illogical Sudoku.
+	 * @param i
+	 * @param j
+	 * @param val
+	 * @param cells
+	 * @return
+	 */
     public static boolean legal(int i, int j, int val, int[][] cells) {
         for (int k = 0; k < 9; ++k)  // row
             if (val == cells[k][j])
