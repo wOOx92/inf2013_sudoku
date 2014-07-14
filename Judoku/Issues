@@ -16,18 +16,16 @@ Difficulty
 
 HIGH PRIORITY
 
+- Undo and Redo nach Validate und Continue
+- Redo nach änderungen funktioniert immer noch nicht
 - legal und backtracking umbenennen!
 - Was mit Exceptions? Z.b. im sudoku construcor throw GridNot9on9 exception?
 - NumberPuzzle sollte eine Methode toJudokuJTextField bereitstellen, da sonst St8ts nicht angezeigt werden kann.
-- Validate Button als  Go Back Button benutzen
-- Läuft jeder Button bereits durch den Controller?
-- SInd Sudokus rechts-unten-lastig?
 - Disable redo / undo button wenn redo / undo nicht möglich
-- Buttons sizes
-- Evaluieren von Eingaben im Controller nicht durch trySetValue() im Model
-- Nach erfolgreichem Validate fängt der Timer nicht mehr an zu laufen (an sich nicht falsch, aber evtl unschön)
 
 LOW PRIORITY
+- SInd Sudokus rechts-unten-lastig?
+- Mehrsprachigkeit
 - Steuerung z
 - Steuerung y
 - Navigation mit Pfeiltasten
@@ -36,8 +34,6 @@ LOW PRIORITY
 
 NOTES:
 	-Builder pattern benutzen?
-	
 	-Auf keinen Fall java.lang.reflections benutzen. Zu langsam und zu unsauber.
-	
 	-Idee: Ein Sudoku ist eindeutig definiert durch sein SolvedGrid nicht durch sein startGrid, also kann das auch noch veränderbar sein. Oberklasse kann solve haben mit einem abstract legal dass später auf das grid geht.
 	Alternativ kann die oberklasse einen gemeinsamen konstruktor haben.

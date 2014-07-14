@@ -53,6 +53,54 @@ public class Controller {
 	}
 
 	/**
+	 * Validates a user input and, if it is valid, sets the value inside the
+	 * NumberPuzzle.
+	 * 
+	 * @param x
+	 *            The x-value of the cell in which the value should be set.
+	 * @param y
+	 *            The y-value of the cell in which the value should be set.
+	 * @param val
+	 *            The value, that is validated and set or denied.
+	 * @param puzzle
+	 *            The puzzle inside which the value should be set.
+	 * @return True, if the value was valid and got set, false otherwise
+	 */
+	public boolean trySetValue(int x, int y, int val, NumberPuzzle puzzle) {
+		/*
+		 * The value must be between 0 and 9.
+		 */
+		if (val < 0 || val > Sudoku.SIZE) {
+			return false;
+		}
+
+		/*
+		 * The x-coordinate must be between 0 and 9.
+		 */
+		if (x < 0 || x >= Sudoku.SIZE) {
+			return false;
+		}
+
+		/*
+		 * The y-coordinate must be between 0 and 9.
+		 */
+		if (y < 0 || y >= Sudoku.SIZE) {
+			return false;
+		}
+
+		/*
+		 * If in the startGrid this cell contains a value, the user is not
+		 * allowed to set a value there since this is an essential clue.
+		 */
+		if (puzzle.getStartGrid()[y][x] != 0) {
+			return false;
+		}
+		
+		puzzle.setValue(x, y, val);
+		return true;
+	}
+	
+	/**
 	 * Counts the number of mistakes the user made when solving the
 	 * NumberPuzzle.
 	 * 

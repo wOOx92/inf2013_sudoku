@@ -74,17 +74,11 @@ public class SudokuBuilder {
 		 */
 		cutWithNeighbourRule(templateSdk);
 
-		// TODO debug ausgaben entfernen
-		System.out.println(hasUniqueSolution(templateSdk, Difficulty.HARD)
-				+ " has unique solutions");
-		int c = getNumberOfClues(templateSdk);
-
 		/*
 		 * Step 6: Try to make the resulting Sudoku irreducible using a
 		 * "cut-and-test" method.
 		 */
 		doRandomCutting(templateSdk, diff);
-		System.out.println(c - getNumberOfClues(templateSdk));
 
 		return new Sudoku(templateSdk, solvedGrid, diff);
 	}

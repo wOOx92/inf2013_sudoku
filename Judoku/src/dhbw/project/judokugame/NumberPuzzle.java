@@ -22,7 +22,7 @@ public interface NumberPuzzle {
 	public int[][] getSolvedGird();
 	
 	/**
-	 * Tries to set a value in a certain cell in the NumberPuzzle.
+	 * Sets a value in the recentGrid inside the NumberPuzzle.
 	 * 
 	 * @param x
 	 *            The x-value of the cell.
@@ -30,10 +30,8 @@ public interface NumberPuzzle {
 	 *            The y-value of the cell.
 	 * @param value
 	 *            The value which is to be set.
-	 * @return True if the value was set, false if it was not successful (no
-	 *         change in the current state was made).
 	 */
-	public boolean trySetValue(int x, int y, int value);
+	public void setValue(int x, int y, int value);
 
 	/**
 	 * Sets a useful hint in the recentGrid within the NumberPuzzle.
