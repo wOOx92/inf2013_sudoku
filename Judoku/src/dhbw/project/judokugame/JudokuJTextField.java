@@ -23,6 +23,8 @@ public class JudokuJTextField extends JTextField {
 	 */
 	final public int Y;
 
+	private String hintgiven;
+	
 	private Color initialColor;
 
 	/**
@@ -36,6 +38,14 @@ public class JudokuJTextField extends JTextField {
 	public JudokuJTextField(int x, int y) {
 		this.X = x;
 		this.Y = y;
+	}
+	
+	@Override
+	public void setText(String t){
+		if(!this.getText().equals(t) || !this.getText().equals(hintgiven)){
+			this.unmark();
+		}
+		super.setText(t);
 	}
 
 	/**
@@ -52,6 +62,7 @@ public class JudokuJTextField extends JTextField {
 	 * Switches this JudokuJTextFields color to red.
 	 */
 	public void mark() {
+		this.hintgiven = this.getText();
 		super.setBackground(Color.RED);
 	}
 
