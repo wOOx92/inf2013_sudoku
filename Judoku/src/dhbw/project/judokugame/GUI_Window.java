@@ -454,10 +454,13 @@ public class GUI_Window {
 			currentTextField.setBorder(BorderFactory.createMatteBorder(2, 2, 2,
 					2, new Color(0, 165, 255)));
 			// Only allow numeric input from 0 to 9
-			try {
+			
+			char input = '?';
+			if(currentTextField.getText().length() == 1) {
+				input = currentTextField.getText().charAt(0);
+			}
+			if(Character.isDigit(input)){
 				oldValue = Integer.parseInt(currentTextField.getText());
-			} catch (NumberFormatException nfe) {
-				// Its Ok, let him try to put characters in - but it won't work.
 			}
 			currentTextField.selectAll();
 		}
