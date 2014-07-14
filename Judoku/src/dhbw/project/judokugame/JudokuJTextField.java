@@ -13,6 +13,9 @@ import javax.swing.JTextField;
  */
 public class JudokuJTextField extends JTextField {
 
+	
+	private static final long serialVersionUID = 1l;
+	
 	/**
 	 * The x-Value of the JudokuJTextField in the game field grid.
 	 */
@@ -23,7 +26,10 @@ public class JudokuJTextField extends JTextField {
 	 */
 	final public int Y;
 
-	private String hintgiven;
+	/**
+	 * The text that this JudokuJTextField contained when {@link JudokuJTextField#mark()} was called.
+	 */
+	private String contentWhenMarked;
 	
 	private Color initialColor;
 
@@ -42,7 +48,7 @@ public class JudokuJTextField extends JTextField {
 	
 	@Override
 	public void setText(String t){
-		if(!this.getText().equals(t) || !this.getText().equals(hintgiven)){
+		if(!this.getText().equals(t) || !this.getText().equals(contentWhenMarked)){
 			this.unmark();
 		}
 		super.setText(t);
@@ -62,7 +68,7 @@ public class JudokuJTextField extends JTextField {
 	 * Switches this JudokuJTextFields color to red.
 	 */
 	public void mark() {
-		this.hintgiven = this.getText();
+		this.contentWhenMarked = this.getText();
 		super.setBackground(Color.RED);
 	}
 

@@ -64,7 +64,7 @@ public class GUI_Window {
 	private JTextField txtTime;
 	private JTextField txtLostMsg;
 	private JTextField txtDifficulty;
-	
+
 	private JPanel pnlLost;
 	private JPanel pnlWon;
 	private JPanel pnlCenter;
@@ -88,18 +88,18 @@ public class GUI_Window {
 		icon = new ImageIcon("judku_icon.png");
 		// frame.setIconImage(icon.getImage());
 		frame = new JFrame();
-		frame.setBounds(200, 200, 450, 620);
+		frame.setBounds(150, 150, 585, 800);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setMinimumSize(new Dimension(450, 620));
-		frame.getContentPane().setLayout(new BorderLayout(10,10));
-		frame.setTitle("Judoku 0.0.0.1");
+		frame.setMinimumSize(new Dimension(450, 615));
+		frame.getContentPane().setLayout(new BorderLayout(10, 10));
+		frame.setTitle("Judoku");
 
 		pnlCenter = new JPanel();
 		pnlCenter.setLayout(new CardLayout());
 
 		pnlWon = new JPanel(new BorderLayout());
 		pnlLost = new JPanel(new BorderLayout());
-		
+
 		txtLostMsg = new JTextField();
 		txtLostMsg.setFont(new Font("DIALOG", Font.BOLD, 20));
 		txtLostMsg.setPreferredSize(new Dimension(200, 60));
@@ -109,7 +109,7 @@ public class GUI_Window {
 		txtLostMsg.setBackground(frame.getBackground());
 		txtLostMsg.setDisabledTextColor(Color.BLACK);
 		txtLostMsg.setBorder(BorderFactory.createEmptyBorder());
-		
+
 		pnlLost.add(txtLostMsg, BorderLayout.NORTH);
 		JPanel pnlGameField = new JPanel();
 		pnlGameField.setLayout(new GridLayout(9, 9, 2, 2));
@@ -120,7 +120,7 @@ public class GUI_Window {
 		pnlNorthBottom.setLayout(new GridLayout(1, 4, 10, 0));
 		pnlNorthBottom.setPreferredSize(new Dimension(450, 20));
 		JPanel pnlSouth = new JPanel();
-		pnlSouth.setLayout(new BorderLayout(15,15));
+		pnlSouth.setLayout(new BorderLayout(15, 15));
 
 		// positioning and sizing the text fields
 		initializeGameField(pnlGameField);
@@ -150,7 +150,7 @@ public class GUI_Window {
 		btnMedium.setBorderPainted(false);
 		btnMedium.addActionListener(new JudokuButtonListener());
 		btnMedium.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		
+
 		mnNewGame.add(btnMedium);
 
 		btnHard = new JButton("HARD");
@@ -229,7 +229,7 @@ public class GUI_Window {
 		txtTime.setPreferredSize(new Dimension(80, 35));
 		txtTime.setHorizontalAlignment(SwingConstants.CENTER);
 		pnlSouth.add(txtTime, BorderLayout.WEST);
-		
+
 		txtDifficulty = new JTextField();
 		txtDifficulty.setEnabled(false);
 		txtDifficulty.setBackground(frame.getBackground());
@@ -249,12 +249,12 @@ public class GUI_Window {
 		prgrBar.setStringPainted(true);
 		prgrBar.setBorderPainted(false);
 		prgrBar.setForeground(new Color(255, 200, 200));
-		
+
 		pnlSouth.add(prgrBar, BorderLayout.CENTER);
 
 		pnlNorth.add(mnbrTop);
 		pnlNorth.add(pnlNorthBottom);
-		
+
 		frame.getContentPane().add(pnlSouth, BorderLayout.SOUTH);
 		frame.getContentPane().add(pnlCenter, BorderLayout.CENTER);
 		frame.getContentPane().add(pnlNorth, BorderLayout.PAGE_START);
@@ -346,7 +346,7 @@ public class GUI_Window {
 		prgrBar.setString(prgrBar.getValue() + "% Done");
 		prgrBar.getRootPane().repaint();
 	}
-	
+
 	public void displayMistake(int x, int y) {
 		this.gameField[y][x].mark();
 		gameField[y][x].setCaretColor(gameField[y][x].getBackground());
@@ -417,12 +417,12 @@ public class GUI_Window {
 			currentTextField.setBorder(BorderFactory.createMatteBorder(2, 2, 2,
 					2, new Color(0, 165, 255)));
 			// Only allow numeric input from 0 to 9
-			
+
 			char input = '?';
-			if(currentTextField.getText().length() == 1) {
+			if (currentTextField.getText().length() == 1) {
 				input = currentTextField.getText().charAt(0);
 			}
-			if(Character.isDigit(input)){
+			if (Character.isDigit(input)) {
 				oldValue = Integer.parseInt(currentTextField.getText());
 			}
 			currentTextField.selectAll();
@@ -433,14 +433,15 @@ public class GUI_Window {
 					.getSource();
 
 			if (currentTextField.getText().equals("")
-					|| currentTextField.getText().equals(" ")
+					//|| currentTextField.getText().equals(" ")
 					|| currentTextField.getText().equals(null)) {
-				controller.trySetValue(currentTextField.X, currentTextField.Y, 0, puzzle);
-				currentTextField.unmark();
+				controller.trySetValue(currentTextField.X, currentTextField.Y,
+						0, puzzle);
+				//currentTextField.unmark();
 			} else {
 				System.out.println("NewValue: " + currentTextField.getText());
 				if (oldValue != Integer.parseInt(currentTextField.getText())) {
-					currentTextField.unmark();
+					//currentTextField.unmark();
 				}
 
 				controller.trySetValue(currentTextField.X, currentTextField.Y,
@@ -567,13 +568,14 @@ public class GUI_Window {
 			} else if (e.getSource() == btnHint) {
 				controller.giveHintPuzzle(puzzle);
 				refreshView();
-			} else if (e.getSource() == btnValidate && btnValidate.getText().equals("Continue")){
-				CardLayout cl = (CardLayout) pnlCenter.getLayout();	
+			} else if (e.getSource() == btnValidate
+					&& btnValidate.getText().equals("Continue")) {
+				CardLayout cl = (CardLayout) pnlCenter.getLayout();
 				cl.show(pnlCenter, "gameField");
 				btnValidate.setText("Validate");
 				enableButtons(true);
 			} else if (e.getSource() == btnValidate) {
-				CardLayout cl = (CardLayout) pnlCenter.getLayout();			
+				CardLayout cl = (CardLayout) pnlCenter.getLayout();
 				int mistakes = controller.validateUserSolution(puzzle);
 				if (mistakes == 0) {
 					cl.show(pnlCenter, "won");
@@ -581,19 +583,19 @@ public class GUI_Window {
 					btnValidate.setEnabled(false);
 				} else {
 					String msgMistakes = "";
-					if(mistakes == 1){
+					if (mistakes == 1) {
 						msgMistakes = "mistake";
 					} else {
 						msgMistakes = "mistakes";
 					}
-					
+
 					txtLostMsg.setText("Oh no! You still have " + mistakes
 							+ msgMistakes + ".");
 					cl.show(pnlCenter, "lost");
 					btnValidate.setText("Continue");
 				}
 				enableButtons(false);
-			} 
+			}
 		}
 	}
 

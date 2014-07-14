@@ -1,15 +1,4 @@
-Issues:
-
-COMMENTING:
-
-GUI_Window
-JTextFieldLimit
-Sudoku
-SudokuBuilder
-
-COMMENTING DONE:
-JudokuSwingWorker
-JudokuJTextField
+Issues:0
 Controller
 NumberPuzzle
 Difficulty
