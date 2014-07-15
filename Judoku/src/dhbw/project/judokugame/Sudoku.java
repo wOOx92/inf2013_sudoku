@@ -246,22 +246,18 @@ public class Sudoku implements NumberPuzzle {
 		}
 	}
 
-	@Override
 	public boolean undoPossible() {
-		boolean possible = false;
 		if(!undoStorage.isEmpty()){
-			possible = true;
+			return true;
 		}
-		return possible;
+		return false;
 		
 	}
 
-	@Override
 	public boolean redoPossible() {
-		boolean possible = false;
 		if(!redoStorage.isEmpty()){
-			possible = true;
+			return true;
 		}
-		return possible;
+		return false;
 	}
 }

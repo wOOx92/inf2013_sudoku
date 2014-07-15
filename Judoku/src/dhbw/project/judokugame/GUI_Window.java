@@ -386,6 +386,20 @@ public class GUI_Window {
 		// btnRedo.setEnabled(enabled);
 		btnReset.setEnabled(enabled);
 	}
+	
+	public void checkUndoRedoButtons(){
+		if(puzzle.redoPossible()) {
+			btnRedo.setEnabled(true);
+		} else {
+			btnRedo.setEnabled(false);
+		}
+		
+		if(puzzle.undoPossible()) {
+			btnUndo.setEnabled(true);
+		} else {
+			btnUndo.setEnabled(false);
+		}
+	}
 
 	class JudokuMouseListener implements MouseListener {
 
@@ -405,9 +419,7 @@ public class GUI_Window {
 
 		@Override
 		public void mouseExited(MouseEvent e) {
-			JudokuJTextField currentTextField = (JudokuJTextField) e
-					.getSource();
-			currentTextField.selectAll();
+
 		}
 
 		@Override
@@ -455,35 +467,15 @@ public class GUI_Window {
 					|| currentTextField.getText().equals(null)) {
 				if (controller.trySetValue(currentTextField.X,
 						currentTextField.Y, 0, puzzle)) {
-					if (puzzle.undoPossible()) {
-						btnUndo.setEnabled(true);
-					}else{
-						btnRedo.setEnabled(false);
-					}
-					if (puzzle.redoPossible()) {
-						btnRedo.setEnabled(true);
-					}else{
-						btnRedo.setEnabled(false);
-					}
 				};
 			} else {
 				if (controller.trySetValue(currentTextField.X,
 						currentTextField.Y,
 						Integer.parseInt(currentTextField.getText()), puzzle)) {
-					if (puzzle.undoPossible()) {
-						btnUndo.setEnabled(true);
-					}else{
-						btnUndo.setEnabled(false);
-					}
-
-					if (puzzle.redoPossible()) {
-						btnRedo.setEnabled(true);
-					}else{
-						btnRedo.setEnabled(false);
-					}
 				};
 			}
-
+			
+			checkUndoRedoButtons();
 			refreshView();
 			currentTextField.setBorder(BorderFactory.createEmptyBorder());
 
@@ -597,12 +589,15 @@ public class GUI_Window {
 				refreshView();
 			} else if (e.getSource() == btnUndo) {
 				controller.undoPuzzle(puzzle);
+				checkUndoRedoButtons();
 				refreshView();
 			} else if (e.getSource() == btnRedo) {
 				controller.redoPuzzle(puzzle);
+				checkUndoRedoButtons();
 				refreshView();
 			} else if (e.getSource() == btnHint) {
 				controller.giveHintPuzzle(puzzle);
+				checkUndoRedoButtons();
 				refreshView();
 			} else if (e.getSource() == btnValidate
 					&& btnValidate.getText().equals("Continue")) {
