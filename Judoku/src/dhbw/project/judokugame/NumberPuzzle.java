@@ -59,7 +59,9 @@ public interface NumberPuzzle {
 	public void undo();
 
 	/**
-	 * Enables / disables the undo button.
+	 * Checks whether there are any actions to undo. 
+	 * @see NumberPuzzle#undo()
+	 * @return True, if there are actions to be undone, false otherwise.
 	 */
 	public boolean undoPossible();
 
@@ -69,7 +71,9 @@ public interface NumberPuzzle {
 	public void redo();
 
 	/**
-	 * Enables / disables the redo button.
+	 * Checks whether there are any actions to redo. 
+	 * @see NumberPuzzle#redo()
+	 * @return True, if there are actions to be redone, false otherwise.
 	 */
 	public boolean redoPossible();
 }
