@@ -120,12 +120,12 @@ public class GUI_Window {
 		
 		
 		// Add winner picture to frame
-		ImageIcon wonImage = new ImageIcon(getClass().getClassLoader().getResource("resources/won.jpg"));	 
+		ImageIcon wonImage = new ImageIcon(getClass().getClassLoader().getResource("resources/gewonnen.png"));	 
 		JLabel wonLabel = new JLabel("", wonImage, JLabel	.CENTER);
 		pnlWon.add(wonLabel);
 		
 		// Add looser picture to frame
-		ImageIcon lostImage = new ImageIcon(getClass().getClassLoader().getResource("resources/lost.jpg"));	 
+		ImageIcon lostImage = new ImageIcon(getClass().getClassLoader().getResource("resources/verloren.png"));	 
 		JLabel lostLabel = new JLabel("", lostImage, JLabel	.CENTER);
 		pnlLost.add(lostLabel);
 		
@@ -605,7 +605,6 @@ public class GUI_Window {
 				cl.show(pnlCenter, "gameField");
 				btnValidate.setText("Validate");
 				enableButtons(true);
-				checkUndoRedoButtons();
 			} else if (e.getSource() == btnValidate) {
 				CardLayout cl = (CardLayout) pnlCenter.getLayout();
 				int mistakes = controller.validateUserSolution(puzzle);
@@ -626,8 +625,6 @@ public class GUI_Window {
 					cl.show(pnlCenter, "lost");
 					btnValidate.setText("Continue");
 				}
-				btnUndo.setEnabled(false);
-				btnRedo.setEnabled(false);
 				enableButtons(false);
 			}
 		}
