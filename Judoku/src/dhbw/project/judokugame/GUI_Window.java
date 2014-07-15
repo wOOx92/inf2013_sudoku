@@ -364,8 +364,8 @@ public class GUI_Window {
 
 	public void enableButtons(boolean enabled) {
 		btnHint.setEnabled(enabled);
-		btnUndo.setEnabled(enabled);
-		btnRedo.setEnabled(enabled);
+		// btnUndo.setEnabled(enabled);
+		// btnRedo.setEnabled(enabled);
 		btnReset.setEnabled(enabled);
 	}
 
@@ -416,8 +416,8 @@ public class GUI_Window {
 					.getSource();
 			currentTextField.setBorder(BorderFactory.createMatteBorder(2, 2, 2,
 					2, new Color(0, 165, 255)));
-			// Only allow numeric input from 0 to 9
 
+			// Only allow numeric input from 0 to 9
 			char input = '?';
 			if (currentTextField.getText().length() == 1) {
 				input = currentTextField.getText().charAt(0);
@@ -425,6 +425,7 @@ public class GUI_Window {
 			if (Character.isDigit(input)) {
 				oldValue = Integer.parseInt(currentTextField.getText());
 			}
+
 			currentTextField.selectAll();
 		}
 
@@ -433,21 +434,38 @@ public class GUI_Window {
 					.getSource();
 
 			if (currentTextField.getText().equals("")
-					//|| currentTextField.getText().equals(" ")
 					|| currentTextField.getText().equals(null)) {
-				controller.trySetValue(currentTextField.X, currentTextField.Y,
-						0, puzzle);
-				//currentTextField.unmark();
+				if (controller.trySetValue(currentTextField.X,
+						currentTextField.Y, 0, puzzle)) {
+					if (puzzle.undoPossible()) {
+						btnUndo.setEnabled(true);
+					}else{
+						btnRedo.setEnabled(false);
+					}
+					if (puzzle.redoPossible()) {
+						btnRedo.setEnabled(true);
+					}else{
+						btnRedo.setEnabled(false);
+					}
+				};
 			} else {
-				System.out.println("NewValue: " + currentTextField.getText());
-				if (oldValue != Integer.parseInt(currentTextField.getText())) {
-					//currentTextField.unmark();
-				}
+				if (controller.trySetValue(currentTextField.X,
+						currentTextField.Y,
+						Integer.parseInt(currentTextField.getText()), puzzle)) {
+					if (puzzle.undoPossible()) {
+						btnUndo.setEnabled(true);
+					}else{
+						btnUndo.setEnabled(false);
+					}
 
-				controller.trySetValue(currentTextField.X, currentTextField.Y,
-						Integer.parseInt(currentTextField.getText()), puzzle);
-
+					if (puzzle.redoPossible()) {
+						btnRedo.setEnabled(true);
+					}else{
+						btnRedo.setEnabled(false);
+					}
+				};
 			}
+
 			refreshView();
 			currentTextField.setBorder(BorderFactory.createEmptyBorder());
 

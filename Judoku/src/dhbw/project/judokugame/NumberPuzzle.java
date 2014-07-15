@@ -1,6 +1,8 @@
 package dhbw.project.judokugame;
+
 /**
- * Every class implementing this interface can be displayed by the GUI. This makes it easier to implement other NumberPuzzles like Str8ts.
+ * Every class implementing this interface can be displayed by the GUI. This
+ * makes it easier to implement other NumberPuzzles like Str8ts.
  * 
  * @author Dennis Uteg, Florian Steurer, Markus Wingler, Michael Jauch
  */
@@ -10,7 +12,7 @@ public interface NumberPuzzle {
 	 * @return The recent state as a 2-dimensional array.
 	 */
 	public int[][] getRecentGrid();
-	
+
 	/**
 	 * @return The start state as a 2-dimensional array.
 	 */
@@ -20,7 +22,7 @@ public interface NumberPuzzle {
 	 * @return The solution as a 2-dimensional array.
 	 */
 	public int[][] getSolvedGird();
-	
+
 	/**
 	 * Sets a value in the recentGrid inside the NumberPuzzle.
 	 * 
@@ -57,7 +59,17 @@ public interface NumberPuzzle {
 	public void undo();
 
 	/**
+	 * Enables / disables the undo button.
+	 */
+	public boolean undoPossible();
+
+	/**
 	 * Sets the NumberPuzzle to a state before an undo()-call.
 	 */
 	public void redo();
+
+	/**
+	 * Enables / disables the redo button.
+	 */
+	public boolean redoPossible();
 }
