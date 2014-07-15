@@ -3,6 +3,7 @@ package dhbw.project.judokugame;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -26,6 +27,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.MenuSelectionManager;
 import javax.swing.SwingConstants;
@@ -64,7 +66,7 @@ public class GUI_Window {
 	private JProgressBar prgrBar;
 	private JTextField txtTime;
 	private JTextField txtLostMsg;
-	private JTextField txtWonMsg;
+	private JTextArea txtWonMsg;
 	private JTextField txtDifficulty;
 
 	private JPanel pnlLost;
@@ -119,12 +121,13 @@ public class GUI_Window {
 		txtLostMsg.setDisabledTextColor(Color.BLACK);
 		txtLostMsg.setBorder(BorderFactory.createEmptyBorder());
 
-		txtWonMsg = new JTextField();
+		txtWonMsg = new JTextArea();
 		txtWonMsg.setFont(new Font("DIALOG", Font.BOLD, 20));
 		txtWonMsg.setPreferredSize(new Dimension(200, 60));
 		txtWonMsg.setBackground(frame.getBackground());
 		txtWonMsg.setEnabled(false);
-		txtWonMsg.setHorizontalAlignment(SwingConstants.CENTER);
+		txtWonMsg.setAlignmentX(Component.CENTER_ALIGNMENT);
+		//txtWonMsg.setHorizontalAlignment(SwingConstants.CENTER);
 		txtWonMsg.setBackground(frame.getBackground());
 		txtWonMsg.setDisabledTextColor(Color.BLACK);
 		txtWonMsg.setBorder(BorderFactory.createEmptyBorder());
@@ -646,7 +649,7 @@ public class GUI_Window {
 						swingTimer.stop();
 						btnValidate.setEnabled(false);
 						txtWonMsg
-								.setText("Congratulations, you won! Your Time: "
+								.setText("Congratulations, you won! \n Your Time: "
 								+ txtTime.getText());
 
 					} else {
