@@ -54,6 +54,7 @@ public class GUI_Window {
 	private JButton btnEasy;
 	private JButton btnMedium;
 	private JButton btnHard;
+	
 
 	/*
 	 * Other Components

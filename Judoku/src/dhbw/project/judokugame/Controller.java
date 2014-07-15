@@ -20,6 +20,17 @@ public class Controller {
 	public static void main(String[] args) {
 		Controller c = new Controller();
 		c.initGui();
+		
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					WindowHelp frame = new WindowHelp();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
 	/**
