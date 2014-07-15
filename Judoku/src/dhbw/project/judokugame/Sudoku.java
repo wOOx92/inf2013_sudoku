@@ -194,20 +194,24 @@ public class Sudoku implements NumberPuzzle {
 	}
 
 	public void giveHint() {
+		int clues = SudokuBuilder.getNumberOfClues(recentGrid);
+		if(clues == Sudoku.SIZE*Sudoku.SIZE){
+			return;
+		}
 		undoStorage.push(SudokuBuilder.deepCopy(recentGrid));
 		Random prng = new Random();
 		int iter = 0;
-		int clues = SudokuBuilder.getNumberOfClues(recentGrid);
-		while (clues < Sudoku.SIZE * Sudoku.SIZE && iter < 30) {
+		while (iter < 3) {
 			int x = prng.nextInt(SIZE);
 			int y = prng.nextInt(SIZE);
 			if (recentGrid[y][x] == 0) {
 				recentGrid[y][x] = solvedGrid[y][x];
-				iter = 99;
+				iter = -1;
+				break;
 			}
 			iter++;
 		}
-		if (iter != 100 && clues < 81) {
+		if (iter != -1) {
 			outer: for (int y = 0; y < Sudoku.SIZE; y++) {
 				for (int x = 0; x < Sudoku.SIZE; x++) {
 					if (recentGrid[y][x] == 0) {

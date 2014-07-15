@@ -398,6 +398,8 @@ public class GUI_Window {
 			btnValidate.setEnabled(false);
 		}
 
+		checkUndoRedoButtons();
+		
 		prgrBar.setValue(100 * userFilledFields / (81 - startFilledFields));
 		prgrBar.setString(prgrBar.getValue() + "% Done");
 		prgrBar.getRootPane().repaint();
@@ -515,7 +517,7 @@ public class GUI_Window {
 				;
 			}
 
-			checkUndoRedoButtons();
+			//checkUndoRedoButtons();
 			refreshView();
 			currentTextField.setBorder(BorderFactory.createEmptyBorder());
 
@@ -628,19 +630,19 @@ public class GUI_Window {
 				refreshView();
 			} else if (e.getSource() == btnReset) {
 				controller.resetPuzzle(puzzle);
-				checkUndoRedoButtons();
+				//checkUndoRedoButtons();
 				refreshView();
 			} else if (e.getSource() == btnUndo) {
 				controller.undoPuzzle(puzzle);
-				checkUndoRedoButtons();
+				//checkUndoRedoButtons();
 				refreshView();
 			} else if (e.getSource() == btnRedo) {
 				controller.redoPuzzle(puzzle);
-				checkUndoRedoButtons();
+				//checkUndoRedoButtons();
 				refreshView();
 			} else if (e.getSource() == btnHint) {
 				controller.giveHintPuzzle(puzzle);
-				checkUndoRedoButtons();
+				//checkUndoRedoButtons();
 				refreshView();
 			} else if (e.getSource() == btnValidate && gameFieldViewActive) {
 				CardLayout cl = (CardLayout) pnlCenter.getLayout();
@@ -682,7 +684,7 @@ public class GUI_Window {
 						.getClassLoader().getResource("resources/validate.png"));
 				btnValidate.setIcon(validateIcon);
 				enableButtons(true);
-				checkUndoRedoButtons();
+				//checkUndoRedoButtons();
 			} else if (e.getSource() == btnLangENG) {
 				for (int i = 0; i < 81; i++) {
 					puzzle.giveHint();
