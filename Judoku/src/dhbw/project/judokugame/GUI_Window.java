@@ -605,6 +605,7 @@ public class GUI_Window {
 				cl.show(pnlCenter, "gameField");
 				btnValidate.setText("Validate");
 				enableButtons(true);
+				checkUndoRedoButtons();
 			} else if (e.getSource() == btnValidate) {
 				CardLayout cl = (CardLayout) pnlCenter.getLayout();
 				int mistakes = controller.validateUserSolution(puzzle);
@@ -625,6 +626,8 @@ public class GUI_Window {
 					cl.show(pnlCenter, "lost");
 					btnValidate.setText("Continue");
 				}
+				btnUndo.setEnabled(false);
+				btnRedo.setEnabled(false);
 				enableButtons(false);
 			}
 		}
