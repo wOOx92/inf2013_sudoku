@@ -73,7 +73,8 @@ public class GUI_Window {
 
 	/**
 	 * Create the application.
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	public GUI_Window(Controller c) throws IOException {
 		this.controller = c;
@@ -86,11 +87,13 @@ public class GUI_Window {
 
 	/**
 	 * Initialize the contents of the frame.
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	private void initialize() throws IOException {
-		ImageIcon windowIcon = new ImageIcon(getClass().getClassLoader().getResource("resources/judoku_icon.png"));
-		
+		ImageIcon windowIcon = new ImageIcon(getClass().getClassLoader()
+				.getResource("resources/judoku_icon.png"));
+
 		// frame.setIconImage(icon.getImage());
 		frame = new JFrame();
 		frame.setBounds(150, 150, 585, 800);
@@ -100,7 +103,6 @@ public class GUI_Window {
 		frame.setTitle("Judoku");
 		frame.setIconImage(windowIcon.getImage());
 
-		
 		pnlCenter = new JPanel();
 		pnlCenter.setLayout(new CardLayout());
 
@@ -116,7 +118,7 @@ public class GUI_Window {
 		txtLostMsg.setBackground(frame.getBackground());
 		txtLostMsg.setDisabledTextColor(Color.BLACK);
 		txtLostMsg.setBorder(BorderFactory.createEmptyBorder());
-		
+
 		txtWonMsg = new JTextField();
 		txtWonMsg.setFont(new Font("DIALOG", Font.BOLD, 20));
 		txtWonMsg.setPreferredSize(new Dimension(200, 60));
@@ -131,15 +133,17 @@ public class GUI_Window {
 		pnlWon.add(txtWonMsg, BorderLayout.NORTH);
 		
 		// Add winner picture to frame
-		ImageIcon wonImage = new ImageIcon(getClass().getClassLoader().getResource("resources/won.png"));	 
-		JLabel wonLabel = new JLabel("", wonImage, JLabel	.CENTER);
+		ImageIcon wonImage = new ImageIcon(getClass().getClassLoader()
+				.getResource("resources/won.png"));
+		JLabel wonLabel = new JLabel("", wonImage, JLabel.CENTER);
 		pnlWon.add(wonLabel);
-		
+
 		// Add looser picture to frame
-		ImageIcon lostImage = new ImageIcon(getClass().getClassLoader().getResource("resources/mistake.png"));	 
-		JLabel lostLabel = new JLabel("", lostImage, JLabel	.CENTER);
+		ImageIcon lostImage = new ImageIcon(getClass().getClassLoader()
+				.getResource("resources/mistake.png"));
+		JLabel lostLabel = new JLabel("", lostImage, JLabel.CENTER);
 		pnlLost.add(lostLabel);
-		
+
 		JPanel pnlGameField = new JPanel();
 		pnlGameField.setLayout(new GridLayout(9, 9, 2, 2));
 
@@ -164,7 +168,7 @@ public class GUI_Window {
 
 		mnNewGame = new JMenu("New Game");
 		mnNewGame.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		
+		mnNewGame.setToolTipText("Start a new Judoku");
 
 		btnEasy = new JButton("EASY");
 		btnEasy.setText("Easy");
@@ -199,6 +203,7 @@ public class GUI_Window {
 		btnReset.addActionListener(new JudokuButtonListener());
 		btnReset.setEnabled(false);
 		btnReset.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		btnReset.setToolTipText("Reset Judoku");
 		mnbrTop.add(btnReset);
 
 		btnQuit = new JButton("Exit");
@@ -206,6 +211,7 @@ public class GUI_Window {
 		btnQuit.addActionListener(new JudokuButtonListener());
 		btnQuit.setBorderPainted(false);
 		btnQuit.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		btnQuit.setToolTipText("Quit Judoku");
 		mnbrTop.add(btnQuit);
 
 		btnLangDEU = new JButton("DEU");
@@ -227,8 +233,10 @@ public class GUI_Window {
 		btnUndo.addActionListener(new JudokuButtonListener());
 		btnUndo.setEnabled(false);
 		btnUndo.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		ImageIcon undoImage = new ImageIcon(getClass().getClassLoader().getResource("resources/undo.png"));
+		ImageIcon undoImage = new ImageIcon(getClass().getClassLoader()
+				.getResource("resources/undo.png"));
 		btnUndo.setIcon(undoImage);
+		btnUndo.setToolTipText("Undo last change");
 		pnlNorthBottom.add(btnUndo);
 
 		btnRedo = new JButton();
@@ -236,8 +244,10 @@ public class GUI_Window {
 		btnRedo.addActionListener(new JudokuButtonListener());
 		btnRedo.setEnabled(false);
 		btnRedo.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		ImageIcon redoImage = new ImageIcon(getClass().getClassLoader().getResource("resources/redo.png"));
+		ImageIcon redoImage = new ImageIcon(getClass().getClassLoader()
+				.getResource("resources/redo.png"));
 		btnRedo.setIcon(redoImage);
+		btnRedo.setToolTipText("Redo last change");
 		pnlNorthBottom.add(btnRedo);
 
 		btnHint = new JButton();
@@ -245,8 +255,10 @@ public class GUI_Window {
 		btnHint.addActionListener(new JudokuButtonListener());
 		btnHint.setEnabled(false);
 		btnHint.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		ImageIcon hintImage = new ImageIcon(getClass().getClassLoader().getResource("resources/hint.png"));
+		ImageIcon hintImage = new ImageIcon(getClass().getClassLoader()
+				.getResource("resources/hint.png"));
 		btnHint.setIcon(hintImage);
+		btnHint.setToolTipText("Give hint");
 		pnlNorthBottom.add(btnHint);
 
 		btnValidate = new JButton();
@@ -254,10 +266,11 @@ public class GUI_Window {
 		btnValidate.addActionListener(new JudokuButtonListener());
 		btnValidate.setEnabled(false);
 		btnValidate.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		ImageIcon validateImage = new ImageIcon(getClass().getClassLoader().getResource("resources/validate.png"));
+		ImageIcon validateImage = new ImageIcon(getClass().getClassLoader()
+				.getResource("resources/validate.png"));
 		btnValidate.setIcon(validateImage);
+		btnValidate.setToolTipText("Validate my solution");
 		pnlNorthBottom.add(btnValidate);
-		
 
 		txtTime = new JTextField();
 		txtTime.setEnabled(false);
@@ -279,8 +292,9 @@ public class GUI_Window {
 		pnlSouth.add(txtDifficulty, BorderLayout.EAST);
 
 		UIManager.put("ProgressBar.background", Color.WHITE);
-		UIManager.put("ProgressBar.selectionBackground", new Color (0,0,0));
-		UIManager.put("ProgressBar.selectionForeground", new Color (255,255,255));
+		UIManager.put("ProgressBar.selectionBackground", new Color(0, 0, 0));
+		UIManager.put("ProgressBar.selectionForeground", new Color(255, 255,
+				255));
 		UIManager.put("ProgressBar.font", new Font("DIALOG", Font.PLAIN, 14));
 		prgrBar = new JProgressBar();
 		prgrBar.setPreferredSize(new Dimension(210, 25));
@@ -306,7 +320,7 @@ public class GUI_Window {
 		final int height = 37;
 
 		Color active = Color.WHITE;
-		Color toggle = new Color(195, 220, 255); //light Sudoku-Blue
+		Color toggle = new Color(195, 220, 255); // light Sudoku-Blue
 
 		for (int y = 0; y < 9; y++) {
 			yPosition = 10;
@@ -362,7 +376,8 @@ public class GUI_Window {
 				if (startGrid[y][x] != 0) {
 					gameField[y][x].setText(String.valueOf(startGrid[y][x]));
 					gameField[y][x].setEnabled(false);
-					gameField[y][x].setDisabledTextColor(new Color (100,100,100)); // Sudoku-Grey
+					gameField[y][x].setDisabledTextColor(new Color(100, 100,
+							100)); // Sudoku-Grey
 					startFilledFields++;
 				} else if (recentGrid[y][x] != 0) {
 					gameField[y][x].setText(String.valueOf(recentGrid[y][x]));
@@ -405,15 +420,15 @@ public class GUI_Window {
 		btnHint.setEnabled(enabled);
 		btnReset.setEnabled(enabled);
 	}
-	
-	public void checkUndoRedoButtons(){
-		if(puzzle.redoPossible()) {
+
+	public void checkUndoRedoButtons() {
+		if (puzzle.redoPossible()) {
 			btnRedo.setEnabled(true);
 		} else {
 			btnRedo.setEnabled(false);
 		}
-		
-		if(puzzle.undoPossible()) {
+
+		if (puzzle.undoPossible()) {
 			btnUndo.setEnabled(true);
 		} else {
 			btnUndo.setEnabled(false);
@@ -486,14 +501,16 @@ public class GUI_Window {
 					|| currentTextField.getText().equals(null)) {
 				if (controller.trySetValue(currentTextField.X,
 						currentTextField.Y, 0, puzzle)) {
-				};
+				}
+				;
 			} else {
 				if (controller.trySetValue(currentTextField.X,
 						currentTextField.Y,
 						Integer.parseInt(currentTextField.getText()), puzzle)) {
-				};
+				}
+				;
 			}
-			
+
 			checkUndoRedoButtons();
 			refreshView();
 			currentTextField.setBorder(BorderFactory.createEmptyBorder());
@@ -557,7 +574,7 @@ public class GUI_Window {
 
 	class JudokuButtonListener implements ActionListener {
 		boolean gameFieldViewActive = true;
-		
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			JudokuSwingWorker sWork = null;
@@ -622,13 +639,16 @@ public class GUI_Window {
 				refreshView();
 			} else if (e.getSource() == btnValidate) {
 				CardLayout cl = (CardLayout) pnlCenter.getLayout();
-				if(gameFieldViewActive){
+				if (gameFieldViewActive) {
 					int mistakes = controller.validateUserSolution(puzzle);
 					if (mistakes == 0) {
 						cl.show(pnlCenter, "won");
 						swingTimer.stop();
 						btnValidate.setEnabled(false);
-						txtWonMsg.setText("Congratulations, you won!");
+						txtWonMsg
+								.setText("Congratulations, you won! Your Time: "
+								+ txtTime.getText());
+
 					} else {
 						String msgMistakes = "";
 						if (mistakes == 1) {
@@ -640,17 +660,22 @@ public class GUI_Window {
 						txtLostMsg.setText("There is " + mistakes + " "
 								+ msgMistakes + " left.");
 						cl.show(pnlCenter, "lost");
-						ImageIcon continueIcon = new ImageIcon(getClass().getClassLoader().getResource("resources/edit.png"));
+						ImageIcon continueIcon = new ImageIcon(getClass()
+								.getClassLoader().getResource(
+										"resources/correct.png"));
 						btnValidate.setIcon(continueIcon);
+						btnValidate.setToolTipText("Correct my mistake(s)");
 					}
 					gameFieldViewActive = false;
 					enableButtons(false);
 					btnUndo.setEnabled(false);
-					btnRedo.setEnabled(false);	
+					btnRedo.setEnabled(false);
 				} else {
 					cl.show(pnlCenter, "gameField");
 					gameFieldViewActive = true;
-					ImageIcon validateIcon = new ImageIcon(getClass().getClassLoader().getResource("resources/validate.png"));
+					ImageIcon validateIcon = new ImageIcon(getClass()
+							.getClassLoader().getResource(
+									"resources/validate.png"));
 					btnValidate.setIcon(validateIcon);
 					enableButtons(true);
 					checkUndoRedoButtons();
