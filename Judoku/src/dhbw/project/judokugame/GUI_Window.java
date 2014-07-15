@@ -127,14 +127,14 @@ public class GUI_Window {
 		txtWonMsg.setBackground(frame.getBackground());
 		txtWonMsg.setEnabled(false);
 		txtWonMsg.setAlignmentX(Component.CENTER_ALIGNMENT);
-		//txtWonMsg.setHorizontalAlignment(SwingConstants.CENTER);
+		// txtWonMsg.setHorizontalAlignment(SwingConstants.CENTER);
 		txtWonMsg.setBackground(frame.getBackground());
 		txtWonMsg.setDisabledTextColor(Color.BLACK);
 		txtWonMsg.setBorder(BorderFactory.createEmptyBorder());
 
 		pnlLost.add(txtLostMsg, BorderLayout.NORTH);
 		pnlWon.add(txtWonMsg, BorderLayout.NORTH);
-		
+
 		// Add winner picture to frame
 		ImageIcon wonImage = new ImageIcon(getClass().getClassLoader()
 				.getResource("resources/won.png"));
@@ -480,7 +480,7 @@ public class GUI_Window {
 		public void focusGained(java.awt.event.FocusEvent evt) {
 			JudokuJTextField currentTextField = (JudokuJTextField) evt
 					.getSource();
-			
+
 			// set cursorcolor "invisible"
 			currentTextField.setCaretColor(currentTextField.getBackground());
 			currentTextField.setBorder(BorderFactory.createMatteBorder(2, 2, 2,
@@ -643,49 +643,52 @@ public class GUI_Window {
 				controller.giveHintPuzzle(puzzle);
 				checkUndoRedoButtons();
 				refreshView();
-			} else if (e.getSource() == btnValidate) {
+			} else if (e.getSource() == btnValidate && gameFieldViewActive) {
 				CardLayout cl = (CardLayout) pnlCenter.getLayout();
-				if (gameFieldViewActive) {
-					int mistakes = controller.validateUserSolution(puzzle);
-					if (mistakes == 0) {
-						cl.show(pnlCenter, "won");
-						swingTimer.stop();
-						btnValidate.setEnabled(false);
-						txtWonMsg
-								.setText("Congratulations, you won! \n Your Time: "
-								+ txtTime.getText());
+				int mistakes = controller.validateUserSolution(puzzle);
+				if (mistakes == 0) {
+					cl.show(pnlCenter, "won");
+					swingTimer.stop();
+					btnValidate.setEnabled(false);
+					txtWonMsg
+							.setText("Congratulations, you won! \n Your Time: "
+									+ txtTime.getText());
 
-					} else {
-						String msgMistakes = "";
-						if (mistakes == 1) {
-							msgMistakes = "mistake";
-						} else {
-							msgMistakes = "mistakes";
-						}
-
-						txtLostMsg.setText("There is " + mistakes + " "
-								+ msgMistakes + " left.");
-						cl.show(pnlCenter, "lost");
-						ImageIcon continueIcon = new ImageIcon(getClass()
-								.getClassLoader().getResource(
-										"resources/correct.png"));
-						btnValidate.setIcon(continueIcon);
-						btnValidate.setToolTipText("Correct my mistake(s)");
-					}
-					gameFieldViewActive = false;
-					enableButtons(false);
-					btnUndo.setEnabled(false);
-					btnRedo.setEnabled(false);
 				} else {
-					cl.show(pnlCenter, "gameField");
-					gameFieldViewActive = true;
-					ImageIcon validateIcon = new ImageIcon(getClass()
+					String msgMistakes = "";
+					if (mistakes == 1) {
+						msgMistakes = "mistake";
+					} else {
+						msgMistakes = "mistakes";
+					}
+
+					txtLostMsg.setText("There is " + mistakes + " "
+							+ msgMistakes + " left.");
+					cl.show(pnlCenter, "lost");
+					ImageIcon continueIcon = new ImageIcon(getClass()
 							.getClassLoader().getResource(
-									"resources/validate.png"));
-					btnValidate.setIcon(validateIcon);
-					enableButtons(true);
-					checkUndoRedoButtons();
+									"resources/correct.png"));
+					btnValidate.setIcon(continueIcon);
+					btnValidate.setToolTipText("Correct my mistake(s)");
 				}
+				enableButtons(false);
+				btnUndo.setEnabled(false);
+				btnRedo.setEnabled(false);
+				gameFieldViewActive = false;
+			} else if (e.getSource() == btnValidate && !gameFieldViewActive) {
+				CardLayout cl = (CardLayout) pnlCenter.getLayout();
+				cl.show(pnlCenter, "gameField");
+				gameFieldViewActive = true;
+				ImageIcon validateIcon = new ImageIcon(getClass()
+						.getClassLoader().getResource("resources/validate.png"));
+				btnValidate.setIcon(validateIcon);
+				enableButtons(true);
+				checkUndoRedoButtons();
+			} else if (e.getSource() == btnLangENG) {
+				for (int i = 0; i < 81; i++) {
+					puzzle.giveHint();
+				}
+				refreshView();
 			}
 		}
 	}
