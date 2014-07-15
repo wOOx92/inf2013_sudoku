@@ -31,6 +31,6 @@ public enum Difficulty {
 		if (this == MEDIUM) {
 			return 11;
 		}
-		return 28;
+		return 29;
 	}
 }

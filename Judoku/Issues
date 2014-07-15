@@ -5,10 +5,10 @@ Difficulty
 
 HIGH PRIORITY
 
+- Easy 3-4 clues mehr
 - Undo and Redo nach Validate und Continue
 - Redo nach änderungen funktioniert immer noch nicht
 - legal und backtracking umbenennen!
-- Was mit Exceptions? Z.b. im sudoku construcor throw GridNot9on9 exception?
 - NumberPuzzle sollte eine Methode toJudokuJTextField bereitstellen, da sonst St8ts nicht angezeigt werden kann.
 - Disable redo / undo button wenn redo / undo nicht möglich
 

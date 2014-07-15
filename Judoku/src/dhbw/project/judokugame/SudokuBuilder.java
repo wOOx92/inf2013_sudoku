@@ -79,6 +79,10 @@ public class SudokuBuilder {
 		 * "cut-and-test" method.
 		 */
 		doRandomCutting(templateSdk, diff);
+		
+		if(diff == Difficulty.EASY){
+			addRandomClues(templateSdk, solvedGrid, prng, 5);
+		}
 
 		return new Sudoku(templateSdk, solvedGrid, diff);
 	}
@@ -490,6 +494,18 @@ public class SudokuBuilder {
 		}
 		sudoku[x][y] = 0; // reset on backtrack
 		return solutionsFound;
+	}
+	
+	private static void addRandomClues(int[][] sudoku, int[][] solutions, Random prng, int cut) {
+		int clues = getNumberOfClues(sudoku);	
+		for(int i = 0; i < cut && clues + i < Sudoku.SIZE*Sudoku.SIZE;){
+			int x = prng.nextInt(9);
+			int y = prng.nextInt(9);
+			if(sudoku[y][x] == 0){
+				sudoku[y][x] = solutions[y][x];
+				i++;
+			}
+		}
 	}
 	
 	public static int[][] deepCopy(int [][] template){
