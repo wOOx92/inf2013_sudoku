@@ -579,7 +579,6 @@ public class GUI_Window {
 	}
 
 	class JudokuButtonListener implements ActionListener {
-		boolean gameFieldViewActive = true;
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -644,7 +643,16 @@ public class GUI_Window {
 				controller.giveHintPuzzle(puzzle);
 				//checkUndoRedoButtons();
 				refreshView();
-			} else if (e.getSource() == btnValidate && gameFieldViewActive) {
+			}  else if (e.getSource() == btnValidate && btnValidate.getToolTipText().equals("Correct my mistake(s)")) {
+				CardLayout cl = (CardLayout) pnlCenter.getLayout();
+				cl.show(pnlCenter, "gameField");
+				ImageIcon validateIcon = new ImageIcon(getClass()
+						.getClassLoader().getResource("resources/validate.png"));
+				btnValidate.setIcon(validateIcon);
+				btnValidate.setToolTipText("Validate my solution");
+				enableButtons(true);
+				//checkUndoRedoButtons();
+			} else if (e.getSource() == btnValidate) {
 				CardLayout cl = (CardLayout) pnlCenter.getLayout();
 				int mistakes = controller.validateUserSolution(puzzle);
 				if (mistakes == 0) {
@@ -675,16 +683,6 @@ public class GUI_Window {
 				enableButtons(false);
 				btnUndo.setEnabled(false);
 				btnRedo.setEnabled(false);
-				gameFieldViewActive = false;
-			} else if (e.getSource() == btnValidate && !gameFieldViewActive) {
-				CardLayout cl = (CardLayout) pnlCenter.getLayout();
-				cl.show(pnlCenter, "gameField");
-				gameFieldViewActive = true;
-				ImageIcon validateIcon = new ImageIcon(getClass()
-						.getClassLoader().getResource("resources/validate.png"));
-				btnValidate.setIcon(validateIcon);
-				enableButtons(true);
-				//checkUndoRedoButtons();
 			} else if (e.getSource() == btnLangENG) {
 				for (int i = 0; i < 81; i++) {
 					puzzle.giveHint();
