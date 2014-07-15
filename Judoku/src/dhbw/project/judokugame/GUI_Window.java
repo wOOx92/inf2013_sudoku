@@ -153,6 +153,7 @@ public class GUI_Window {
 
 		mnNewGame = new JMenu("New Game");
 		mnNewGame.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		
 
 		btnEasy = new JButton("EASY");
 		btnEasy.setText("Easy");
