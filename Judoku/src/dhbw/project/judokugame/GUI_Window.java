@@ -64,6 +64,7 @@ public class GUI_Window {
 	private JProgressBar prgrBar;
 	private JTextField txtTime;
 	private JTextField txtLostMsg;
+	private JTextField txtWonMsg;
 	private JTextField txtDifficulty;
 
 	private JPanel pnlLost;
@@ -115,9 +116,19 @@ public class GUI_Window {
 		txtLostMsg.setBackground(frame.getBackground());
 		txtLostMsg.setDisabledTextColor(Color.BLACK);
 		txtLostMsg.setBorder(BorderFactory.createEmptyBorder());
+		
+		txtWonMsg = new JTextField();
+		txtWonMsg.setFont(new Font("DIALOG", Font.BOLD, 20));
+		txtWonMsg.setPreferredSize(new Dimension(200, 60));
+		txtWonMsg.setBackground(frame.getBackground());
+		txtWonMsg.setEnabled(false);
+		txtWonMsg.setHorizontalAlignment(SwingConstants.CENTER);
+		txtWonMsg.setBackground(frame.getBackground());
+		txtWonMsg.setDisabledTextColor(Color.BLACK);
+		txtWonMsg.setBorder(BorderFactory.createEmptyBorder());
 
 		pnlLost.add(txtLostMsg, BorderLayout.NORTH);
-		
+		pnlWon.add(txtWonMsg, BorderLayout.NORTH);
 		
 		// Add winner picture to frame
 		ImageIcon wonImage = new ImageIcon(getClass().getClassLoader().getResource("resources/won.png"));	 
@@ -125,7 +136,7 @@ public class GUI_Window {
 		pnlWon.add(wonLabel);
 		
 		// Add looser picture to frame
-		ImageIcon lostImage = new ImageIcon(getClass().getClassLoader().getResource("resources/lost.png"));	 
+		ImageIcon lostImage = new ImageIcon(getClass().getClassLoader().getResource("resources/mistake.png"));	 
 		JLabel lostLabel = new JLabel("", lostImage, JLabel	.CENTER);
 		pnlLost.add(lostLabel);
 		
@@ -617,6 +628,7 @@ public class GUI_Window {
 						cl.show(pnlCenter, "won");
 						swingTimer.stop();
 						btnValidate.setEnabled(false);
+						txtWonMsg.setText("Congratulations, you won!");
 					} else {
 						String msgMistakes = "";
 						if (mistakes == 1) {
@@ -625,10 +637,10 @@ public class GUI_Window {
 							msgMistakes = "mistakes";
 						}
 
-						txtLostMsg.setText("You still have " + mistakes + " "
+						txtLostMsg.setText("There is " + mistakes + " "
 								+ msgMistakes + " left.");
 						cl.show(pnlCenter, "lost");
-						ImageIcon continueIcon = new ImageIcon(getClass().getClassLoader().getResource("resources/redo.png"));
+						ImageIcon continueIcon = new ImageIcon(getClass().getClassLoader().getResource("resources/edit.png"));
 						btnValidate.setIcon(continueIcon);
 					}
 					gameFieldViewActive = false;
