@@ -439,26 +439,31 @@ public class GUI_Window {
 						currentTextField.Y, 0, puzzle)) {
 					if (puzzle.undoPossible()) {
 						btnUndo.setEnabled(true);
+					}else{
+						btnRedo.setEnabled(false);
 					}
 					if (puzzle.redoPossible()) {
 						btnRedo.setEnabled(true);
+					}else{
+						btnRedo.setEnabled(false);
 					}
-				}
-				;
+				};
 			} else {
 				if (controller.trySetValue(currentTextField.X,
 						currentTextField.Y,
 						Integer.parseInt(currentTextField.getText()), puzzle)) {
 					if (puzzle.undoPossible()) {
 						btnUndo.setEnabled(true);
+					}else{
+						btnUndo.setEnabled(false);
 					}
 
 					if (puzzle.redoPossible()) {
 						btnRedo.setEnabled(true);
+					}else{
+						btnRedo.setEnabled(false);
 					}
-				}
-				;
-
+				};
 			}
 
 			refreshView();
