@@ -15,11 +15,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
@@ -33,7 +35,6 @@ import javax.swing.UIManager;
 public class GUI_Window {
 
 	private JFrame frame;
-	ImageIcon icon;
 
 	private NumberPuzzle puzzle;
 	private Controller controller;
@@ -71,8 +72,9 @@ public class GUI_Window {
 
 	/**
 	 * Create the application.
+	 * @throws IOException 
 	 */
-	public GUI_Window(Controller c) {
+	public GUI_Window(Controller c) throws IOException {
 		this.controller = c;
 		initialize();
 	}
@@ -83,9 +85,11 @@ public class GUI_Window {
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @throws IOException 
 	 */
-	private void initialize() {
-		icon = new ImageIcon("judku_icon.png");
+	private void initialize() throws IOException {
+		ImageIcon windowIcon = new ImageIcon(getClass().getClassLoader().getResource("resources/judoku_icon.png"));
+		
 		// frame.setIconImage(icon.getImage());
 		frame = new JFrame();
 		frame.setBounds(150, 150, 585, 800);
@@ -93,7 +97,9 @@ public class GUI_Window {
 		frame.setMinimumSize(new Dimension(450, 615));
 		frame.getContentPane().setLayout(new BorderLayout(10, 10));
 		frame.setTitle("Judoku");
+		frame.setIconImage(windowIcon.getImage());
 
+		
 		pnlCenter = new JPanel();
 		pnlCenter.setLayout(new CardLayout());
 
@@ -111,6 +117,18 @@ public class GUI_Window {
 		txtLostMsg.setBorder(BorderFactory.createEmptyBorder());
 
 		pnlLost.add(txtLostMsg, BorderLayout.NORTH);
+		
+		
+		// Add winner picture to frame
+		ImageIcon wonImage = new ImageIcon(getClass().getClassLoader().getResource("resources/won.jpg"));	 
+		JLabel wonLabel = new JLabel("", wonImage, JLabel	.CENTER);
+		pnlWon.add(wonLabel);
+		
+		// Add looser picture to frame
+		ImageIcon lostImage = new ImageIcon(getClass().getClassLoader().getResource("resources/lost.jpg"));	 
+		JLabel lostLabel = new JLabel("", lostImage, JLabel	.CENTER);
+		pnlLost.add(lostLabel);
+		
 		JPanel pnlGameField = new JPanel();
 		pnlGameField.setLayout(new GridLayout(9, 9, 2, 2));
 
