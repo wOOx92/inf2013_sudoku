@@ -261,7 +261,7 @@ public class GUI_Window {
 		ImageIcon hintImage = new ImageIcon(getClass().getClassLoader()
 				.getResource("resources/hint.png"));
 		btnHint.setIcon(hintImage);
-		btnHint.setToolTipText("Give hint");
+		btnHint.setToolTipText("Give a hint");
 		pnlNorthBottom.add(btnHint);
 
 		btnValidate = new JButton();
@@ -346,7 +346,6 @@ public class GUI_Window {
 				gameField[y][x].setBounds(xPosition, yPosition, width, height);
 				gameField[y][x].setInitialColor(active);
 				gameField[y][x].setSelectionColor(new Color(0, 0, 0, 0));
-				gameField[y][x].setCaretColor(gameField[y][x].getBackground());
 				gameField[y][x].getCaret().setBlinkRate(0);
 				gameField[y][x].setCursor(new Cursor(Cursor.HAND_CURSOR));
 
