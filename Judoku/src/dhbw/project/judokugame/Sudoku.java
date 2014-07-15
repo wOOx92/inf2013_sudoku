@@ -138,11 +138,8 @@ public class Sudoku implements NumberPuzzle {
 	 * after a reset is possible.
 	 */
 	public void reset() {
-		/*
-		 * Save a copy of the recentGrid for an possible undo()-call later
-		 */
-		undoStorage.push(SudokuBuilder.deepCopy(recentGrid));
-		limitStack(undoStorage);
+		undoStorage.clear();
+		redoStorage.clear();
 
 		/*
 		 * Set the recentGrid to the startGrid (initial state).

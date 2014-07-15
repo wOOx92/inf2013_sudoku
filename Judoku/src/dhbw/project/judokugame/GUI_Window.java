@@ -627,6 +627,7 @@ public class GUI_Window {
 				refreshView();
 			} else if (e.getSource() == btnReset) {
 				controller.resetPuzzle(puzzle);
+				checkUndoRedoButtons();
 				refreshView();
 			} else if (e.getSource() == btnUndo) {
 				controller.undoPuzzle(puzzle);
