@@ -120,12 +120,12 @@ public class GUI_Window {
 		
 		
 		// Add winner picture to frame
-		ImageIcon wonImage = new ImageIcon(getClass().getClassLoader().getResource("resources/gewonnen.png"));	 
+		ImageIcon wonImage = new ImageIcon(getClass().getClassLoader().getResource("resources/won.png"));	 
 		JLabel wonLabel = new JLabel("", wonImage, JLabel	.CENTER);
 		pnlWon.add(wonLabel);
 		
 		// Add looser picture to frame
-		ImageIcon lostImage = new ImageIcon(getClass().getClassLoader().getResource("resources/verloren.png"));	 
+		ImageIcon lostImage = new ImageIcon(getClass().getClassLoader().getResource("resources/lost.png"));	 
 		JLabel lostLabel = new JLabel("", lostImage, JLabel	.CENTER);
 		pnlLost.add(lostLabel);
 		
@@ -392,8 +392,6 @@ public class GUI_Window {
 
 	public void enableButtons(boolean enabled) {
 		btnHint.setEnabled(enabled);
-		// btnUndo.setEnabled(enabled);
-		// btnRedo.setEnabled(enabled);
 		btnReset.setEnabled(enabled);
 	}
 	
@@ -547,6 +545,8 @@ public class GUI_Window {
 	}
 
 	class JudokuButtonListener implements ActionListener {
+		boolean gameFieldViewActive = true;
+		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			JudokuSwingWorker sWork = null;
@@ -609,33 +609,40 @@ public class GUI_Window {
 				controller.giveHintPuzzle(puzzle);
 				checkUndoRedoButtons();
 				refreshView();
-			} else if (e.getSource() == btnValidate
-					&& btnValidate.getText().equals("Continue")) {
-				CardLayout cl = (CardLayout) pnlCenter.getLayout();
-				cl.show(pnlCenter, "gameField");
-				btnValidate.setText("Validate");
-				enableButtons(true);
 			} else if (e.getSource() == btnValidate) {
 				CardLayout cl = (CardLayout) pnlCenter.getLayout();
-				int mistakes = controller.validateUserSolution(puzzle);
-				if (mistakes == 0) {
-					cl.show(pnlCenter, "won");
-					swingTimer.stop();
-					btnValidate.setEnabled(false);
-				} else {
-					String msgMistakes = "";
-					if (mistakes == 1) {
-						msgMistakes = "mistake";
+				if(gameFieldViewActive){
+					int mistakes = controller.validateUserSolution(puzzle);
+					if (mistakes == 0) {
+						cl.show(pnlCenter, "won");
+						swingTimer.stop();
+						btnValidate.setEnabled(false);
 					} else {
-						msgMistakes = "mistakes";
-					}
+						String msgMistakes = "";
+						if (mistakes == 1) {
+							msgMistakes = "mistake";
+						} else {
+							msgMistakes = "mistakes";
+						}
 
-					txtLostMsg.setText("You still have " + mistakes
-							+ msgMistakes + " left.");
-					cl.show(pnlCenter, "lost");
-					btnValidate.setText("Continue");
+						txtLostMsg.setText("You still have " + mistakes + " "
+								+ msgMistakes + " left.");
+						cl.show(pnlCenter, "lost");
+						ImageIcon continueIcon = new ImageIcon(getClass().getClassLoader().getResource("resources/redo.png"));
+						btnValidate.setIcon(continueIcon);
+					}
+					gameFieldViewActive = false;
+					enableButtons(false);
+					btnUndo.setEnabled(false);
+					btnRedo.setEnabled(false);	
+				} else {
+					cl.show(pnlCenter, "gameField");
+					gameFieldViewActive = true;
+					ImageIcon validateIcon = new ImageIcon(getClass().getClassLoader().getResource("resources/validate.png"));
+					btnValidate.setIcon(validateIcon);
+					enableButtons(true);
+					checkUndoRedoButtons();
 				}
-				enableButtons(false);
 			}
 		}
 	}
