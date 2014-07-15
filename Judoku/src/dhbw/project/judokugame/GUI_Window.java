@@ -407,7 +407,6 @@ public class GUI_Window {
 	public void displayMistake(int x, int y) {
 		this.gameField[y][x].mark();
 		gameField[y][x].setCaretColor(gameField[y][x].getBackground());
-		// TODO change Cursor color!!
 	}
 
 	public NumberPuzzle getNumberPuzzle() {
@@ -481,6 +480,9 @@ public class GUI_Window {
 		public void focusGained(java.awt.event.FocusEvent evt) {
 			JudokuJTextField currentTextField = (JudokuJTextField) evt
 					.getSource();
+			
+			// set cursorcolor "invisible"
+			currentTextField.setCaretColor(currentTextField.getBackground());
 			currentTextField.setBorder(BorderFactory.createMatteBorder(2, 2, 2,
 					2, new Color(0, 165, 255)));
 
