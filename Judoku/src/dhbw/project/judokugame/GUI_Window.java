@@ -625,8 +625,8 @@ public class GUI_Window {
 						msgMistakes = "mistakes";
 					}
 
-					txtLostMsg.setText("Oh no! You still have " + mistakes
-							+ msgMistakes + ".");
+					txtLostMsg.setText("You still have " + mistakes
+							+ msgMistakes + " left.");
 					cl.show(pnlCenter, "lost");
 					btnValidate.setText("Continue");
 				}
