@@ -210,33 +210,42 @@ public class GUI_Window {
 		btnLangENG.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		mnbrTop.add(btnLangENG);
 
-		btnUndo = new JButton("Undo");
+		btnUndo = new JButton();
 		btnUndo.setContentAreaFilled(false);
 		btnUndo.addActionListener(new JudokuButtonListener());
 		btnUndo.setEnabled(false);
 		btnUndo.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		ImageIcon undoImage = new ImageIcon(getClass().getClassLoader().getResource("resources/undo.png"));
+		btnUndo.setIcon(undoImage);
 		pnlNorthBottom.add(btnUndo);
 
-		btnRedo = new JButton("Redo");
+		btnRedo = new JButton();
 		btnRedo.setContentAreaFilled(false);
 		btnRedo.addActionListener(new JudokuButtonListener());
 		btnRedo.setEnabled(false);
 		btnRedo.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		ImageIcon redoImage = new ImageIcon(getClass().getClassLoader().getResource("resources/redo.png"));
+		btnRedo.setIcon(redoImage);
 		pnlNorthBottom.add(btnRedo);
 
-		btnHint = new JButton("Give Hint");
+		btnHint = new JButton();
 		btnHint.setContentAreaFilled(false);
 		btnHint.addActionListener(new JudokuButtonListener());
 		btnHint.setEnabled(false);
 		btnHint.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		ImageIcon hintImage = new ImageIcon(getClass().getClassLoader().getResource("resources/hint.png"));
+		btnHint.setIcon(hintImage);
 		pnlNorthBottom.add(btnHint);
 
-		btnValidate = new JButton("Validate");
+		btnValidate = new JButton();
 		btnValidate.setContentAreaFilled(false);
 		btnValidate.addActionListener(new JudokuButtonListener());
 		btnValidate.setEnabled(false);
 		btnValidate.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		ImageIcon validateImage = new ImageIcon(getClass().getClassLoader().getResource("resources/validate.png"));
+		btnValidate.setIcon(validateImage);
 		pnlNorthBottom.add(btnValidate);
+		
 
 		txtTime = new JTextField();
 		txtTime.setEnabled(false);
