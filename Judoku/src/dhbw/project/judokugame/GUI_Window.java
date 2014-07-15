@@ -379,8 +379,8 @@ public class GUI_Window {
 				if (startGrid[y][x] != 0) {
 					gameField[y][x].setText(String.valueOf(startGrid[y][x]));
 					gameField[y][x].setEnabled(false);
-					gameField[y][x].setDisabledTextColor(new Color(100, 100,
-							100)); // Sudoku-Grey
+					gameField[y][x].setDisabledTextColor(new Color(120, 120,
+							120)); // Sudoku-Grey
 					startFilledFields++;
 				} else if (recentGrid[y][x] != 0) {
 					gameField[y][x].setText(String.valueOf(recentGrid[y][x]));
