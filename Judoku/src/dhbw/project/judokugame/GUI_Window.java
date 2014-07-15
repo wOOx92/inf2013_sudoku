@@ -258,15 +258,15 @@ public class GUI_Window {
 		pnlSouth.add(txtDifficulty, BorderLayout.EAST);
 
 		UIManager.put("ProgressBar.background", Color.WHITE);
-		UIManager.put("ProgressBar.selectionBackground", Color.BLACK);
-		UIManager.put("ProgressBar.selectionForeground", Color.BLACK);
+		UIManager.put("ProgressBar.selectionBackground", new Color (0,0,0));
+		UIManager.put("ProgressBar.selectionForeground", new Color (255,255,255));
 		UIManager.put("ProgressBar.font", new Font("DIALOG", Font.PLAIN, 14));
 		prgrBar = new JProgressBar();
 		prgrBar.setPreferredSize(new Dimension(210, 25));
 		prgrBar.setString("0% Done");
 		prgrBar.setStringPainted(true);
 		prgrBar.setBorderPainted(false);
-		prgrBar.setForeground(new Color(0, 165, 255));
+		prgrBar.setForeground(new Color(0, 165, 255)); // Sudoku-Blue
 
 		pnlSouth.add(prgrBar, BorderLayout.CENTER);
 
@@ -285,7 +285,7 @@ public class GUI_Window {
 		final int height = 37;
 
 		Color active = Color.WHITE;
-		Color toggle = new Color(195, 220, 255);
+		Color toggle = new Color(195, 220, 255); //light Sudoku-Blue
 
 		for (int y = 0; y < 9; y++) {
 			yPosition = 10;
@@ -341,7 +341,7 @@ public class GUI_Window {
 				if (startGrid[y][x] != 0) {
 					gameField[y][x].setText(String.valueOf(startGrid[y][x]));
 					gameField[y][x].setEnabled(false);
-					gameField[y][x].setDisabledTextColor(new Color (100,100,100));
+					gameField[y][x].setDisabledTextColor(new Color (100,100,100)); // Sudoku-Grey
 					startFilledFields++;
 				} else if (recentGrid[y][x] != 0) {
 					gameField[y][x].setText(String.valueOf(recentGrid[y][x]));
