@@ -245,4 +245,23 @@ public class Sudoku implements NumberPuzzle {
 			undoRedoStack.remove(0);
 		}
 	}
+
+	@Override
+	public boolean undoPossible() {
+		boolean possible = false;
+		if(!undoStorage.isEmpty()){
+			possible = true;
+		}
+		return possible;
+		
+	}
+
+	@Override
+	public boolean redoPossible() {
+		boolean possible = false;
+		if(!redoStorage.isEmpty()){
+			possible = true;
+		}
+		return possible;
+	}
 }
