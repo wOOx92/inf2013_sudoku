@@ -4,7 +4,7 @@ import java.util.concurrent.ExecutionException;
 import javax.swing.SwingWorker;
 
 /**
- * The Judoku Swing worker outsources the generating of Sudoku object to a
+ * The Judoku Swing worker outsources the generating of Sudoku objects to a
  * separate worker thread.
  * 
  * @author Dennis Uteg, Florian Steurer, Markus Wingler, Michael Jauch

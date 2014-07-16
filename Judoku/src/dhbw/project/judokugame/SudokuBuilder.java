@@ -1,9 +1,20 @@
 package dhbw.project.judokugame;
+
 import java.util.Arrays;
 import java.util.Random;
 
+/**
+ * SudokuBuilder's are capable of creating playable, uniquely solvable Sudokus
+ * of different difficulties. The generating algorithms originate from
+ * https://www
+ * .hochschule-trier.de/uploads/tx_rfttheses/Eckart_Sussenburger_-_Loesungs
+ * -_und_Generierungsalgorithmen_fuer_Sudoku.pdf
+ * 
+ * @author Dennis Uteg, Florian Steurer, Markus Wingler, Michael Jauch
+ * 
+ */
 public class SudokuBuilder {
-	
+
 	/**
 	 * Builds a Sudoku object of the desired difficulty.
 	 * 
@@ -27,10 +38,11 @@ public class SudokuBuilder {
 	 *            The desired difficulty.
 	 * @return A playable Sudoku object.
 	 */
-	public Sudoku newSudoku(long seed, Difficulty diff){
+	public Sudoku newSudoku(long seed, Difficulty diff) {
 		/*
 		 * This Random object will be used to generate all random variables
-		 * needed.
+		 * needed so exactly the same Sudoku can be recreated using the same
+		 * seed.
 		 */
 		Random prng = new Random(seed);
 
@@ -45,12 +57,7 @@ public class SudokuBuilder {
 		 * Step 2: Remove 3 elements at random for more randomness in the
 		 * generation process (the Sudoku will stay valid).
 		 */
-		// TODO checking if removed in removerandomElement method.
-		for (int i = 0; i < 3;) {
-			if (removeRandomElement(templateSdk, prng)) {
-				i++;
-			}
-		}
+		removeRandomElements(templateSdk, prng, 3);
 
 		/*
 		 * Step 3: Cut one clue from every row / column / carree that is still
@@ -79,8 +86,11 @@ public class SudokuBuilder {
 		 * "cut-and-test" method.
 		 */
 		doRandomCutting(templateSdk, diff);
-		
-		if(diff == Difficulty.EASY){
+
+		/*
+		 * If the desired Difficulty is EASY, add 5 additional clues.
+		 */
+		if (diff == Difficulty.EASY) {
 			addRandomClues(templateSdk, solvedGrid, prng, 5);
 		}
 
@@ -131,44 +141,79 @@ public class SudokuBuilder {
 	 *            The Sudoku grid to be checked for solutions.
 	 * @return True if a solution was found, false if not.
 	 */
-	private static boolean solve(int i, int j, int[][] cells) {
-		if (i == 9) {
-			i = 0;
-			if (++j == 9)
+	private static boolean solve(int y, int x, int[][] sudoku) {
+		/*
+		 * If the algorithm finished recursing through the x-th column, increase
+		 * the column index and reset y.
+		 */
+		if (y == 9) {
+			y = 0;
+			if (++x == 9) {
+				/*
+				 * If all columns have been finished (the recursion filled every
+				 * field in the Sudoku), a solution has been found
+				 */
 				return true;
-		}
-		if (cells[i][j] != 0) // skip filled cells
-			return solve(i + 1, j, cells);
-
-		for (int val = 1; val <= 9; ++val) {
-			if (Sudoku.legal(i, j, val, cells)) {
-				cells[i][j] = val;
-				if (solve(i + 1, j, cells))
-					return true;
 			}
 		}
-		cells[i][j] = 0; // reset on backtrack
+
+		/*
+		 * If the field is already filled, skip it.
+		 */
+		if (sudoku[y][x] != 0) {
+			return solve(y + 1, x, sudoku);
+		}
+
+		/*
+		 * Try to set every possible value (if it is legal) in the cell and
+		 * solve the resulting Sudokus.
+		 */
+		for (int val = 1; val <= 9; ++val) {
+			if (Sudoku.legal(y, x, val, sudoku)) {
+				sudoku[y][x] = val;
+				if (solve(y + 1, x, sudoku)) {
+					/*
+					 * If solve(y+1, x, sudoku) was successful, a solution was
+					 * found.
+					 */
+					return true;
+				}
+			}
+		}
+		/*
+		 * No value was possible, reset on backtrack and return false.
+		 */
+		sudoku[y][x] = 0;
 		return false;
 	}
 
 	/**
-	 * Tries to remove a random element from the Sudoku grid.
+	 * Tries to remove a number of random elements from a Sudoku grid. If the
+	 * grid has less elements than the number of elements that should be
+	 * removed, the method does nothing.
 	 * 
 	 * @param sudoku
 	 *            The Sudoku grid which gets modified.
 	 * @param prng
 	 *            The Random Number Generator used to generate the random
 	 *            variables.
-	 * @return
+	 * @param number
+	 *            The number of clues that should be removed.
 	 */
-	private static boolean removeRandomElement(int[][] sudoku, Random prng) {
-		int x = prng.nextInt(Sudoku.SIZE);
-		int y = prng.nextInt(Sudoku.SIZE);
-		if (sudoku[y][x] != 0) {
-			sudoku[y][x] = 0;
-			return true;
+	private static void removeRandomElements(int[][] sudoku, Random prng,
+			int number) {
+		if (SudokuBuilder.getNumberOfClues(sudoku) < number) {
+			return;
 		}
-		return false;
+
+		for (int i = 0; i < number; i++) {
+			int x = prng.nextInt(Sudoku.SIZE);
+			int y = prng.nextInt(Sudoku.SIZE);
+			if (sudoku[y][x] != 0) {
+				sudoku[y][x] = 0;
+				i++;
+			}
+		}
 	}
 
 	/**
@@ -445,7 +490,7 @@ public class SudokuBuilder {
 	 * @param sudoku
 	 *            The Sudoku to be checked.
 	 * @param diff
-	 * 			  The Difficulty determines the maximum recursion depth. 
+	 *            The Difficulty determines the maximum recursion depth.
 	 * @return True if only one solution exists, false if there are none or
 	 *         multiple solutions.
 	 */
@@ -495,22 +540,23 @@ public class SudokuBuilder {
 		sudoku[x][y] = 0; // reset on backtrack
 		return solutionsFound;
 	}
-	
-	private static void addRandomClues(int[][] sudoku, int[][] solutions, Random prng, int cut) {
-		int clues = getNumberOfClues(sudoku);	
-		for(int i = 0; i < cut && clues + i < Sudoku.SIZE*Sudoku.SIZE;){
+
+	private static void addRandomClues(int[][] sudoku, int[][] solutions,
+			Random prng, int cut) {
+		int clues = getNumberOfClues(sudoku);
+		for (int i = 0; i < cut && clues + i < Sudoku.SIZE * Sudoku.SIZE;) {
 			int x = prng.nextInt(9);
 			int y = prng.nextInt(9);
-			if(sudoku[y][x] == 0){
+			if (sudoku[y][x] == 0) {
 				sudoku[y][x] = solutions[y][x];
 				i++;
 			}
 		}
 	}
-	
-	public static int[][] deepCopy(int [][] template){
+
+	public static int[][] deepCopy(int[][] template) {
 		int[][] copy = new int[template.length][0];
-		for(int i = 0; i < template.length; i++){
+		for (int i = 0; i < template.length; i++) {
 			copy[i] = Arrays.copyOf(template[i], template[i].length);
 		}
 		return copy;
