@@ -217,7 +217,7 @@ public class SudokuBuilder {
 	}
 
 	/**
-	 * Cuts out one element from the Sudoku grid.
+	 * Cuts one element from every complete row, column or carre in the Sudoku.
 	 * 
 	 * @param sudoku
 	 *            The Sudoku which gets modified.
@@ -226,50 +226,72 @@ public class SudokuBuilder {
 	 *            variables.
 	 */
 	private static void cutCompleteStructures(int[][] sudoku, Random prng) {
-		// erst die zeilen
+		/*
+		 * Check the completeness of every row.
+		 */
 		for (int i = 0; i < Sudoku.SIZE; i++) {
 			boolean lineComplete = true;
+			/*
+			 * Check the completeness of the i-th row.
+			 */
 			for (int e = 0; e < Sudoku.SIZE; e++) {
 				if (sudoku[i][e] == 0) {
 					lineComplete = false;
 					break;
 				}
 			}
+			/*
+			 * If it was complete, cut a random clue out.
+			 */
 			if (lineComplete) {
 				int x = prng.nextInt(Sudoku.SIZE);
 				sudoku[i][x] = 0;
 			}
 		}
 
-		// dann die spalten
+		/*
+		 * Check the completeness of every column.
+		 */
 		for (int i = 0; i < Sudoku.SIZE; i++) {
 			boolean columnComplete = true;
+			/*
+			 * Check the completeness of the i-th column.
+			 */
 			for (int e = 0; e < Sudoku.SIZE; e++) {
 				if (sudoku[e][i] == 0) {
 					columnComplete = false;
 					break;
 				}
 			}
+			/*
+			 * If the column was still complete, cut a random clue out.
+			 */
 			if (columnComplete) {
 				int y = prng.nextInt(Sudoku.SIZE);
 				sudoku[y][i] = 0;
 			}
 		}
 
-		// Aus jedem vollstaendigen Carre eine zahl entfernen
+		/*
+		 * Check the completeness for every carree in the Sudoku.
+		 */
 		for (int i = 0; i < Sudoku.SIZE; i = i + Sudoku.CARREE_SIZE) {
 			for (int e = 0; e < Sudoku.SIZE; e = e + Sudoku.CARREE_SIZE) {
 				boolean carreeComplete = true;
-				for (int xos = 0; xos < Sudoku.CARREE_SIZE; xos++) { // x Offset
-					for (int yos = 0; yos < Sudoku.CARREE_SIZE; yos++) { // y
-																			// Offset
+				/*
+				 * For a specific carre check if it is still complete.
+				 */
+				outer: for (int xos = 0; xos < Sudoku.CARREE_SIZE; xos++) {
+					for (int yos = 0; yos < Sudoku.CARREE_SIZE; yos++) {
 						if (sudoku[i + yos][e + xos] == 0) {
 							carreeComplete = false;
-							break; // Lohnt sich das hier? Breaked nur die
-									// innerste Schleife
+							break outer; 
 						}
 					}
 				}
+				/*
+				 * If the carre was still complete, cut a random clue out.
+				 */
 				if (carreeComplete) {
 					int x = prng.nextInt(Sudoku.CARREE_SIZE);
 					int y = prng.nextInt(Sudoku.CARREE_SIZE);
@@ -300,16 +322,25 @@ public class SudokuBuilder {
 
 	/**
 	 * Tries to cut out clues using the deductive cutting-rule
-	 * "cut out a number if all possible values are already used in its neighbouring cells"
+	 * "cut out a cell if only this value is legal in the resulting empty cell"
 	 * 
 	 * @param sudoku
 	 *            The Sudoku grid to be cut.
 	 */
 	private static void cutDeductively(int[][] sudoku) {
+		/*
+		 * For each cell in the Sudoku
+		 */
 		for (int x = 0; x < Sudoku.SIZE; x++) {
 			for (int y = 0; y < Sudoku.SIZE; y++) {
+				/*
+				 * Save the cell and cut it
+				 */
 				int save = sudoku[y][x];
 				sudoku[y][x] = 0;
+				/*
+				 * Check if any other value than the original value is legal, the value can not be cut out.
+				 */
 				for (int i = 1; i <= Sudoku.SIZE; i++) {
 					if (i != save && Sudoku.legal(y, x, i, sudoku)) {
 						sudoku[y][x] = save;
@@ -322,14 +353,14 @@ public class SudokuBuilder {
 
 	/**
 	 * Tries to cut out clues using the deductive cutting-rule
-	 * "cut out every number which is neighboured by each of its neighbours".
+	 * "cut out every number which is neighbored by each of its neighbors".
 	 * 
 	 * @param sudoku
 	 *            The Sudoku grid to be cut.
 	 */
 	private static void cutWithNeighbourRule(int[][] sudoku) {
 		/*
-		 * Use the row, column and carrre neighborRule for each value in the
+		 * Use the row, column and carree neighborRule for each value in the
 		 * Sudoku grid.
 		 */
 		for (int x = 0; x < Sudoku.SIZE; x++) {
@@ -344,7 +375,7 @@ public class SudokuBuilder {
 	}
 
 	/**
-	 * Tries to cut out a clue using the neighbouring-rule for rows.
+	 * Tries to cut out a clue using the neighboring-rule for rows.
 	 * 
 	 * @param x
 	 *            The x-value of the clue in the grid.
@@ -369,7 +400,7 @@ public class SudokuBuilder {
 	}
 
 	/**
-	 * Tries to cut out a clue using the neighbouring-rule for columns.
+	 * Tries to cut out a clue using the neighboring-rule for columns.
 	 * 
 	 * @param x
 	 *            The x-value of the clue in the grid.
@@ -394,7 +425,7 @@ public class SudokuBuilder {
 	}
 
 	/**
-	 * Tries to cut out a clue using the neighbouring-rule for carrees.
+	 * Tries to cut out a clue using the neighboring-rule for carrees.
 	 * 
 	 * @param x
 	 *            The x-value of the clue in the grid.
