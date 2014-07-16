@@ -360,7 +360,7 @@ public class SudokuBuilder {
 	 */
 	private static void cutWithNeighbourRule(int[][] sudoku) {
 		/*
-		 * Use the row, column and carree neighborRule for each value in the
+		 * Use the row, column and carree neighborRule for each cell in the
 		 * Sudoku grid.
 		 */
 		for (int x = 0; x < Sudoku.SIZE; x++) {

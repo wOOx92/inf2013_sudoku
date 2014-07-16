@@ -1,5 +1,6 @@
 HIGH PRIORITY
 
+- Wenn fenster minimal groß, dann passt das bild nicht mehr ganz drauf (bei won und lost)
 - Comment GUI
 - Comment SudokuBuilder
 - Give Hints auch wenn schon alles richtig ausgefüllt wurde wirkt wie validate
