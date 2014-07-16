@@ -664,15 +664,11 @@ public class GUI_Window {
 									+ txtTime.getText());
 
 				} else {
-					String msgMistakes = "";
 					if (mistakes == 1) {
-						msgMistakes = "mistake";
+						txtLostMsg.setText("There is " + mistakes + " mistake left");
 					} else {
-						msgMistakes = "mistakes";
+						txtLostMsg.setText("There are " + mistakes + " mistakes left");
 					}
-
-					txtLostMsg.setText("There is " + mistakes + " "
-							+ msgMistakes + " left.");
 					cl.show(pnlCenter, "lost");
 					ImageIcon continueIcon = new ImageIcon(getClass()
 							.getClassLoader().getResource(

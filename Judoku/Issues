@@ -2,6 +2,7 @@ HIGH PRIORITY
 
 - Comment GUI
 - Comment SudokuBuilder
+- Give Hints auch wenn schon alles richtig ausgefüllt wurde wirkt wie validate
 - JUnit Tests
 - Button Sizes menu bar
 - btnValidate ausführlich testen, hat einmal das icon nicht gewechselt und brauch manchmal 2 clicks (sollte gefixed sein)
