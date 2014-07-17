@@ -79,7 +79,7 @@ public class SudokuBuilder {
 		 * value if another cell in the row, column or carree of the cell x
 		 * contains that value.
 		 */
-		cutWithNeighbourRule(templateSdk);
+		cutWithNeighborRule(templateSdk);
 
 		/*
 		 * Step 6: Try to make the resulting Sudoku irreducible using a
@@ -354,12 +354,14 @@ public class SudokuBuilder {
 
 	/**
 	 * Tries to cut out clues using the deductive cutting-rule
-	 * "cut out every number which is neighbored by each of its neighbors".
+	 * "Cut out a number if all neighboring empty cells are neighbored by that number again"
+	 * . A cell neighbors a number if that number occurs in the same row, column
+	 * or carre as the cell.
 	 * 
 	 * @param sudoku
 	 *            The Sudoku grid to be cut.
 	 */
-	private static void cutWithNeighbourRule(int[][] sudoku) {
+	private static void cutWithNeighborRule(int[][] sudoku) {
 		/*
 		 * Use the row, column and carree neighborRule for each cell in the
 		 * Sudoku grid.
@@ -367,9 +369,9 @@ public class SudokuBuilder {
 		for (int x = 0; x < Sudoku.SIZE; x++) {
 			for (int y = 0; y < Sudoku.SIZE; y++) {
 				if (sudoku[y][x] != 0) {
-					cutRowNeighbourRule(x, y, sudoku);
-					cutColumnNeighbourRule(x, y, sudoku);
-					cutCarreeNeighbourRule(x, y, sudoku);
+					cutRowNeighborRule(x, y, sudoku);
+					cutColumnNeighborRule(x, y, sudoku);
+					cutCarreeNeighborRule(x, y, sudoku);
 				}
 			}
 		}
@@ -386,7 +388,7 @@ public class SudokuBuilder {
 	 *            The Sudoku grid.
 	 * @return True if the clue has been cut, false if not.
 	 */
-	private static boolean cutRowNeighbourRule(int x, int y, int[][] sudoku) {
+	private static boolean cutRowNeighborRule(int x, int y, int[][] sudoku) {
 		/*
 		 * Make a backup of the number and cut it out.
 		 */
@@ -404,7 +406,7 @@ public class SudokuBuilder {
 			 * cut candidate, this means the cut candidate must not be cut out.
 			 */
 			if (sudoku[y][x1] == 0 && x1 != x
-					&& !isNeighbouredBy(x1, y, cutCandidate, sudoku)) {
+					&& !isNeighboredBy(x1, y, cutCandidate, sudoku)) {
 				/*
 				 * Put the candidate back in the cell and return false because
 				 * the cell was not cut.
@@ -427,7 +429,7 @@ public class SudokuBuilder {
 	 *            The Sudoku grid.
 	 * @return True if the clue has been cut, false if not.
 	 */
-	private static boolean cutColumnNeighbourRule(int x, int y, int[][] sudoku) {
+	private static boolean cutColumnNeighborRule(int x, int y, int[][] sudoku) {
 		/*
 		 * Make a backup of the number and cut it out.
 		 */
@@ -445,7 +447,7 @@ public class SudokuBuilder {
 			 * cut candidate, this means the cut candidate must not be cut out.
 			 */
 			if (sudoku[y1][x] == 0 && y1 != y
-					&& !isNeighbouredBy(x, y1, cutCandidate, sudoku)) {
+					&& !isNeighboredBy(x, y1, cutCandidate, sudoku)) {
 				/*
 				 * Put the candidate back in the cell and return false because
 				 * the cell was not cut.
@@ -468,7 +470,7 @@ public class SudokuBuilder {
 	 *            The Sudoku grid.
 	 * @return True if the clue has been cut, false if not.
 	 */
-	private static boolean cutCarreeNeighbourRule(int x, int y, int[][] sudoku) {
+	private static boolean cutCarreeNeighborRule(int x, int y, int[][] sudoku) {
 		/*
 		 * Make a backup of the number and cut it out.
 		 */
@@ -499,7 +501,7 @@ public class SudokuBuilder {
 						 * If it is not neighbored by the cut candidate again,
 						 * it must not be cut out.
 						 */
-						if (!isNeighbouredBy(xos + x1, yos + y1, cutCandidate,
+						if (!isNeighboredBy(xos + x1, yos + y1, cutCandidate,
 								sudoku)) {
 							/*
 							 * Put the candidate back in the cell and return
@@ -529,7 +531,7 @@ public class SudokuBuilder {
 	 *            The Sudoku grid.
 	 * @return True if there is a neighbor with the given value, false if not.
 	 */
-	private static boolean isNeighbouredBy(int x, int y, int val, int[][] sudoku) {
+	private static boolean isNeighboredBy(int x, int y, int val, int[][] sudoku) {
 		for (int i = 0; i < Sudoku.SIZE; i++) {
 			/*
 			 * If a cell in the column or in the row contains the value, the

@@ -52,6 +52,7 @@ public class GUI_Window {
 	private JButton btnQuit;
 	private JButton btnHint;
 	private JButton btnValidate;
+	private JButton btnContinue;
 	private JButton btnLangDEU;
 	private JButton btnLangENG;
 	private JButton btnEasy;
@@ -274,6 +275,15 @@ public class GUI_Window {
 		btnValidate.setIcon(validateImage);
 		btnValidate.setToolTipText("Validate my solution");
 		pnlNorthBottom.add(btnValidate);
+		
+		btnContinue = new JButton();
+		btnContinue.setContentAreaFilled(false);
+		btnContinue.addActionListener(new JudokuButtonListener());
+		btnContinue.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		ImageIcon continueImage = new ImageIcon(getClass().getClassLoader().getResource(
+						"resources/correct.png"));
+		btnContinue.setIcon(continueImage);
+		btnContinue.setToolTipText("Correct my mistake(s)");
 
 		txtTime = new JTextField();
 		txtTime.setEnabled(false);
@@ -629,29 +639,22 @@ public class GUI_Window {
 				refreshView();
 			} else if (e.getSource() == btnReset) {
 				controller.resetPuzzle(puzzle);
-				//checkUndoRedoButtons();
 				refreshView();
 			} else if (e.getSource() == btnUndo) {
 				controller.undoPuzzle(puzzle);
-				//checkUndoRedoButtons();
 				refreshView();
 			} else if (e.getSource() == btnRedo) {
 				controller.redoPuzzle(puzzle);
-				//checkUndoRedoButtons();
 				refreshView();
 			} else if (e.getSource() == btnHint) {
 				controller.giveHintPuzzle(puzzle);
-				//checkUndoRedoButtons();
 				refreshView();
-			}  else if (e.getSource() == btnValidate && btnValidate.getToolTipText().equals("Correct my mistake(s)")) {
+			}  else if (e.getSource() == btnContinue) {
 				CardLayout cl = (CardLayout) pnlCenter.getLayout();
 				cl.show(pnlCenter, "gameField");
-				ImageIcon validateIcon = new ImageIcon(getClass()
-						.getClassLoader().getResource("resources/validate.png"));
-				btnValidate.setIcon(validateIcon);
-				btnValidate.setToolTipText("Validate my solution");
+				btnContinue.getParent().add(btnValidate);
+				btnContinue.getParent().remove(btnContinue);
 				enableButtons(true);
-				//checkUndoRedoButtons();
 			} else if (e.getSource() == btnValidate) {
 				CardLayout cl = (CardLayout) pnlCenter.getLayout();
 				int mistakes = controller.validateUserSolution(puzzle);
@@ -670,11 +673,8 @@ public class GUI_Window {
 						txtLostMsg.setText("There are " + mistakes + " mistakes left");
 					}
 					cl.show(pnlCenter, "lost");
-					ImageIcon continueIcon = new ImageIcon(getClass()
-							.getClassLoader().getResource(
-									"resources/correct.png"));
-					btnValidate.setIcon(continueIcon);
-					btnValidate.setToolTipText("Correct my mistake(s)");
+					btnValidate.getParent().add(btnContinue);
+					btnValidate.getParent().remove(btnValidate);
 				}
 				enableButtons(false);
 				btnUndo.setEnabled(false);
