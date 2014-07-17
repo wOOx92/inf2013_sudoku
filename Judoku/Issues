@@ -2,13 +2,10 @@ HIGH PRIORITY
 
 - Wenn fenster minimal groß, dann passt das bild nicht mehr ganz drauf (bei won und lost)
 - Comment GUI
-- Comment SudokuBuilder
 - Give Hints auch wenn schon alles richtig ausgefüllt wurde wirkt wie validate
 - JUnit Tests
 	- Welche Methoden?
 - Button Sizes menu bar
-- btnValidate ausführlich testen, hat einmal das icon nicht gewechselt und brauch manchmal 2 clicks (sollte gefixed sein)
-- legal und backtracking umbenennen!
 - NumberPuzzle sollte eine Methode toJudokuJTextField bereitstellen, da sonst St8ts nicht angezeigt werden kann.
 
 LOW PRIORITY and ADD-ONs
@@ -16,10 +13,14 @@ LOW PRIORITY and ADD-ONs
 - sind Sudokus rechts-unten-lastig?
 
 - Seed
+
 - Mehrsprachigkeit
+
 - Tastenkombinationen
 	- Steuerung z
 	- Steuerung y
 	- Navigation mit Pfeiltasten
+	
+- Str8ts
 	
 - Timer format
