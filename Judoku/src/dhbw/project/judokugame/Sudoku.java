@@ -244,6 +244,8 @@ public class Sudoku implements NumberPuzzle {
 				}
 			}
 		}
+		
+		redoStorage.clear();
 	}
 
 	public void undo() {
