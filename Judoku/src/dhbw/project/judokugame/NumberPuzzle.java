@@ -14,14 +14,14 @@ public interface NumberPuzzle {
 	public int[][] getRecentGrid();
 
 	/**
-	 * @return The start state as a 2-dimensional array.
+	 * @return The start state (when a new game is started) as a 2-dimensional array.
 	 */
 	public int[][] getStartGrid();
 
 	/**
 	 * @return The solution as a 2-dimensional array.
 	 */
-	public int[][] getSolvedGird();
+	public int[][] getSolvedGrid();
 
 	/**
 	 * Sets a value in the recentGrid inside the NumberPuzzle.
@@ -41,7 +41,7 @@ public interface NumberPuzzle {
 	public void giveHint();
 
 	/**
-	 * Searches for wrong entries in the NumberPuzzle.
+	 * Searches for first wrong entry in the NumberPuzzle.
 	 * 
 	 * @return An array of size 2 with the x and y value of the mistake. An
 	 *         empty array if there are no mistakes.

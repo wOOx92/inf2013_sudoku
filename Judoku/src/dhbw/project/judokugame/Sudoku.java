@@ -28,7 +28,7 @@ public class Sudoku implements NumberPuzzle {
 	 * The maximum number of steps a user can use {@link Sudoku#undo()} and
 	 * {@link Sudoku#undo()}.
 	 */
-	public final static int UNDOLIMIT = 5;
+	private final static int UNDOLIMIT = 5;
 
 	/**
 	 * The solution of the Sudoku.
@@ -77,7 +77,7 @@ public class Sudoku implements NumberPuzzle {
 	}
 
 	/**
-	 * Checks whether it is possible to place a given value in a ceratin cell in
+	 * Checks whether it is possible to place a given value in a certain cell in
 	 * an Sudoku grid, or if this value already exists in the cells row, column
 	 * or carree.
 	 * 
@@ -117,8 +117,8 @@ public class Sudoku implements NumberPuzzle {
 		 */
 		int yOffset = (y / Sudoku.CARREE_SIZE) * Sudoku.CARREE_SIZE;
 		int xOffset = (x / Sudoku.CARREE_SIZE) * Sudoku.CARREE_SIZE;
-		for (int i = 0; i < Sudoku.CARREE_SIZE; ++i) {
-			for (int k = 0; k < Sudoku.CARREE_SIZE; ++k) {
+		for (int i = 0; i < Sudoku.CARREE_SIZE; i++) {
+			for (int k = 0; k < Sudoku.CARREE_SIZE; k++) {
 				if (val == sudoku[yOffset + i][xOffset + k]) {
 					return false;
 				}
@@ -140,7 +140,7 @@ public class Sudoku implements NumberPuzzle {
 
 	public void setValue(int x, int y, int val) {
 		/*
-		 * Save the recentState to the undo storage (so undo() can be called on
+		 * Saves the recent state to the undo storage (so undo() can be called on
 		 * this action).
 		 */
 		undoStorage.push(SudokuBuilder.deepCopy(recentGrid));
@@ -163,7 +163,7 @@ public class Sudoku implements NumberPuzzle {
 		return this.recentGrid;
 	}
 
-	public int[][] getSolvedGird() {
+	public int[][] getSolvedGrid() {
 		return this.solvedGrid;
 	}
 
@@ -207,14 +207,15 @@ public class Sudoku implements NumberPuzzle {
 		 * Save the recent state so undo() can be called on this action.
 		 */
 		undoStorage.push(SudokuBuilder.deepCopy(recentGrid));
-
+		limitStack(undoStorage);
+		
 		/*
 		 * Try to find a random empty cell to write the hint in. If for 30
 		 * iterations there was no empty cell stop trying at random.
 		 */
 		Random prng = new Random();
-		int iter = 0;
-		while (iter < 30) {
+		int i = 0;
+		while (i < 40) {
 			int x = prng.nextInt(SIZE);
 			int y = prng.nextInt(SIZE);
 
@@ -223,17 +224,17 @@ public class Sudoku implements NumberPuzzle {
 			 */
 			if (recentGrid[y][x] == 0) {
 				recentGrid[y][x] = solvedGrid[y][x];
-				iter = -1;
+				i = -1;
 				break;
 			}
-			iter++;
+			i++;
 		}
 
 		/*
 		 * If the first loop did not manage to find an empty cell, go through
 		 * the Sudoku once more and give the hint in the first empty cell found.
 		 */
-		if (iter != -1) {
+		if (i != -1) {
 			outer: for (int y = 0; y < Sudoku.SIZE; y++) {
 				for (int x = 0; x < Sudoku.SIZE; x++) {
 					if (recentGrid[y][x] == 0) {
@@ -243,7 +244,6 @@ public class Sudoku implements NumberPuzzle {
 				}
 			}
 		}
-		limitStack(undoStorage);
 	}
 
 	public void undo() {

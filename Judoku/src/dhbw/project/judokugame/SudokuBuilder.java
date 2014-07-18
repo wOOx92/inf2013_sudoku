@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Random;
 
 /**
- * SudokuBuilder's are capable of creating playable, uniquely solvable Sudokus
+ * The SudokuBuilder is capable of creating playable, uniquely solvable Sudokus
  * of different difficulties. The generating algorithms originate from
  * https://www
  * .hochschule-trier.de/uploads/tx_rfttheses/Eckart_Sussenburger_-_Loesungs
@@ -125,7 +125,8 @@ public class SudokuBuilder {
 		int[][] solvedGrid = new int[Sudoku.SIZE][Sudoku.SIZE];
 
 		/*
-		 * Step 1: Place the number 1 to 8 randomly in an empty grid.
+		 * Step 1: Place the number 1 to 8 randomly in an empty grid. Placing
+		 * the number 9 could possible result in an unsolvable Sudoku.
 		 */
 		for (int i = 1; i <= 8; i++) {
 			int x = prng.nextInt(Sudoku.SIZE);
@@ -154,8 +155,7 @@ public class SudokuBuilder {
 	 *            The x-value of the cell where possibilities will be applied.
 	 * @param y
 	 *            The y-value of the cell where possibilities will be applied.
-	 * @param sudoku
-	 *            The Sudoku grid to be checked for solutions.
+	 * 
 	 * @return True if a solution was found, false if not.
 	 */
 	private static boolean solve(int y, int x, int[][] sudoku) {
@@ -209,11 +209,6 @@ public class SudokuBuilder {
 	 * grid has less elements than the number of elements that should be
 	 * removed, the method does nothing.
 	 * 
-	 * @param sudoku
-	 *            The Sudoku grid which gets modified.
-	 * @param prng
-	 *            The Random Number Generator used to generate the random
-	 *            variables.
 	 * @param number
 	 *            The number of clues that should be removed.
 	 */
@@ -233,13 +228,7 @@ public class SudokuBuilder {
 	}
 
 	/**
-	 * Cuts one element from every complete row, column or carre in the Sudoku.
-	 * 
-	 * @param sudoku
-	 *            The Sudoku which gets modified.
-	 * @param prng
-	 *            The Random Number Generator used to generate the random
-	 *            variables.
+	 * Cuts one element from every complete row, column or carree in the Sudoku.
 	 */
 	private void cutCompleteStructures() {
 		/*
@@ -295,7 +284,7 @@ public class SudokuBuilder {
 			for (int e = 0; e < Sudoku.SIZE; e = e + Sudoku.CARREE_SIZE) {
 				boolean carreeComplete = true;
 				/*
-				 * For a specific carre check if it is still complete.
+				 * For a specific carree check if it is still complete.
 				 */
 				outer: for (int xos = 0; xos < Sudoku.CARREE_SIZE; xos++) {
 					for (int yos = 0; yos < Sudoku.CARREE_SIZE; yos++) {
@@ -306,7 +295,7 @@ public class SudokuBuilder {
 					}
 				}
 				/*
-				 * If the carre was still complete, cut a random clue out.
+				 * If the carree was still complete, cut a random clue out.
 				 */
 				if (carreeComplete) {
 					int x = prng.nextInt(Sudoku.CARREE_SIZE);
@@ -337,11 +326,9 @@ public class SudokuBuilder {
 	}
 
 	/**
-	 * Tries to cut out clues using the deductive cutting-rule
-	 * "cut out a cell if only this value is legal in the resulting empty cell"
+	 * Tries to cut out clues using the deductive cutting-rule "cut out a cell
+	 * if only this value is legal in the resulting empty cell.
 	 * 
-	 * @param sudoku
-	 *            The Sudoku grid to be cut.
 	 */
 	private void cutDeductively() {
 		/*
@@ -372,10 +359,8 @@ public class SudokuBuilder {
 	 * Tries to cut out clues using the deductive cutting-rule
 	 * "Cut out a number if all neighboring empty cells are neighbored by that number again"
 	 * . A cell neighbors a number if that number occurs in the same row, column
-	 * or carre as the cell.
+	 * or carree as the cell.
 	 * 
-	 * @param sudoku
-	 *            The Sudoku grid to be cut.
 	 */
 	private void cutWithNeighborRule() {
 		/*
@@ -400,8 +385,6 @@ public class SudokuBuilder {
 	 *            The x-value of the clue in the grid.
 	 * @param y
 	 *            The y-value of the clue in the grid.
-	 * @param sudoku
-	 *            The Sudoku grid.
 	 * @return True if the clue has been cut, false if not.
 	 */
 	private boolean cutRowNeighborRule(int x, int y) {
@@ -552,7 +535,8 @@ public class SudokuBuilder {
 			 * If a cell in the column or in the row contains the value, the
 			 * cell is neighbored by that value.
 			 */
-			if (sudokuGridStorage[i][x] == val || sudokuGridStorage[y][i] == val) {
+			if (sudokuGridStorage[i][x] == val
+					|| sudokuGridStorage[y][i] == val) {
 				return true;
 			}
 		}
@@ -586,8 +570,6 @@ public class SudokuBuilder {
 	 * Tries to cut out clues which are not cuttable by deduction. Only cuts
 	 * clues if the resulting Sudoku still has a unique solution.
 	 * 
-	 * @param sudoku
-	 *            The Sudoku grid to be cut.
 	 * @param diff
 	 *            The difficulty determines the maximum number of clues that get
 	 *            cut out by this.
@@ -605,7 +587,8 @@ public class SudokuBuilder {
 					 * Test if the Sudoku still has a unique solution. If it has
 					 * not, put the clue back in.
 					 */
-					if (!hasUniqueSolution(sudokuGridStorage, diff.maxRecursionDepth())) {
+					if (!hasUniqueSolution(sudokuGridStorage,
+							diff.maxRecursionDepth())) {
 						sudokuGridStorage[y][x] = cutCandidate;
 					}
 				}
@@ -717,13 +700,6 @@ public class SudokuBuilder {
 	 * there is no place for the amount of clues (because it is already to
 	 * full), this will add as much clues as possible.
 	 * 
-	 * @param sudoku
-	 *            The Sudoku grid where the clues will be added.
-	 * @param solutions
-	 *            The solution to the Sudoku grid (the clues will be taken from
-	 *            here).
-	 * @param prng
-	 *            The Random Number Generator to generate the random variables.
 	 * @param add
 	 *            The number of clues that should be added.
 	 */
@@ -734,8 +710,8 @@ public class SudokuBuilder {
 		 * cells left and the loop has to stop.
 		 */
 		for (int i = 0; i < add && clues + i < Sudoku.SIZE * Sudoku.SIZE;) {
-			int x = prng.nextInt(9);
-			int y = prng.nextInt(9);
+			int x = prng.nextInt(Sudoku.SIZE);
+			int y = prng.nextInt(Sudoku.SIZE);
 			/*
 			 * If the cell has no clue in it, add it and increase the number of
 			 * clues added.

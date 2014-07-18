@@ -1,11 +1,16 @@
 HIGH PRIORITY
 
+- GuiWindow: KeyAdapter prüfen.
+- GiveHint redo undo verhalten
+- Threadsicher (Hint 2x prellen)
+- Date in JavaDocs
 - MausListener hat gar keine Funktion?
 - Comment GUI
 - JUnit Tests
 	- Welche Methoden?
 - Button Sizes menu bar
 - NumberPuzzle sollte eine Methode toJudokuJTextField bereitstellen, da sonst St8ts nicht angezeigt werden kann.
+- REeturn values bei neighbor rauslassen
 - Sudoku templateSdk als Objektvariable / Zustand
 
 

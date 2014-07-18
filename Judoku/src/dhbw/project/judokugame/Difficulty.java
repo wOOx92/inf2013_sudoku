@@ -2,8 +2,8 @@ package dhbw.project.judokugame;
 
 /**
  * This enumeration contains the difficulties for NumberPuzzles. Difficulties
- * are defined by a recursion depth. Difference in the recursion depth affects
- * the amount of the cutting of clues during the generation of NumberPuzzles
+ * are defined by a recursion depth. Differences in the recursion depth affect
+ * the amount of the cutting of clues during the generating of NumberPuzzles
  * (the deeper the recursion, the more cutting can be done, the harder the
  * NumberPuzzle will get).
  * 

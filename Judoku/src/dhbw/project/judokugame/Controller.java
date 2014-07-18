@@ -12,10 +12,10 @@ import java.awt.EventQueue;
 public class Controller {
 
 	/**
-	 * This is the GUI_Window object sending user inputs and requests to this
+	 * This is the GuiWindow object sending user inputs and requests to this
 	 * controller object.
 	 */
-	private GUI_Window linkedGuiWindow;
+	private GuiWindow linkedGuiWindow;
 
 	public static void main(String[] args) {
 		Controller c = new Controller();
@@ -30,7 +30,7 @@ public class Controller {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GUI_Window window = new GUI_Window(Controller.this);
+					GuiWindow window = new GuiWindow(Controller.this);
 					linkedGuiWindow = window;
 					window.setVisible(true);
 				} catch (Exception e) {
@@ -138,7 +138,7 @@ public class Controller {
 				/*
 				 * Check if the user input varies from the actual solution
 				 */
-				if (puzzle.getRecentGrid()[y][x] != puzzle.getSolvedGird()[y][x]) {
+				if (puzzle.getRecentGrid()[y][x] != puzzle.getSolvedGrid()[y][x]) {
 					mistakes++;
 				}
 			}
@@ -148,11 +148,11 @@ public class Controller {
 
 	/**
 	 * Checks whether the user already made mistakes filling in the
-	 * NumberPuzzle. If so, notifies the GUI_Window to mark the erroneous field,
+	 * NumberPuzzle. If so, notifies the GuiWindow to mark the erroneous field,
 	 * otherwise calls the NumberPuzzle itself to provide an hint.
 	 * 
 	 * @param puzzle
-	 *            The NumberPuzzle object displayed by the GUI_Window
+	 *            The NumberPuzzle object displayed by the GuiWindow
 	 */
 	public void giveHintPuzzle(NumberPuzzle puzzle) {
 		int[] coords = puzzle.searchMistake();

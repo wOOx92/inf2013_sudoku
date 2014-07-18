@@ -15,8 +15,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.StyleConstants;
 import javax.swing.JButton;
 
-import dhbw.project.judokugame.GUI_Window.JudokuButtonListener;
-import dhbw.project.judokugame.GUI_Window.JudokuTimeListener;
+import dhbw.project.judokugame.GuiWindow.JudokuButtonListener;
+import dhbw.project.judokugame.GuiWindow.JudokuTimeListener;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
