@@ -127,6 +127,25 @@ public class Sudoku implements NumberPuzzle {
 		return true;
 	}
 
+	/**
+	 * Calculates the number of clues in a Sudoku grid.
+	 * 
+	 * @param sudoku
+	 *            The Sudoku grid.
+	 * @return The amount of given clues.
+	 */
+	public static int getNumberOfClues(int[][] sudoku) {
+		int clues = 0;
+		for (int x = 0; x < 9; x++) {
+			for (int y = 0; y < 9; y++) {
+				if (sudoku[y][x] != 0) {
+					clues++;
+				}
+			}
+		}
+		return clues;
+	}
+	
 	public void reset() {
 		undoStorage.clear();
 		redoStorage.clear();
@@ -198,7 +217,7 @@ public class Sudoku implements NumberPuzzle {
 		 * Get the number of filled cells and check if there are any empty cells
 		 * left to give hints in.
 		 */
-		int clues = SudokuBuilder.getNumberOfClues(recentGrid);
+		int clues = Sudoku.getNumberOfClues(recentGrid);
 		if (clues == Sudoku.SIZE * Sudoku.SIZE) {
 			return;
 		}
