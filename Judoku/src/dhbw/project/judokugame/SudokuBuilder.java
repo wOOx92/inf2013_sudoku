@@ -16,6 +16,23 @@ import java.util.Random;
 public class SudokuBuilder {
 
 	/**
+	 * This is the Solution of the Sudoku that will be generated
+	 */
+	private int[][] solvedGrid;
+
+	/**
+	 * This is the Sudoku grid that will be cut and minimized and will become
+	 * the start grid of the new Sudoku
+	 */
+	private int[][] sudokuGridStorage;
+
+	/**
+	 * This is the Random Number Generator that generates every random variable
+	 * needed during the generating process.
+	 */
+	private Random prng;
+
+	/**
 	 * Builds a Sudoku object of the desired difficulty.
 	 * 
 	 * @param diff
@@ -44,33 +61,33 @@ public class SudokuBuilder {
 		 * needed so exactly the same Sudoku can be recreated using the same
 		 * seed.
 		 */
-		Random prng = new Random(seed);
+		prng = new Random(seed);
 
 		/*
 		 * Step 1: Generate a entirely solved Sudoku grid and copy it for
 		 * further manipulation.
 		 */
-		int[][] solvedGrid = generateSolvedGrid(prng);
-		int[][] templateSdk = SudokuBuilder.deepCopy(solvedGrid);
+		solvedGrid = generateSolvedGrid();
+		sudokuGridStorage = SudokuBuilder.deepCopy(solvedGrid);
 
 		/*
 		 * Step 2: Remove 3 elements at random for more randomness in the
 		 * generation process (the Sudoku will stay valid).
 		 */
-		removeRandomElements(templateSdk, prng, 3);
+		removeRandomElements(3);
 
 		/*
 		 * Step 3: Cut one clue from every row / column / carree that is still
 		 * complete. This results in more randomness in the generating process.
 		 */
-		cutCompleteStructures(templateSdk, prng);
+		cutCompleteStructures();
 
 		/*
 		 * Step 4: Cut all clues that satisfy this condition: If the clue is
 		 * removed, the only possible candidate for the resulting empty cell is
 		 * said clue.
 		 */
-		cutDeductively(templateSdk);
+		cutDeductively();
 
 		/*
 		 * Step 5: Cut all clues using the "Neighbor-rule": If every empty cell
@@ -79,22 +96,22 @@ public class SudokuBuilder {
 		 * value if another cell in the row, column or carree of the cell x
 		 * contains that value.
 		 */
-		cutWithNeighborRule(templateSdk);
+		cutWithNeighborRule();
 
 		/*
 		 * Step 6: Try to make the resulting Sudoku irreducible using a
 		 * "cut-and-test" method.
 		 */
-		doRandomCutting(templateSdk, diff);
+		doRandomCutting(diff);
 
 		/*
 		 * If the desired Difficulty is EASY, add 5 additional clues.
 		 */
 		if (diff == Difficulty.EASY) {
-			addRandomClues(templateSdk, solvedGrid, prng, 5);
+			addRandomClues(5);
 		}
 
-		return new Sudoku(templateSdk, solvedGrid, diff);
+		return new Sudoku(sudokuGridStorage, solvedGrid, diff);
 	}
 
 	/**
@@ -104,7 +121,7 @@ public class SudokuBuilder {
 	 *            The (P)RNG used to generate the grid.
 	 * @return A completely and correctly filled Sudoku grid.
 	 */
-	private static int[][] generateSolvedGrid(Random prng) {
+	private int[][] generateSolvedGrid() {
 		int[][] solvedGrid = new int[Sudoku.SIZE][Sudoku.SIZE];
 
 		/*
@@ -200,17 +217,16 @@ public class SudokuBuilder {
 	 * @param number
 	 *            The number of clues that should be removed.
 	 */
-	private static void removeRandomElements(int[][] sudoku, Random prng,
-			int number) {
-		if (SudokuBuilder.getNumberOfClues(sudoku) < number) {
+	private void removeRandomElements(int number) {
+		if (SudokuBuilder.getNumberOfClues(sudokuGridStorage) < number) {
 			return;
 		}
 
 		for (int i = 0; i < number; i++) {
 			int x = prng.nextInt(Sudoku.SIZE);
 			int y = prng.nextInt(Sudoku.SIZE);
-			if (sudoku[y][x] != 0) {
-				sudoku[y][x] = 0;
+			if (sudokuGridStorage[y][x] != 0) {
+				sudokuGridStorage[y][x] = 0;
 				i++;
 			}
 		}
@@ -225,7 +241,7 @@ public class SudokuBuilder {
 	 *            The Random Number Generator used to generate the random
 	 *            variables.
 	 */
-	private static void cutCompleteStructures(int[][] sudoku, Random prng) {
+	private void cutCompleteStructures() {
 		/*
 		 * Check the completeness of every row.
 		 */
@@ -235,7 +251,7 @@ public class SudokuBuilder {
 			 * Check the completeness of the i-th row.
 			 */
 			for (int e = 0; e < Sudoku.SIZE; e++) {
-				if (sudoku[i][e] == 0) {
+				if (sudokuGridStorage[i][e] == 0) {
 					lineComplete = false;
 					break;
 				}
@@ -245,7 +261,7 @@ public class SudokuBuilder {
 			 */
 			if (lineComplete) {
 				int x = prng.nextInt(Sudoku.SIZE);
-				sudoku[i][x] = 0;
+				sudokuGridStorage[i][x] = 0;
 			}
 		}
 
@@ -258,7 +274,7 @@ public class SudokuBuilder {
 			 * Check the completeness of the i-th column.
 			 */
 			for (int e = 0; e < Sudoku.SIZE; e++) {
-				if (sudoku[e][i] == 0) {
+				if (sudokuGridStorage[e][i] == 0) {
 					columnComplete = false;
 					break;
 				}
@@ -268,7 +284,7 @@ public class SudokuBuilder {
 			 */
 			if (columnComplete) {
 				int y = prng.nextInt(Sudoku.SIZE);
-				sudoku[y][i] = 0;
+				sudokuGridStorage[y][i] = 0;
 			}
 		}
 
@@ -283,7 +299,7 @@ public class SudokuBuilder {
 				 */
 				outer: for (int xos = 0; xos < Sudoku.CARREE_SIZE; xos++) {
 					for (int yos = 0; yos < Sudoku.CARREE_SIZE; yos++) {
-						if (sudoku[i + yos][e + xos] == 0) {
+						if (sudokuGridStorage[i + yos][e + xos] == 0) {
 							carreeComplete = false;
 							break outer;
 						}
@@ -295,7 +311,7 @@ public class SudokuBuilder {
 				if (carreeComplete) {
 					int x = prng.nextInt(Sudoku.CARREE_SIZE);
 					int y = prng.nextInt(Sudoku.CARREE_SIZE);
-					sudoku[i + y][e + x] = 0;
+					sudokuGridStorage[i + y][e + x] = 0;
 				}
 			}
 		}
@@ -327,7 +343,7 @@ public class SudokuBuilder {
 	 * @param sudoku
 	 *            The Sudoku grid to be cut.
 	 */
-	private static void cutDeductively(int[][] sudoku) {
+	private void cutDeductively() {
 		/*
 		 * For each cell in the Sudoku
 		 */
@@ -336,15 +352,15 @@ public class SudokuBuilder {
 				/*
 				 * Save the cell and cut it
 				 */
-				int save = sudoku[y][x];
-				sudoku[y][x] = 0;
+				int save = sudokuGridStorage[y][x];
+				sudokuGridStorage[y][x] = 0;
 				/*
 				 * Check if any other value than the original value is legal,
 				 * the value can not be cut out.
 				 */
 				for (int i = 1; i <= Sudoku.SIZE; i++) {
-					if (i != save && Sudoku.legal(y, x, i, sudoku)) {
-						sudoku[y][x] = save;
+					if (i != save && Sudoku.legal(y, x, i, sudokuGridStorage)) {
+						sudokuGridStorage[y][x] = save;
 						break;
 					}
 				}
@@ -361,17 +377,17 @@ public class SudokuBuilder {
 	 * @param sudoku
 	 *            The Sudoku grid to be cut.
 	 */
-	private static void cutWithNeighborRule(int[][] sudoku) {
+	private void cutWithNeighborRule() {
 		/*
 		 * Use the row, column and carree neighborRule for each cell in the
 		 * Sudoku grid.
 		 */
 		for (int x = 0; x < Sudoku.SIZE; x++) {
 			for (int y = 0; y < Sudoku.SIZE; y++) {
-				if (sudoku[y][x] != 0) {
-					cutRowNeighborRule(x, y, sudoku);
-					cutColumnNeighborRule(x, y, sudoku);
-					cutCarreeNeighborRule(x, y, sudoku);
+				if (sudokuGridStorage[y][x] != 0) {
+					cutRowNeighborRule(x, y);
+					cutColumnNeighborRule(x, y);
+					cutCarreeNeighborRule(x, y);
 				}
 			}
 		}
@@ -388,12 +404,12 @@ public class SudokuBuilder {
 	 *            The Sudoku grid.
 	 * @return True if the clue has been cut, false if not.
 	 */
-	private static boolean cutRowNeighborRule(int x, int y, int[][] sudoku) {
+	private boolean cutRowNeighborRule(int x, int y) {
 		/*
 		 * Make a backup of the number and cut it out.
 		 */
-		int cutCandidate = sudoku[y][x];
-		sudoku[y][x] = 0;
+		int cutCandidate = sudokuGridStorage[y][x];
+		sudokuGridStorage[y][x] = 0;
 
 		/*
 		 * Check if this violates the "neighbor-rule" for rows, by checking
@@ -405,13 +421,13 @@ public class SudokuBuilder {
 			 * cell of the cut candidate && that cell is not neighbored by the
 			 * cut candidate, this means the cut candidate must not be cut out.
 			 */
-			if (sudoku[y][x1] == 0 && x1 != x
-					&& !isNeighboredBy(x1, y, cutCandidate, sudoku)) {
+			if (sudokuGridStorage[y][x1] == 0 && x1 != x
+					&& !isNeighboredBy(x1, y, cutCandidate)) {
 				/*
 				 * Put the candidate back in the cell and return false because
 				 * the cell was not cut.
 				 */
-				sudoku[y][x] = cutCandidate;
+				sudokuGridStorage[y][x] = cutCandidate;
 				return false;
 			}
 		}
@@ -429,12 +445,12 @@ public class SudokuBuilder {
 	 *            The Sudoku grid.
 	 * @return True if the clue has been cut, false if not.
 	 */
-	private static boolean cutColumnNeighborRule(int x, int y, int[][] sudoku) {
+	private boolean cutColumnNeighborRule(int x, int y) {
 		/*
 		 * Make a backup of the number and cut it out.
 		 */
-		int cutCandidate = sudoku[y][x];
-		sudoku[y][x] = 0;
+		int cutCandidate = sudokuGridStorage[y][x];
+		sudokuGridStorage[y][x] = 0;
 
 		/*
 		 * Check if this violates the "neighbor-rule" for columns, by checking
@@ -446,13 +462,13 @@ public class SudokuBuilder {
 			 * cell of the cut candidate && that cell is not neighbored by the
 			 * cut candidate, this means the cut candidate must not be cut out.
 			 */
-			if (sudoku[y1][x] == 0 && y1 != y
-					&& !isNeighboredBy(x, y1, cutCandidate, sudoku)) {
+			if (sudokuGridStorage[y1][x] == 0 && y1 != y
+					&& !isNeighboredBy(x, y1, cutCandidate)) {
 				/*
 				 * Put the candidate back in the cell and return false because
 				 * the cell was not cut.
 				 */
-				sudoku[y][x] = cutCandidate;
+				sudokuGridStorage[y][x] = cutCandidate;
 				return false;
 			}
 		}
@@ -470,12 +486,12 @@ public class SudokuBuilder {
 	 *            The Sudoku grid.
 	 * @return True if the clue has been cut, false if not.
 	 */
-	private static boolean cutCarreeNeighborRule(int x, int y, int[][] sudoku) {
+	private boolean cutCarreeNeighborRule(int x, int y) {
 		/*
 		 * Make a backup of the number and cut it out.
 		 */
-		int cutCandidate = sudoku[y][x];
-		sudoku[y][x] = 0;
+		int cutCandidate = sudokuGridStorage[y][x];
+		sudokuGridStorage[y][x] = 0;
 		/*
 		 * Calculate the offsets for the carree.
 		 */
@@ -491,7 +507,7 @@ public class SudokuBuilder {
 				/*
 				 * If the cell is empty
 				 */
-				if (sudoku[yos + y1][xos + x1] == 0) {
+				if (sudokuGridStorage[yos + y1][xos + x1] == 0) {
 					/*
 					 * If the cell is not the same as the cell of the cut
 					 * candidate
@@ -501,13 +517,12 @@ public class SudokuBuilder {
 						 * If it is not neighbored by the cut candidate again,
 						 * it must not be cut out.
 						 */
-						if (!isNeighboredBy(xos + x1, yos + y1, cutCandidate,
-								sudoku)) {
+						if (!isNeighboredBy(xos + x1, yos + y1, cutCandidate)) {
 							/*
 							 * Put the candidate back in the cell and return
 							 * false because the cell was not cut.
 							 */
-							sudoku[y][x] = cutCandidate;
+							sudokuGridStorage[y][x] = cutCandidate;
 							return false;
 						}
 					}
@@ -531,13 +546,13 @@ public class SudokuBuilder {
 	 *            The Sudoku grid.
 	 * @return True if there is a neighbor with the given value, false if not.
 	 */
-	private static boolean isNeighboredBy(int x, int y, int val, int[][] sudoku) {
+	private boolean isNeighboredBy(int x, int y, int val) {
 		for (int i = 0; i < Sudoku.SIZE; i++) {
 			/*
 			 * If a cell in the column or in the row contains the value, the
 			 * cell is neighbored by that value.
 			 */
-			if (sudoku[i][x] == val || sudoku[y][i] == val) {
+			if (sudokuGridStorage[i][x] == val || sudokuGridStorage[y][i] == val) {
 				return true;
 			}
 		}
@@ -554,7 +569,7 @@ public class SudokuBuilder {
 		 */
 		for (int x1 = 0; x1 < Sudoku.CARREE_SIZE; x1++) {
 			for (int y1 = 0; y1 < Sudoku.CARREE_SIZE; y1++) {
-				if (sudoku[yos + y1][xos + x1] == val) {
+				if (sudokuGridStorage[yos + y1][xos + x1] == val) {
 					return true;
 				}
 			}
@@ -577,21 +592,21 @@ public class SudokuBuilder {
 	 *            The difficulty determines the maximum number of clues that get
 	 *            cut out by this.
 	 */
-	private static void doRandomCutting(int[][] sudoku, Difficulty diff) {
+	private void doRandomCutting(Difficulty diff) {
 		for (int x = 0; x < Sudoku.SIZE; x++) {
 			for (int y = 0; y < Sudoku.SIZE; y++) {
-				if (sudoku[y][x] != 0) {
+				if (sudokuGridStorage[y][x] != 0) {
 					/*
 					 * Save a backup of the value and cut it out.
 					 */
-					int cutCandidate = sudoku[y][x];
-					sudoku[y][x] = 0;
+					int cutCandidate = sudokuGridStorage[y][x];
+					sudokuGridStorage[y][x] = 0;
 					/*
 					 * Test if the Sudoku still has a unique solution. If it has
 					 * not, put the clue back in.
 					 */
-					if (!hasUniqueSolution(sudoku, diff.maxRecursionDepth())) {
-						sudoku[y][x] = cutCandidate;
+					if (!hasUniqueSolution(sudokuGridStorage, diff.maxRecursionDepth())) {
+						sudokuGridStorage[y][x] = cutCandidate;
 					}
 				}
 			}
@@ -712,9 +727,8 @@ public class SudokuBuilder {
 	 * @param add
 	 *            The number of clues that should be added.
 	 */
-	private static void addRandomClues(int[][] sudoku, int[][] solutions,
-			Random prng, int add) {
-		int clues = getNumberOfClues(sudoku);
+	private void addRandomClues(int add) {
+		int clues = getNumberOfClues(sudokuGridStorage);
 		/*
 		 * If clues + i is equal the SIZE*SIZE, this means there are no empty
 		 * cells left and the loop has to stop.
@@ -726,8 +740,8 @@ public class SudokuBuilder {
 			 * If the cell has no clue in it, add it and increase the number of
 			 * clues added.
 			 */
-			if (sudoku[y][x] == 0) {
-				sudoku[y][x] = solutions[y][x];
+			if (sudokuGridStorage[y][x] == 0) {
+				sudokuGridStorage[y][x] = solvedGrid[y][x];
 				i++;
 			}
 		}
