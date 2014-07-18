@@ -53,7 +53,7 @@ public class GUI_Window {
 	private JButton btnHint;
 	private JButton btnValidate;
 	private JButton btnContinue;
-	private JButton btnLangDEU;
+	private JButton btnInfo;
 	private JButton btnLangENG;
 	private JButton btnEasy;
 	private JButton btnMedium;
@@ -95,8 +95,8 @@ public class GUI_Window {
 		frame = new JFrame();
 		frame.setBounds(150, 150, 585, 800);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setMinimumSize(new Dimension(450, 615));
-		frame.getContentPane().setLayout(new BorderLayout(10, 10));
+		frame.setMinimumSize(new Dimension(465, 635));
+		frame.setLayout(new BorderLayout(10, 10));
 		frame.setTitle("Judoku");
 		ImageIcon windowIcon = new ImageIcon(getClass().getClassLoader()
 				.getResource("resources/judoku_icon.png"));
@@ -150,6 +150,7 @@ public class GUI_Window {
 		mnNewGame = new JMenu("New Game");
 		mnNewGame.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		mnNewGame.setToolTipText("Start a new Judoku");
+		mnNewGame.setPreferredSize(new Dimension(80, 25));
 
 		btnEasy = new JButton("EASY");
 		btnEasy.setText("Easy");
@@ -185,6 +186,7 @@ public class GUI_Window {
 		btnReset.setEnabled(false);
 		btnReset.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		btnReset.setToolTipText("Reset Judoku");
+		btnReset.setPreferredSize(new Dimension(80, 25));
 		mnBar.add(btnReset);
 
 		btnQuit = new JButton("Exit");
@@ -193,14 +195,16 @@ public class GUI_Window {
 		btnQuit.setBorderPainted(false);
 		btnQuit.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		btnQuit.setToolTipText("Quit Judoku");
+		btnQuit.setPreferredSize(new Dimension(80, 25));
 		mnBar.add(btnQuit);
 
-		btnLangDEU = new JButton("DEU");
-		btnLangDEU.setContentAreaFilled(false);
-		btnLangDEU.setBorderPainted(false);
-		btnLangDEU.addActionListener(new JudokuButtonListener());
-		btnLangDEU.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		mnBar.add(btnLangDEU);
+		btnInfo = new JButton("Info");
+		btnInfo.setContentAreaFilled(false);
+		btnInfo.setBorderPainted(false);
+		btnInfo.addActionListener(new JudokuButtonListener());
+		btnInfo.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		btnInfo.setPreferredSize(new Dimension(80, 25));
+		mnBar.add(btnInfo);
 
 		btnLangENG = new JButton("ENG");
 		btnLangENG.setContentAreaFilled(false);
@@ -686,7 +690,12 @@ public class GUI_Window {
 				enableButtons(false);
 				btnUndo.setEnabled(false);
 				btnRedo.setEnabled(false);
-			} else if (e.getSource() == btnLangENG) {
+			} else if (e.getSource() == btnInfo) {
+				/*
+				 * 
+				 */
+			}
+			else if (e.getSource() == btnLangENG) {
 				for (int i = 0; i < 81; i++) {
 					puzzle.giveHint();
 				}

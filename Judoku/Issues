@@ -1,13 +1,13 @@
 HIGH PRIORITY
 
 - MausListener hat gar keine Funktion?
-- Wenn fenster minimal groß, dann passt das bild nicht mehr ganz drauf (bei won und lost)
 - Comment GUI
-- Give Hints auch wenn schon alles richtig ausgefüllt wurde wirkt wie validate
 - JUnit Tests
 	- Welche Methoden?
 - Button Sizes menu bar
 - NumberPuzzle sollte eine Methode toJudokuJTextField bereitstellen, da sonst St8ts nicht angezeigt werden kann.
+- Sudoku templateSdk als Objektvariable / Zustand
+
 
 LOW PRIORITY and ADD-ONs
 
