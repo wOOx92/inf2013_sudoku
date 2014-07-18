@@ -22,31 +22,29 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class WindowHelp extends JFrame {
-
+public class GuiInfoView {
+	private GuiWindow parentWindow;
+	
 	private JPanel contentPane;
     private JButton btnInfo;
     private JButton btnSudokuRules;
     private JButton btnFunctions;
 	private JButton btnCredits;
+	private JButton btnReturn;
 	private JTextPane txtCenterText;
-	private JPanel pnlTextArea;
 	private JPanel pnlButtons;
 	/**
 	 * Create the frame.
 	 */
-	public WindowHelp() {
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+	public GuiInfoView(GuiWindow parentWindow) {
+		this.parentWindow = parentWindow;
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(5, 5));
-		setContentPane(contentPane);
-		setSize(600, 300);
-		setResizable(false);
 		
 		pnlButtons = new JPanel();
-		pnlButtons.setLayout(new GridLayout(4,1,10,10));
+		pnlButtons.setLayout(new GridLayout(5,1,30,30));
 		
 		contentPane.add(pnlButtons, BorderLayout.WEST);
 		btnInfo = new JButton("Info");
@@ -61,10 +59,14 @@ public class WindowHelp extends JFrame {
 		btnCredits = new JButton("Credits");
 		btnCredits.addActionListener(new WindowHelpButtonListener());
 		btnCredits.setContentAreaFilled(false);
+		btnReturn = new JButton("Go back");
+		btnReturn.addActionListener(new WindowHelpButtonListener());
+		btnReturn.setContentAreaFilled(false);
 		pnlButtons.add(btnInfo);
 		pnlButtons.add(btnSudokuRules);
 		pnlButtons.add(btnFunctions);
 		pnlButtons.add(btnCredits);
+		pnlButtons.add(btnReturn);
 		
 		
 		txtCenterText = new JTextPane();
@@ -73,6 +75,9 @@ public class WindowHelp extends JFrame {
 		contentPane.add(txtCenterText, BorderLayout.CENTER);			
 	}
 	
+	public JPanel getContentPane() {
+		return contentPane;
+	}
 	
 	class WindowHelpButtonListener implements ActionListener {
 		@Override
@@ -115,10 +120,11 @@ public class WindowHelp extends JFrame {
 			    				+ "<br>"
 			    				+ "Dennis Uteg"
 			    				+ "<br>"
-			    				+ "Michael Jauch</font face></html>");
-			    	
-						} 
-			
+			    				+ "Michael Jauch</font face></html>");				
+			    	} 
+			    	else if(e.getSource() == btnReturn){
+			    		parentWindow.toggleHelpViewBack();
+			    	}
 		}
 	}
 

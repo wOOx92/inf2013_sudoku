@@ -39,19 +39,6 @@ public class Controller {
 			}
 		});
 	}
-	
-	public void initWindowHelp() {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					WindowHelp frame = new WindowHelp();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	public void resetPuzzle(NumberPuzzle puzzle) {
 		puzzle.reset();

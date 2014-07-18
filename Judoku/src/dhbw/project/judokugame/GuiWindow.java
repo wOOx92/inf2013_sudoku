@@ -42,6 +42,7 @@ public class GuiWindow {
 	private Controller controller;
 	private JudokuJTextField[][] gameField = new JudokuJTextField[9][9];
 	private Timer swingTimer = new Timer(1000, new JudokuTimeListener());;
+	String activeCenterView = "gameField";
 
 	/*
 	 * Buttons
@@ -131,6 +132,9 @@ public class GuiWindow {
 		initializePanelLost(pnlLost);
 		pnlCenter.add(pnlLost, "lost");
 
+		GuiInfoView viewHelp = new GuiInfoView(this);
+		pnlCenter.add(viewHelp.getContentPane(), "help");
+		
 		JPanel pnlSouth = new JPanel();
 		pnlSouth.setLayout(new BorderLayout(15, 15));
 		initializeGameStatusPanel(pnlSouth);
@@ -390,7 +394,7 @@ public class GuiWindow {
 		JLabel lostLabel = new JLabel("", lostImage, JLabel.CENTER);
 		pnlLost.add(lostLabel);
 	}
-
+	
 	/**
 	 * Writes time, progressbar and difficulty to the bottom jpanel.
 	 * 
@@ -514,6 +518,17 @@ public class GuiWindow {
 		}
 	}
 
+	public void toggleHelpViewBack() {		
+		btnContinue.setEnabled(true);
+		CardLayout cl = (CardLayout) pnlCenter.getLayout();
+		cl.show(pnlCenter, activeCenterView);	
+		
+		if(!activeCenterView.equals("won") && !activeCenterView.equals("lost") && puzzle != null){
+			enableButtons(true);
+			refreshView();
+		}
+	}
+	
 	/**
 	 * Listens to the JTextFields for gained / lost focus within the gamefield.
 	 * 
@@ -667,6 +682,7 @@ public class GuiWindow {
 				 */
 				CardLayout cl = (CardLayout) pnlCenter.getLayout();
 				cl.show(pnlCenter, "gameField");
+				activeCenterView = "gameField";
 				enableButtons(true);
 				/*
 				 * Close the "dropdown"-Menu.
@@ -694,6 +710,7 @@ public class GuiWindow {
 				sWork.execute();
 				CardLayout cl = (CardLayout) pnlCenter.getLayout();
 				cl.show(pnlCenter, "gameField");
+				activeCenterView = "gameField";
 				enableButtons(true);
 				MenuSelectionManager.defaultManager().clearSelectedPath();
 				JudokuTimeListener jtl = (JudokuTimeListener) swingTimer
@@ -712,6 +729,7 @@ public class GuiWindow {
 				sWork.execute();
 				CardLayout cl = (CardLayout) pnlCenter.getLayout();
 				cl.show(pnlCenter, "gameField");
+				activeCenterView = "gameField";
 				enableButtons(true);
 				MenuSelectionManager.defaultManager().clearSelectedPath();
 				JudokuTimeListener jtl = (JudokuTimeListener) swingTimer
@@ -756,6 +774,7 @@ public class GuiWindow {
 			else if (e.getSource() == btnContinue) {
 				CardLayout cl = (CardLayout) pnlCenter.getLayout();
 				cl.show(pnlCenter, "gameField");
+				activeCenterView = "gameField";
 				btnContinue.getParent().add(btnValidate);
 				btnContinue.getParent().remove(btnContinue);
 				enableButtons(true);
@@ -771,6 +790,7 @@ public class GuiWindow {
 				 */
 				if (mistakes == 0) {
 					cl.show(pnlCenter, "won");
+					activeCenterView = "won";
 					swingTimer.stop();
 					btnValidate.setEnabled(false);
 					txtWonMsg
@@ -789,6 +809,7 @@ public class GuiWindow {
 								+ " mistakes left");
 					}
 					cl.show(pnlCenter, "lost");
+					activeCenterView = "lost";
 					btnValidate.getParent().add(btnContinue);
 					btnValidate.getParent().remove(btnValidate);
 				}
@@ -800,7 +821,14 @@ public class GuiWindow {
 			 * Info-Button
 			 */
 			else if (e.getSource() == btnInfo) {
-				controller.initWindowHelp();
+				CardLayout cl = (CardLayout) pnlCenter.getLayout();
+				cl.show(pnlCenter, "help");
+				enableButtons(false);
+				btnUndo.setEnabled(false);
+				btnRedo.setEnabled(false);
+				btnValidate.setEnabled(false);
+				btnContinue.setEnabled(false);
+				//controller.initWindowHelp();
 			}
 			/*
 			 * LanguageEN-Button

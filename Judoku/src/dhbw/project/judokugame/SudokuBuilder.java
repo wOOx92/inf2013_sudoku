@@ -640,9 +640,10 @@ public class SudokuBuilder {
 		 * Skip filled cells by increasing the x value and making a recursive
 		 * call
 		 */
-		if (sudoku[x][y] != 0)
+		if (sudoku[x][y] != 0) {
 			return checkSolutions(x + 1, y, sudoku, solutionsFound,
 					maxRecursionDepth--);
+		}
 
 		/*
 		 * Fill every legal value from 1 to 9 in the cell and try to find
