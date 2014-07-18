@@ -20,17 +20,6 @@ public class Controller {
 	public static void main(String[] args) {
 		Controller c = new Controller();
 		c.initGui();
-		
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					WindowHelp frame = new WindowHelp();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
 	}
 
 	/**
@@ -44,6 +33,19 @@ public class Controller {
 					GUI_Window window = new GUI_Window(Controller.this);
 					linkedGuiWindow = window;
 					window.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
+	public void initWindowHelp() {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					WindowHelp frame = new WindowHelp();
+					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

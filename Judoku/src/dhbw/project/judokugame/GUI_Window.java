@@ -692,9 +692,7 @@ public class GUI_Window {
 				btnUndo.setEnabled(false);
 				btnRedo.setEnabled(false);
 			} else if (e.getSource() == btnInfo) {
-				/*
-				 * 
-				 */
+				controller.initWindowHelp();
 			}
 			else if (e.getSource() == btnLangENG) {
 				for (int i = 0; i < 81; i++) {

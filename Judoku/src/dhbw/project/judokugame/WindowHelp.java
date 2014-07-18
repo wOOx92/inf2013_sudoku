@@ -36,7 +36,7 @@ public class WindowHelp extends JFrame {
 	 * Create the frame.
 	 */
 	public WindowHelp() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -70,13 +70,9 @@ public class WindowHelp extends JFrame {
 		txtCenterText = new JTextPane();
 		txtCenterText.setContentType("text/html");
 		txtCenterText.setBackground(contentPane.getBackground());
-		contentPane.add(txtCenterText, BorderLayout.CENTER);
-		
-		
-		
-		
-		
+		contentPane.add(txtCenterText, BorderLayout.CENTER);			
 	}
+	
 	
 	class WindowHelpButtonListener implements ActionListener {
 		@Override
