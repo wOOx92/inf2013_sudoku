@@ -19,7 +19,7 @@ public enum Difficulty {
 	 * The value of the recursion depth will directly influence the amount of
 	 * clues cut out by "cut-and-test-backtracking". The higher the value, the
 	 * more cutting can be done. Tests show that a recursion depth up to 30
-	 * yield a appropriate time.
+	 * yield an appropriate time.
 	 * 
 	 * @return The positive integer that is used as an upper limit for the
 	 *         recursion depth.
@@ -31,6 +31,6 @@ public enum Difficulty {
 		if (this == MEDIUM) {
 			return 11;
 		}
-		return 28;
+		return 29;
 	}
 }

@@ -31,11 +31,6 @@ public class Sudoku implements NumberPuzzle {
 	public final static int UNDOLIMIT = 5;
 
 	/**
-	 * The difficulty rating of the Sudoku.
-	 */
-	public final Difficulty DIFFICULTY;
-
-	/**
 	 * The solution of the Sudoku.
 	 */
 	private final int[][] solvedGrid;
@@ -71,7 +66,6 @@ public class Sudoku implements NumberPuzzle {
 	 *            The estimated difficulty.
 	 */
 	public Sudoku(int[][] sudokuGrid, int[][] solvedGrid, Difficulty diff) {
-		this.DIFFICULTY = diff;
 		this.startGrid = sudokuGrid;
 		/*
 		 * Never assign one of the grid fields to another one without making a
@@ -133,16 +127,9 @@ public class Sudoku implements NumberPuzzle {
 		return true;
 	}
 
-	/**
-	 * Resets the Sudoku to its initial state. Calling {@link Sudoku#undo()}
-	 * after a reset is possible.
-	 */
 	public void reset() {
-		/*
-		 * Save a copy of the recentGrid for an possible undo()-call later
-		 */
-		undoStorage.push(SudokuBuilder.deepCopy(recentGrid));
-		limitStack(undoStorage);
+		undoStorage.clear();
+		redoStorage.clear();
 
 		/*
 		 * Set the recentGrid to the startGrid (initial state).
@@ -152,36 +139,44 @@ public class Sudoku implements NumberPuzzle {
 	}
 
 	public void setValue(int x, int y, int val) {
+		/*
+		 * Save the recentState to the undo storage (so undo() can be called on
+		 * this action).
+		 */
 		undoStorage.push(SudokuBuilder.deepCopy(recentGrid));
 		limitStack(undoStorage);
+
 		this.recentGrid[y][x] = val;
+
+		/*
+		 * Redos should only be possible directly after undos, so the stack
+		 * needs to be emptied.
+		 */
 		redoStorage.clear();
 	}
 
-	/**
-	 * @return The initial grid of the Sudoku.
-	 */
 	public int[][] getStartGrid() {
 		return this.startGrid;
 	}
 
-	/**
-	 * @return The recent grid of the Sudoku.
-	 */
 	public int[][] getRecentGrid() {
 		return this.recentGrid;
 	}
 
-	/**
-	 * @return The solution of the Sudoku.
-	 */
 	public int[][] getSolvedGird() {
 		return this.solvedGrid;
 	}
 
 	public int[] searchMistake() {
+		/*
+		 * For each cell in the Sudoku
+		 */
 		for (int x = 0; x < SIZE; x++) {
 			for (int y = 0; y < SIZE; y++) {
+				/*
+				 * If the cell in the recentGrid is not equal to the
+				 * corresponding cell in the solution, this is a mistake.
+				 */
 				if (this.recentGrid[y][x] != 0
 						&& this.recentGrid[y][x] != this.solvedGrid[y][x]) {
 					int[] mistake = new int[2];
@@ -192,25 +187,53 @@ public class Sudoku implements NumberPuzzle {
 			}
 		}
 
-		// No mistake found
+		/*
+		 * No mistakes have been found, so an empty array is returned.
+		 */
 		return new int[0];
 	}
 
 	public void giveHint() {
+		/*
+		 * Get the number of filled cells and check if there are any empty cells
+		 * left to give hints in.
+		 */
+		int clues = SudokuBuilder.getNumberOfClues(recentGrid);
+		if (clues == Sudoku.SIZE * Sudoku.SIZE) {
+			return;
+		}
+
+		/*
+		 * Save the recent state so undo() can be called on this action.
+		 */
 		undoStorage.push(SudokuBuilder.deepCopy(recentGrid));
+
+		/*
+		 * Try to find a random empty cell to write the hint in. If for 30
+		 * iterations there was no empty cell stop trying at random.
+		 */
 		Random prng = new Random();
 		int iter = 0;
-		int clues = SudokuBuilder.getNumberOfClues(recentGrid);
-		while (clues < Sudoku.SIZE * Sudoku.SIZE && iter < 30) {
+		while (iter < 30) {
 			int x = prng.nextInt(SIZE);
 			int y = prng.nextInt(SIZE);
+
+			/*
+			 * If the cell is empty, give the hint and end the loop.
+			 */
 			if (recentGrid[y][x] == 0) {
 				recentGrid[y][x] = solvedGrid[y][x];
-				iter = 99;
+				iter = -1;
+				break;
 			}
 			iter++;
 		}
-		if (iter != 100 && clues < 81) {
+
+		/*
+		 * If the first loop did not manage to find an empty cell, go through
+		 * the Sudoku once more and give the hint in the first empty cell found.
+		 */
+		if (iter != -1) {
 			outer: for (int y = 0; y < Sudoku.SIZE; y++) {
 				for (int x = 0; x < Sudoku.SIZE; x++) {
 					if (recentGrid[y][x] == 0) {
@@ -225,6 +248,10 @@ public class Sudoku implements NumberPuzzle {
 
 	public void undo() {
 		if (!undoStorage.empty()) {
+			/*
+			 * Save the recentState for a redo() call and take latest state on
+			 * the undo stack as the new state.
+			 */
 			redoStorage.push(SudokuBuilder.deepCopy(recentGrid));
 			limitStack(redoStorage);
 			recentGrid = undoStorage.pop();
@@ -233,6 +260,10 @@ public class Sudoku implements NumberPuzzle {
 
 	public void redo() {
 		if (!redoStorage.empty()) {
+			/*
+			 * Save the recentState for an undo() call and take the latest state
+			 * on the redo stack as the new state.
+			 */
 			undoStorage.push(SudokuBuilder.deepCopy(recentGrid));
 			limitStack(undoStorage);
 			recentGrid = redoStorage.pop();
@@ -240,9 +271,27 @@ public class Sudoku implements NumberPuzzle {
 	}
 
 	private void limitStack(Stack<?> undoRedoStack) {
+		/*
+		 * If the given Stack has reached the defined limit, remove the oldest
+		 * element.
+		 */
 		if (undoRedoStack.size() > UNDOLIMIT) {
-
 			undoRedoStack.remove(0);
 		}
+	}
+
+	public boolean undoPossible() {
+		if (!undoStorage.isEmpty()) {
+			return true;
+		}
+		return false;
+
+	}
+
+	public boolean redoPossible() {
+		if (!redoStorage.isEmpty()) {
+			return true;
+		}
+		return false;
 	}
 }

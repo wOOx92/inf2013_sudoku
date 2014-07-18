@@ -107,6 +107,10 @@ public class Controller {
 			return false;
 		}
 		
+		if(val == puzzle.getRecentGrid()[y][x]){
+			return true;
+		}
+		
 		puzzle.setValue(x, y, val);
 		return true;
 	}
