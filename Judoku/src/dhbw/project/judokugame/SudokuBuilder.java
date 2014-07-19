@@ -18,23 +18,23 @@ public class SudokuBuilder {
 	/**
 	 * This is the Solution of the Sudoku that will be generated
 	 */
-	private int[][] solvedGrid;
+	protected int[][] solvedGrid;
 
 	/**
 	 * This is the Sudoku grid that will be cut and minimized and will become
 	 * the start grid of the new Sudoku
 	 */
-	private int[][] sudokuGridStorage;
+	protected int[][] sudokuGridStorage;
 
 	/**
 	 * This is the Random Number Generator that generates every random variable
 	 * needed during the generating process.
 	 */
-	private Random prng;
+	protected Random prng;
 	
-	private int carreeSize;
+	protected int carreeSize;
 	
-	private int sudokuSize;
+	protected int sudokuSize;
 
 	/**
 	 * Builds a Sudoku object of the desired difficulty.
@@ -111,9 +111,10 @@ public class SudokuBuilder {
 		doRandomCutting(diff);
 
 		/*
-		 * If the desired Difficulty is EASY, add 5 additional clues.
+		 * If the desired Difficulty is EASY, add additional clues (only needed
+		 * for classic 9x9 Sudokus)
 		 */
-		if (diff == Difficulty.EASY) {
+		if (diff == Difficulty.EASY && this.sudokuSize == 9) {
 			addRandomClues(this.carreeSize+1);
 		}
 
@@ -127,7 +128,7 @@ public class SudokuBuilder {
 	 *            The (P)RNG used to generate the grid.
 	 * @return A completely and correctly filled Sudoku grid.
 	 */
-	private int[][] generateSolvedGrid() {
+	protected int[][] generateSolvedGrid() {
 		int[][] solvedGrid = new int[this.sudokuSize][this.sudokuSize];
 
 		/*
@@ -164,7 +165,7 @@ public class SudokuBuilder {
 	 * 
 	 * @return True if a solution was found, false if not.
 	 */
-	private boolean solve(int y, int x, int[][] sudoku) {
+	protected boolean solve(int y, int x, int[][] sudoku) {
 		/*
 		 * If the algorithm finished recursing through the x-th column, increase
 		 * the column index and reset y.
@@ -269,7 +270,7 @@ public class SudokuBuilder {
 	 * @param number
 	 *            The number of clues that should be removed.
 	 */
-	private void removeRandomElements(int number) {
+	protected void removeRandomElements(int number) {
 		if (Sudoku.getNumberOfClues(sudokuGridStorage) < number) {
 			return;
 		}
@@ -287,7 +288,7 @@ public class SudokuBuilder {
 	/**
 	 * Cuts one element from every complete row, column or carree in the Sudoku.
 	 */
-	private void cutCompleteStructures() {
+	protected void cutCompleteStructures() {
 		/*
 		 * Check the completeness of every row.
 		 */
@@ -368,7 +369,7 @@ public class SudokuBuilder {
 	 * if only this value is legal in the resulting empty cell.
 	 * 
 	 */
-	private void cutDeductively() {
+	protected void cutDeductively() {
 		/*
 		 * For each cell in the Sudoku
 		 */
@@ -400,7 +401,7 @@ public class SudokuBuilder {
 	 * or carree as the cell.
 	 * 
 	 */
-	private void cutWithNeighborRule() {
+	protected void cutWithNeighborRule() {
 		/*
 		 * Use the row, column and carree neighborRule for each cell in the
 		 * Sudoku grid.
@@ -600,7 +601,7 @@ public class SudokuBuilder {
 	 *            The difficulty determines the maximum number of clues that get
 	 *            cut out by this.
 	 */
-	private void doRandomCutting(Difficulty diff) {
+	protected void doRandomCutting(Difficulty diff) {
 		for (int x = 0; x < this.sudokuSize; x++) {
 			for (int y = 0; y < this.sudokuSize; y++) {
 				if (sudokuGridStorage[y][x] != 0) {
@@ -637,7 +638,7 @@ public class SudokuBuilder {
 	 * @return True if only one solution exists, false if there are none or
 	 *         multiple solutions.
 	 */
-	private boolean hasUniqueSolution(int[][] sudoku,
+	protected boolean hasUniqueSolution(int[][] sudoku,
 			int maxRecursionDepth) {
 		/*
 		 * The grid will get filled, so make a copy and check that copy, so that
@@ -730,7 +731,7 @@ public class SudokuBuilder {
 	 * @param add
 	 *            The number of clues that should be added.
 	 */
-	private void addRandomClues(int add) {
+	protected void addRandomClues(int add) {
 		int clues = Sudoku.getNumberOfClues(sudokuGridStorage);
 		/*
 		 * If clues + i is equal the SIZE*SIZE, this means there are no empty

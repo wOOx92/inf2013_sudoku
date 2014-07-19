@@ -100,7 +100,7 @@ public class GuiWindow {
 		frame = new JFrame();
 		frame.setBounds(150, 150, 585, 800);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setMinimumSize(new Dimension(465, 635));
+		frame.setMinimumSize(new Dimension(520, 685));
 		frame.setLayout(new BorderLayout(10, 10));
 		frame.setTitle("Judoku");
 		ImageIcon windowIcon = new ImageIcon(getClass().getClassLoader()
@@ -307,6 +307,11 @@ public class GuiWindow {
 		pane.setLayout(new GridLayout(puzzleSize, puzzleSize, 2, 2));
 		gameField = new JudokuJTextField[puzzleSize][puzzleSize];
 		
+		int fontSize = 38;
+		if(puzzleSize == 16) {
+			fontSize = 28;
+		}
+		
 		int xPosition = 10;
 		int yPosition = 10;
 		final int width = 37;
@@ -332,7 +337,7 @@ public class GuiWindow {
 				 * Format the JTextFields
 				 */
 				gameField[y][x].setColumns(10);
-				gameField[y][x].setFont(new Font("Arial", Font.BOLD, 38));
+				gameField[y][x].setFont(new Font("Arial", Font.BOLD, fontSize));
 				gameField[y][x].setHorizontalAlignment(JTextField.CENTER);
 				gameField[y][x].setBounds(xPosition, yPosition, width, height);
 				gameField[y][x].setInitialColor(active);
@@ -374,11 +379,8 @@ public class GuiWindow {
 				}
 			}
 			xPosition = xPosition + 38;
-		}
-		
-		Dimension size = frame.getSize();
-		frame.setSize(new Dimension(size.height, size.width+1));
-		frame.setSize(size);
+		}	
+		frame.setVisible(true);
 	}
 
 	/**

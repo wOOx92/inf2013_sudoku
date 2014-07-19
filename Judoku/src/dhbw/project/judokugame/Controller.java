@@ -2,6 +2,8 @@ package dhbw.project.judokugame;
 
 import java.awt.EventQueue;
 
+import dhbw.project.judoku.junitest.SudokuBuilderTest;
+
 /**
  * The Controller evaluates user inputs from the GUI_Window and initializes the
  * necessary actions inside the model (the NumberPuzzle object).
