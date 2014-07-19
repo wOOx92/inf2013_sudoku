@@ -70,21 +70,21 @@ public class Controller {
 		/*
 		 * The value must be between 0 and 9.
 		 */
-		if (val < 0 || val > Sudoku.SIZE) {
+		if (val < 0 || val > puzzle.getSize()) {
 			return false;
 		}
 
 		/*
 		 * The x-coordinate must be between 0 and 9.
 		 */
-		if (x < 0 || x >= Sudoku.SIZE) {
+		if (x < 0 || x >= puzzle.getSize()) {
 			return false;
 		}
 
 		/*
 		 * The y-coordinate must be between 0 and 9.
 		 */
-		if (y < 0 || y >= Sudoku.SIZE) {
+		if (y < 0 || y >= puzzle.getSize()) {
 			return false;
 		}
 
@@ -119,8 +119,8 @@ public class Controller {
 		/*
 		 * For every field in the NumberPuzzle
 		 */
-		for (int x = 0; x < 9; x++) {
-			for (int y = 0; y < 9; y++) {
+		for (int x = 0; x < puzzle.getSize(); x++) {
+			for (int y = 0; y < puzzle.getSize(); y++) {
 
 				/*
 				 * Check if the user input varies from the actual solution

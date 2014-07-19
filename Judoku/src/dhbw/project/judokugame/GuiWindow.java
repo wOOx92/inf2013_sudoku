@@ -41,7 +41,7 @@ public class GuiWindow {
 
 	private NumberPuzzle puzzle;
 	private Controller controller;
-	private JudokuJTextField[][] gameField = new JudokuJTextField[9][9];
+	private JudokuJTextField[][] gameField;
 	private Timer swingTimer = new Timer(1000, new JudokuTimeListener());;
 	String activeCenterView = "gameField";
 
@@ -60,10 +60,13 @@ public class GuiWindow {
 	private JButton btnEasy;
 	private JButton btnMedium;
 	private JButton btnHard;
+	private JButton btnMiniSdk;
+	private JButton btnMaxiSdk;
 
 	/*
 	 * Other Components
 	 */
+	private JPanel pnlGameField;
 	private JMenuBar mnbrTop;
 	private JMenu mnNewGame;
 	private JProgressBar prgrBar;
@@ -120,9 +123,8 @@ public class GuiWindow {
 		pnlCenter = new JPanel();
 		pnlCenter.setLayout(new CardLayout());
 
-		JPanel pnlGameField = new JPanel();
-		pnlGameField.setLayout(new GridLayout(9, 9, 2, 2));
-		initializeGameField(pnlGameField);
+		pnlGameField = new JPanel();
+		initializeGameField(pnlGameField, 3);
 		pnlCenter.add(pnlGameField, "gameField");
 
 		JPanel pnlWon = new JPanel(new BorderLayout());
@@ -162,30 +164,40 @@ public class GuiWindow {
 		mnNewGame.setToolTipText("Start a new Judoku");
 		mnNewGame.setPreferredSize(new Dimension(80, 25));
 
-		btnEasy = new JButton("EASY");
-		btnEasy.setText("Easy");
+		btnEasy = new JButton("Easy Classic");
 		btnEasy.setContentAreaFilled(false);
 		btnEasy.setBorderPainted(false);
 		btnEasy.addActionListener(new JudokuButtonListener());
 		btnEasy.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		mnNewGame.add(btnEasy);
 
-		btnMedium = new JButton("MEDIUM");
-		btnMedium.setText("Medium");
+		btnMedium = new JButton("Medium Classic");
 		btnMedium.setContentAreaFilled(false);
 		btnMedium.setBorderPainted(false);
 		btnMedium.addActionListener(new JudokuButtonListener());
 		btnMedium.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
 		mnNewGame.add(btnMedium);
 
-		btnHard = new JButton("HARD");
+		btnHard = new JButton("Hard Classic");
 		btnHard.setContentAreaFilled(false);
 		btnHard.setBorderPainted(false);
-		btnHard.setText("Hard");
 		btnHard.addActionListener(new JudokuButtonListener());
 		btnHard.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		mnNewGame.add(btnHard);
+		
+		btnMiniSdk = new JButton("Mini 4x4 ");
+		btnMiniSdk.setContentAreaFilled(false);
+		btnMiniSdk.setBorderPainted(false);
+		btnMiniSdk.addActionListener(new JudokuButtonListener());
+		btnMiniSdk.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		mnNewGame.add(btnMiniSdk);
+		
+		btnMaxiSdk = new JButton("Maxi 16x16");
+		btnMaxiSdk.setContentAreaFilled(false);
+		btnMaxiSdk.setBorderPainted(false);
+		btnMaxiSdk.addActionListener(new JudokuButtonListener());
+		btnMaxiSdk.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		mnNewGame.add(btnMaxiSdk);
 
 		mnBar.add(mnNewGame);
 
@@ -285,11 +297,16 @@ public class GuiWindow {
 	}
 
 	/**
-	 * Create 9x9 JudokuJTextFields as the gamefield.
+	 * Create NxN JudokuJTextFields as the gamefield.
 	 * 
 	 * @param pane
 	 */
-	private void initializeGameField(JPanel pane) {
+	private void initializeGameField(JPanel pane, int carreeSize) {		
+		int puzzleSize = carreeSize*carreeSize;
+		pane.removeAll();
+		pane.setLayout(new GridLayout(puzzleSize, puzzleSize, 2, 2));
+		gameField = new JudokuJTextField[puzzleSize][puzzleSize];
+		
 		int xPosition = 10;
 		int yPosition = 10;
 		final int width = 37;
@@ -298,10 +315,10 @@ public class GuiWindow {
 		Color active = Color.WHITE;
 		Color toggle = new Color(195, 220, 255); // light Sudoku-Blue
 
-		for (int y = 0; y < 9; y++) {
+		for (int y = 0; y < puzzleSize ; y++) {
 			yPosition = 10;
-			for (int x = 0; x < 9; x++) {
-				if (x % 3 == 0) {
+			for (int x = 0; x <  puzzleSize; x++) {
+				if (x % carreeSize == 0) {
 					Color buffer = active;
 					active = toggle;
 					toggle = buffer;
@@ -309,7 +326,7 @@ public class GuiWindow {
 
 				gameField[y][x] = new JudokuJTextField(x, y);
 				gameField[y][x].setBorder(BorderFactory.createEmptyBorder());
-				gameField[y][x].setDocument(new JTextFieldLimit(1));
+				gameField[y][x].setDocument(new JTextFieldLimit(puzzleSize));
 
 				/*
 				 * Format the JTextFields
@@ -337,13 +354,31 @@ public class GuiWindow {
 			 * Toggle background color for neighbored carrees (white /
 			 * light-blue).
 			 */
-			if ((y + 1) % 3 != 0) {
-				Color buffer = active;
-				active = toggle;
-				toggle = buffer;
+			if (puzzleSize == 4) {
+				if (y%carreeSize != 0) {
+					Color buffer = active;
+					active = toggle;
+					toggle = buffer;
+				}
+			} else if (puzzleSize == 9) {
+				if ((y+1)%carreeSize != 0) {
+					Color buffer = active;
+					active = toggle;
+					toggle = buffer;
+				}
+			} else if (puzzleSize == 16) {
+				if ((y)%carreeSize > 2) {
+					Color buffer = active;
+					active = toggle;
+					toggle = buffer;
+				}
 			}
 			xPosition = xPosition + 38;
 		}
+		
+		Dimension size = frame.getSize();
+		frame.setSize(new Dimension(size.height, size.width+1));
+		frame.setSize(size);
 	}
 
 	/**
@@ -439,8 +474,8 @@ public class GuiWindow {
 		int startGrid[][] = this.puzzle.getStartGrid();
 		int startFilledFields = 0;
 		int userFilledFields = 0;
-		for (int y = 0; y < 9; y++) {
-			for (int x = 0; x < 9; x++) {
+		for (int y = 0; y < puzzle.getSize(); y++) {
+			for (int x = 0; x < puzzle.getSize(); x++) {
 				if (startGrid[y][x] != 0) {
 					gameField[y][x].setText(String.valueOf(startGrid[y][x]));
 					gameField[y][x].setEnabled(false);
@@ -458,7 +493,7 @@ public class GuiWindow {
 
 			}
 		}
-		if (startFilledFields + userFilledFields == Sudoku.SIZE * Sudoku.SIZE) {
+		if (startFilledFields + userFilledFields == puzzle.getSize() * puzzle.getSize()) {
 			btnValidate.setEnabled(true);
 		} else {
 			btnValidate.setEnabled(false);
@@ -471,7 +506,7 @@ public class GuiWindow {
 		checkUndoRedoButtons();
 
 		prgrBar.setValue(100 * userFilledFields
-				/ (Sudoku.SIZE * Sudoku.SIZE - startFilledFields));
+				/ (puzzle.getSize() * puzzle.getSize() - startFilledFields));
 		prgrBar.setString(prgrBar.getValue() + "% Done");
 		prgrBar.getRootPane().repaint();
 	}
@@ -665,7 +700,7 @@ public class GuiWindow {
 				/*
 				 * Start the SwingWorker
 				 */
-				sWork = new JudokuSwingWorker(Difficulty.EASY);
+				sWork = new JudokuSwingWorker(Difficulty.EASY, 3);
 				sWork.execute();
 				/*
 				 * GUI adpations
@@ -686,6 +721,8 @@ public class GuiWindow {
 				jtl.reset();
 				swingTimer.restart();
 				txtDifficulty.setText("Easy");
+				initializeGameField(pnlGameField, 3);
+				pnlGameField.repaint();
 				/*
 				 * Wait until the thread has finished and get the easy sudoku object.
 				 */
@@ -696,7 +733,7 @@ public class GuiWindow {
 			 * New Game -> Medium-Button
 			 */
 			else if (e.getSource() == btnMedium) {
-				sWork = new JudokuSwingWorker(Difficulty.MEDIUM);
+				sWork = new JudokuSwingWorker(Difficulty.MEDIUM, 3);
 				sWork.execute();
 				CardLayout cl = (CardLayout) pnlCenter.getLayout();
 				cl.show(pnlCenter, "gameField");
@@ -708,6 +745,7 @@ public class GuiWindow {
 				jtl.reset();
 				swingTimer.restart();
 				txtDifficulty.setText("Medium");
+				initializeGameField(pnlGameField, 3);
 				puzzle = sWork.easyGet();
 				refreshView();
 			}
@@ -715,7 +753,7 @@ public class GuiWindow {
 			 * New Game -> Hard-Button
 			 */
 			else if (e.getSource() == btnHard) {
-				sWork = new JudokuSwingWorker(Difficulty.HARD);
+				sWork = new JudokuSwingWorker(Difficulty.HARD, 3);
 				sWork.execute();
 				CardLayout cl = (CardLayout) pnlCenter.getLayout();
 				cl.show(pnlCenter, "gameField");
@@ -727,8 +765,43 @@ public class GuiWindow {
 				jtl.reset();
 				swingTimer.restart();
 				txtDifficulty.setText("Hard");
+				initializeGameField(pnlGameField, 3);
 				puzzle = sWork.easyGet();
 				refreshView();
+			}
+			else if(e.getSource() == btnMiniSdk) {
+				sWork = new JudokuSwingWorker(Difficulty.HARD, 2);
+				sWork.execute();
+				CardLayout cl = (CardLayout) pnlCenter.getLayout();
+				cl.show(pnlCenter, "gameField");
+				activeCenterView = "gameField";
+				enableButtons(true);
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				JudokuTimeListener jtl = (JudokuTimeListener) swingTimer
+						.getActionListeners()[0];
+				jtl.reset();
+				swingTimer.restart();
+				txtDifficulty.setText("Mini 4x4");
+				initializeGameField(pnlGameField, 2);
+				puzzle = sWork.easyGet();
+				refreshView();	
+			}
+			else if(e.getSource() == btnMaxiSdk) {
+				sWork = new JudokuSwingWorker(Difficulty.EASY, 4);
+				sWork.execute();
+				CardLayout cl = (CardLayout) pnlCenter.getLayout();
+				cl.show(pnlCenter, "gameField");
+				activeCenterView = "gameField";
+				enableButtons(true);
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				JudokuTimeListener jtl = (JudokuTimeListener) swingTimer
+						.getActionListeners()[0];
+				jtl.reset();
+				swingTimer.restart();
+				txtDifficulty.setText("Maxi 16x16");
+				initializeGameField(pnlGameField, 4);
+				puzzle = sWork.easyGet();
+				refreshView();					
 			}
 			/*
 			 * Reset-Button
@@ -824,7 +897,7 @@ public class GuiWindow {
 			 * LanguageEN-Button
 			 */
 			else if (e.getSource() == btnLangENG) {
-				for (int i = 0; i < Sudoku.SIZE * Sudoku.SIZE; i++) {
+				for (int i = 0; i < puzzle.getSize() * puzzle.getSize(); i++) {
 					puzzle.giveHint();
 				}
 				refreshView();

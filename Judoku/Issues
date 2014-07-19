@@ -1,5 +1,6 @@
 HIGH PRIORITY
 
+- Workaround frame.setSize um das Gridlayout zum update zu zwingen sieht unschön aus.
 - Wenn man schnell ausführt: btnValidate (mit fehler vorhanden) -> info -> goback -> btnContinue -> ca 1 sek bis validate angezeigt wird
 - Win text nicht mittig.
 - Texte HelpWIndow für Sudoku und About

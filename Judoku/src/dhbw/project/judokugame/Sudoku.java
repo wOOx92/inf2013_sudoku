@@ -17,13 +17,13 @@ public class Sudoku implements NumberPuzzle {
 	/**
 	 * This field is the side-length of a carree in a Sudoku.
 	 */
-	public final static int CARREE_SIZE = 3;
+	public final int CARREE_SIZE;
 
 	/**
 	 * The side-length of a Sudoku grid.
 	 */
-	public final static int SIZE = 9;
-
+	public final int SIZE;
+			
 	/**
 	 * The maximum number of steps a user can use {@link Sudoku#undo()} and
 	 * {@link Sudoku#undo()}.
@@ -66,6 +66,9 @@ public class Sudoku implements NumberPuzzle {
 	 *            The estimated difficulty.
 	 */
 	public Sudoku(int[][] sudokuGrid, int[][] solvedGrid, Difficulty diff) {
+		SIZE = solvedGrid.length;
+		CARREE_SIZE = (int)Math.sqrt(solvedGrid.length);
+		
 		this.startGrid = sudokuGrid;
 		/*
 		 * Never assign one of the grid fields to another one without making a
@@ -77,57 +80,6 @@ public class Sudoku implements NumberPuzzle {
 	}
 
 	/**
-	 * Checks whether it is possible to place a given value in a certain cell in
-	 * an Sudoku grid, or if this value already exists in the cells row, column
-	 * or carree.
-	 * 
-	 * @param y
-	 *            The y-Value of the cell.
-	 * @param x
-	 *            The x-Value of the cell.
-	 * @param val
-	 *            The integer value to be placed
-	 * @param sudoku
-	 *            The 9x9 array grid representing the Sudoku.
-	 * @return true, if it is possible to place the value in the cell, false
-	 *         otherwise.
-	 */
-	public static boolean legal(int y, int x, int val, int[][] sudoku) {
-		/*
-		 * Check the cells row for violations
-		 */
-		for (int i = 0; i < Sudoku.SIZE; ++i) {
-			if (val == sudoku[i][x]) {
-				return false;
-			}
-		}
-
-		/*
-		 * Check the cells column for violations
-		 */
-		for (int i = 0; i < Sudoku.SIZE; ++i) {
-			if (val == sudoku[y][i]) {
-				return false;
-			}
-		}
-
-		/*
-		 * Calculate the where the carre starts and check the cells carree for
-		 * violations.
-		 */
-		int yOffset = (y / Sudoku.CARREE_SIZE) * Sudoku.CARREE_SIZE;
-		int xOffset = (x / Sudoku.CARREE_SIZE) * Sudoku.CARREE_SIZE;
-		for (int i = 0; i < Sudoku.CARREE_SIZE; i++) {
-			for (int k = 0; k < Sudoku.CARREE_SIZE; k++) {
-				if (val == sudoku[yOffset + i][xOffset + k]) {
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-
-	/**
 	 * Calculates the number of clues in a Sudoku grid.
 	 * 
 	 * @param sudoku
@@ -136,8 +88,8 @@ public class Sudoku implements NumberPuzzle {
 	 */
 	public static int getNumberOfClues(int[][] sudoku) {
 		int clues = 0;
-		for (int x = 0; x < 9; x++) {
-			for (int y = 0; y < 9; y++) {
+		for (int x = 0; x < sudoku.length; x++) {
+			for (int y = 0; y < sudoku.length; y++) {
 				if (sudoku[y][x] != 0) {
 					clues++;
 				}
@@ -173,7 +125,15 @@ public class Sudoku implements NumberPuzzle {
 		 */
 		redoStorage.clear();
 	}
-
+	
+	public int getSize() {
+		return this.SIZE;
+	}
+	
+	public int getCarreeSize() {
+		return this.CARREE_SIZE;
+	}
+	
 	public int[][] getStartGrid() {
 		return this.startGrid;
 	}
@@ -218,7 +178,7 @@ public class Sudoku implements NumberPuzzle {
 		 * left to give hints in.
 		 */
 		int clues = Sudoku.getNumberOfClues(recentGrid);
-		if (clues == Sudoku.SIZE * Sudoku.SIZE) {
+		if (clues == this.SIZE * this.SIZE) {
 			return;
 		}
 
@@ -254,8 +214,8 @@ public class Sudoku implements NumberPuzzle {
 		 * the Sudoku once more and give the hint in the first empty cell found.
 		 */
 		if (i != -1) {
-			outer: for (int y = 0; y < Sudoku.SIZE; y++) {
-				for (int x = 0; x < Sudoku.SIZE; x++) {
+			outer: for (int y = 0; y < this.SIZE; y++) {
+				for (int x = 0; x < this.SIZE; x++) {
 					if (recentGrid[y][x] == 0) {
 						recentGrid[y][x] = solvedGrid[y][x];
 						break outer;

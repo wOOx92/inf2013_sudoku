@@ -1,4 +1,6 @@
 package dhbw.project.judokugame;
+import java.util.HashSet;
+
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
@@ -7,16 +9,15 @@ class JTextFieldLimit extends PlainDocument {
   
   private static final long serialVersionUID = 0l;
   
-  private int limit;
+  private HashSet<String> allowedValues = new HashSet<>();
+  
   
   JTextFieldLimit(int limit) {
     super();
-    this.limit = limit;
-  }
-
-  JTextFieldLimit(int limit, boolean upper) {
-    super();
-    this.limit = limit;
+    
+    for(int i = 1; i <= limit; i++){
+    	allowedValues.add(String.valueOf(i));
+    }
   }
 
   @Override
@@ -24,7 +25,7 @@ class JTextFieldLimit extends PlainDocument {
     if (str == null || str.equals("0"))
       return;
 
-    if ((getLength() + str.length()) <= limit) {
+    if (allowedValues.contains(str)) {
       super.insertString(offset, str, attr);
     }
   }

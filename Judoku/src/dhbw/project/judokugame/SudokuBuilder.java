@@ -31,6 +31,10 @@ public class SudokuBuilder {
 	 * needed during the generating process.
 	 */
 	private Random prng;
+	
+	private int carreeSize;
+	
+	private int sudokuSize;
 
 	/**
 	 * Builds a Sudoku object of the desired difficulty.
@@ -39,7 +43,9 @@ public class SudokuBuilder {
 	 *            The desired difficulty.
 	 * @return A playable Sudoku.
 	 */
-	public Sudoku newSudoku(Difficulty diff) {
+	public Sudoku newSudoku(Difficulty diff, int carreeSize) {
+		this.carreeSize = carreeSize;
+		this.sudokuSize = carreeSize*carreeSize;	
 		/*
 		 * Since no seed was specified, a random seed is generated.
 		 */
@@ -108,7 +114,7 @@ public class SudokuBuilder {
 		 * If the desired Difficulty is EASY, add 5 additional clues.
 		 */
 		if (diff == Difficulty.EASY) {
-			addRandomClues(5);
+			addRandomClues(this.carreeSize+1);
 		}
 
 		return new Sudoku(sudokuGridStorage, solvedGrid, diff);
@@ -122,18 +128,18 @@ public class SudokuBuilder {
 	 * @return A completely and correctly filled Sudoku grid.
 	 */
 	private int[][] generateSolvedGrid() {
-		int[][] solvedGrid = new int[Sudoku.SIZE][Sudoku.SIZE];
+		int[][] solvedGrid = new int[this.sudokuSize][this.sudokuSize];
 
 		/*
 		 * Step 1: Place the number 1 to 8 randomly in an empty grid. Placing
 		 * the number 9 could possible result in an unsolvable Sudoku.
 		 */
-		for (int i = 1; i <= 8; i++) {
-			int x = prng.nextInt(Sudoku.SIZE);
-			int y = prng.nextInt(Sudoku.SIZE);
+		for (int i = 1; i < this.sudokuSize; i++) {
+			int x = prng.nextInt(this.sudokuSize);
+			int y = prng.nextInt(this.sudokuSize);
 			while (solvedGrid[y][x] != 0) {
-				x = prng.nextInt(Sudoku.SIZE);
-				y = prng.nextInt(Sudoku.SIZE);
+				x = prng.nextInt(this.sudokuSize);
+				y = prng.nextInt(this.sudokuSize);
 			}
 			solvedGrid[y][x] = i;
 		}
@@ -158,14 +164,14 @@ public class SudokuBuilder {
 	 * 
 	 * @return True if a solution was found, false if not.
 	 */
-	private static boolean solve(int y, int x, int[][] sudoku) {
+	private boolean solve(int y, int x, int[][] sudoku) {
 		/*
 		 * If the algorithm finished recursing through the x-th column, increase
 		 * the column index and reset y.
 		 */
-		if (y == 9) {
+		if (y == this.sudokuSize) {
 			y = 0;
-			if (++x == 9) {
+			if (++x == this.sudokuSize) {
 				/*
 				 * If all columns have been finished (the recursion filled every
 				 * field in the Sudoku), a solution has been found
@@ -185,8 +191,8 @@ public class SudokuBuilder {
 		 * Try to set every possible value (if it is legal) in the cell and
 		 * solve the resulting Sudokus.
 		 */
-		for (int val = 1; val <= 9; ++val) {
-			if (Sudoku.legal(y, x, val, sudoku)) {
+		for (int val = 1; val <= this.sudokuSize; ++val) {
+			if (legal(y, x, val, sudoku)) {
 				sudoku[y][x] = val;
 				if (solve(y + 1, x, sudoku)) {
 					/*
@@ -205,6 +211,57 @@ public class SudokuBuilder {
 	}
 
 	/**
+	 * Checks whether it is possible to place a given value in a certain cell in
+	 * an Sudoku grid, or if this value already exists in the cells row, column
+	 * or carree.
+	 * 
+	 * @param y
+	 *            The y-Value of the cell.
+	 * @param x
+	 *            The x-Value of the cell.
+	 * @param val
+	 *            The integer value to be placed
+	 * @param sudoku
+	 *            The 9x9 array grid representing the Sudoku.
+	 * @return true, if it is possible to place the value in the cell, false
+	 *         otherwise.
+	 */
+	public boolean legal(int y, int x, int val, int[][] sudoku) {
+		/*
+		 * Check the cells row for violations
+		 */
+		for (int i = 0; i < this.sudokuSize; ++i) {
+			if (val == sudoku[i][x]) {
+				return false;
+			}
+		}
+
+		/*
+		 * Check the cells column for violations
+		 */
+		for (int i = 0; i < this.sudokuSize; ++i) {
+			if (val == sudoku[y][i]) {
+				return false;
+			}
+		}
+
+		/*
+		 * Calculate the where the carre starts and check the cells carree for
+		 * violations.
+		 */
+		int yOffset = (y / this.carreeSize) * this.carreeSize;
+		int xOffset = (x / this.carreeSize) * this.carreeSize;
+		for (int i = 0; i < this.carreeSize; i++) {
+			for (int k = 0; k < this.carreeSize; k++) {
+				if (val == sudoku[yOffset + i][xOffset + k]) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	/**
 	 * Tries to remove a number of random elements from a Sudoku grid. If the
 	 * grid has less elements than the number of elements that should be
 	 * removed, the method does nothing.
@@ -218,8 +275,8 @@ public class SudokuBuilder {
 		}
 
 		for (int i = 0; i < number; i++) {
-			int x = prng.nextInt(Sudoku.SIZE);
-			int y = prng.nextInt(Sudoku.SIZE);
+			int x = prng.nextInt(this.sudokuSize);
+			int y = prng.nextInt(this.sudokuSize);
 			if (sudokuGridStorage[y][x] != 0) {
 				sudokuGridStorage[y][x] = 0;
 				i++;
@@ -234,12 +291,12 @@ public class SudokuBuilder {
 		/*
 		 * Check the completeness of every row.
 		 */
-		for (int i = 0; i < Sudoku.SIZE; i++) {
+		for (int i = 0; i < this.sudokuSize; i++) {
 			boolean lineComplete = true;
 			/*
 			 * Check the completeness of the i-th row.
 			 */
-			for (int e = 0; e < Sudoku.SIZE; e++) {
+			for (int e = 0; e < this.sudokuSize; e++) {
 				if (sudokuGridStorage[i][e] == 0) {
 					lineComplete = false;
 					break;
@@ -249,7 +306,7 @@ public class SudokuBuilder {
 			 * If it was complete, cut a random clue out.
 			 */
 			if (lineComplete) {
-				int x = prng.nextInt(Sudoku.SIZE);
+				int x = prng.nextInt(this.sudokuSize);
 				sudokuGridStorage[i][x] = 0;
 			}
 		}
@@ -257,12 +314,12 @@ public class SudokuBuilder {
 		/*
 		 * Check the completeness of every column.
 		 */
-		for (int i = 0; i < Sudoku.SIZE; i++) {
+		for (int i = 0; i < this.sudokuSize; i++) {
 			boolean columnComplete = true;
 			/*
 			 * Check the completeness of the i-th column.
 			 */
-			for (int e = 0; e < Sudoku.SIZE; e++) {
+			for (int e = 0; e < this.sudokuSize; e++) {
 				if (sudokuGridStorage[e][i] == 0) {
 					columnComplete = false;
 					break;
@@ -272,7 +329,7 @@ public class SudokuBuilder {
 			 * If the column was still complete, cut a random clue out.
 			 */
 			if (columnComplete) {
-				int y = prng.nextInt(Sudoku.SIZE);
+				int y = prng.nextInt(this.sudokuSize);
 				sudokuGridStorage[y][i] = 0;
 			}
 		}
@@ -280,14 +337,14 @@ public class SudokuBuilder {
 		/*
 		 * Check the completeness for every carree in the Sudoku.
 		 */
-		for (int i = 0; i < Sudoku.SIZE; i = i + Sudoku.CARREE_SIZE) {
-			for (int e = 0; e < Sudoku.SIZE; e = e + Sudoku.CARREE_SIZE) {
+		for (int i = 0; i < this.sudokuSize; i = i + this.carreeSize) {
+			for (int e = 0; e < this.sudokuSize; e = e + this.carreeSize) {
 				boolean carreeComplete = true;
 				/*
 				 * For a specific carree check if it is still complete.
 				 */
-				outer: for (int xos = 0; xos < Sudoku.CARREE_SIZE; xos++) {
-					for (int yos = 0; yos < Sudoku.CARREE_SIZE; yos++) {
+				outer: for (int xos = 0; xos < this.carreeSize; xos++) {
+					for (int yos = 0; yos < this.carreeSize; yos++) {
 						if (sudokuGridStorage[i + yos][e + xos] == 0) {
 							carreeComplete = false;
 							break outer;
@@ -298,8 +355,8 @@ public class SudokuBuilder {
 				 * If the carree was still complete, cut a random clue out.
 				 */
 				if (carreeComplete) {
-					int x = prng.nextInt(Sudoku.CARREE_SIZE);
-					int y = prng.nextInt(Sudoku.CARREE_SIZE);
+					int x = prng.nextInt(this.carreeSize);
+					int y = prng.nextInt(this.carreeSize);
 					sudokuGridStorage[i + y][e + x] = 0;
 				}
 			}
@@ -315,8 +372,8 @@ public class SudokuBuilder {
 		/*
 		 * For each cell in the Sudoku
 		 */
-		for (int x = 0; x < Sudoku.SIZE; x++) {
-			for (int y = 0; y < Sudoku.SIZE; y++) {
+		for (int x = 0; x < this.sudokuSize; x++) {
+			for (int y = 0; y < this.sudokuSize; y++) {
 				/*
 				 * Save the cell and cut it
 				 */
@@ -326,8 +383,8 @@ public class SudokuBuilder {
 				 * Check if any other value than the original value is legal,
 				 * the value can not be cut out.
 				 */
-				for (int i = 1; i <= Sudoku.SIZE; i++) {
-					if (i != save && Sudoku.legal(y, x, i, sudokuGridStorage)) {
+				for (int i = 1; i <= this.sudokuSize; i++) {
+					if (i != save && legal(y, x, i, sudokuGridStorage)) {
 						sudokuGridStorage[y][x] = save;
 						break;
 					}
@@ -348,8 +405,8 @@ public class SudokuBuilder {
 		 * Use the row, column and carree neighborRule for each cell in the
 		 * Sudoku grid.
 		 */
-		for (int x = 0; x < Sudoku.SIZE; x++) {
-			for (int y = 0; y < Sudoku.SIZE; y++) {
+		for (int x = 0; x < this.sudokuSize; x++) {
+			for (int y = 0; y < this.sudokuSize; y++) {
 				if (sudokuGridStorage[y][x] != 0) {
 					cutRowNeighborRule(x, y);
 					cutColumnNeighborRule(x, y);
@@ -378,7 +435,7 @@ public class SudokuBuilder {
 		 * Check if this violates the "neighbor-rule" for rows, by checking
 		 * every other cell in the row.
 		 */
-		for (int x1 = 0; x1 < Sudoku.SIZE; x1++) {
+		for (int x1 = 0; x1 < this.sudokuSize; x1++) {
 			/*
 			 * If there is an empty cell && that cell is not the same as the
 			 * cell of the cut candidate && that cell is not neighbored by the
@@ -415,7 +472,7 @@ public class SudokuBuilder {
 		 * Check if this violates the "neighbor-rule" for columns, by checking
 		 * every other cell in the column.
 		 */
-		for (int y1 = 0; y1 < Sudoku.SIZE; y1++) {
+		for (int y1 = 0; y1 < this.sudokuSize; y1++) {
 			/*
 			 * If there is an empty cell && that cell is not the same as the
 			 * cell of the cut candidate && that cell is not neighbored by the
@@ -450,15 +507,15 @@ public class SudokuBuilder {
 		/*
 		 * Calculate the offsets for the carree.
 		 */
-		int xos = (x / Sudoku.CARREE_SIZE) * Sudoku.CARREE_SIZE;
-		int yos = (y / Sudoku.CARREE_SIZE) * Sudoku.CARREE_SIZE;
+		int xos = (x / this.carreeSize) * this.carreeSize;
+		int yos = (y / this.carreeSize) * this.carreeSize;
 
 		/*
 		 * Check if this violates the "neighbor-rule" for carrees, by checking
 		 * every other cell in the carree.
 		 */
-		for (int y1 = 0; y1 < Sudoku.CARREE_SIZE; y1++) {
-			for (int x1 = 0; x1 < Sudoku.CARREE_SIZE; x1++) {
+		for (int y1 = 0; y1 < this.carreeSize; y1++) {
+			for (int x1 = 0; x1 < this.carreeSize; x1++) {
 				/*
 				 * If the cell is empty
 				 */
@@ -499,7 +556,7 @@ public class SudokuBuilder {
 	 * @return True if there is a neighbor with the given value, false if not.
 	 */
 	private boolean isNeighboredBy(int x, int y, int val) {
-		for (int i = 0; i < Sudoku.SIZE; i++) {
+		for (int i = 0; i < this.sudokuSize; i++) {
 			/*
 			 * If a cell in the column or in the row contains the value, the
 			 * cell is neighbored by that value.
@@ -513,15 +570,15 @@ public class SudokuBuilder {
 		/*
 		 * Calculate the offsets for the carree.
 		 */
-		int xos = (x / Sudoku.CARREE_SIZE) * Sudoku.CARREE_SIZE;
-		int yos = (y / Sudoku.CARREE_SIZE) * Sudoku.CARREE_SIZE;
+		int xos = (x / this.carreeSize) * this.carreeSize;
+		int yos = (y / this.carreeSize) * this.carreeSize;
 
 		/*
 		 * If the value is found within the carree, the cell is neighbored by
 		 * that value.
 		 */
-		for (int x1 = 0; x1 < Sudoku.CARREE_SIZE; x1++) {
-			for (int y1 = 0; y1 < Sudoku.CARREE_SIZE; y1++) {
+		for (int x1 = 0; x1 < this.carreeSize; x1++) {
+			for (int y1 = 0; y1 < this.carreeSize; y1++) {
 				if (sudokuGridStorage[yos + y1][xos + x1] == val) {
 					return true;
 				}
@@ -544,8 +601,8 @@ public class SudokuBuilder {
 	 *            cut out by this.
 	 */
 	private void doRandomCutting(Difficulty diff) {
-		for (int x = 0; x < Sudoku.SIZE; x++) {
-			for (int y = 0; y < Sudoku.SIZE; y++) {
+		for (int x = 0; x < this.sudokuSize; x++) {
+			for (int y = 0; y < this.sudokuSize; y++) {
 				if (sudokuGridStorage[y][x] != 0) {
 					/*
 					 * Save a backup of the value and cut it out.
@@ -580,7 +637,7 @@ public class SudokuBuilder {
 	 * @return True if only one solution exists, false if there are none or
 	 *         multiple solutions.
 	 */
-	private static boolean hasUniqueSolution(int[][] sudoku,
+	private boolean hasUniqueSolution(int[][] sudoku,
 			int maxRecursionDepth) {
 		/*
 		 * The grid will get filled, so make a copy and check that copy, so that
@@ -613,14 +670,14 @@ public class SudokuBuilder {
 	 *         >1 if multiple solutions where found (not necessarily the actual
 	 *         amount of solutions).
 	 */
-	private static int checkSolutions(int x, int y, int[][] sudoku,
+	private int checkSolutions(int x, int y, int[][] sudoku,
 			int solutionsFound, int maxRecursionDepth) {
 		/*
 		 * If all columns in a row have been filled increase the number of rows.
 		 */
-		if (x == Sudoku.SIZE) {
+		if (x == this.sudokuSize) {
 			x = 0;
-			if (++y == Sudoku.SIZE) {
+			if (++y == this.sudokuSize) {
 				/*
 				 * If all cells have been filled, another solution has been
 				 * found.
@@ -650,8 +707,8 @@ public class SudokuBuilder {
 		 * solutions recursively. Break the loop if there is already more than 1
 		 * solution.
 		 */
-		for (int val = 1; val <= Sudoku.SIZE && solutionsFound < 2; ++val) {
-			if (Sudoku.legal(x, y, val, sudoku)) {
+		for (int val = 1; val <= this.sudokuSize && solutionsFound < 2; ++val) {
+			if (legal(x, y, val, sudoku)) {
 				sudoku[x][y] = val;
 				solutionsFound = checkSolutions(x + 1, y, sudoku,
 						solutionsFound, maxRecursionDepth--);
@@ -679,9 +736,9 @@ public class SudokuBuilder {
 		 * If clues + i is equal the SIZE*SIZE, this means there are no empty
 		 * cells left and the loop has to stop.
 		 */
-		for (int i = 0; i < add && clues + i < Sudoku.SIZE * Sudoku.SIZE;) {
-			int x = prng.nextInt(Sudoku.SIZE);
-			int y = prng.nextInt(Sudoku.SIZE);
+		for (int i = 0; i < add && clues + i < this.sudokuSize * this.sudokuSize;) {
+			int x = prng.nextInt(this.sudokuSize);
+			int y = prng.nextInt(this.sudokuSize);
 			/*
 			 * If the cell has no clue in it, add it and increase the number of
 			 * clues added.

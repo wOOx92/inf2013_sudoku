@@ -7,7 +7,11 @@ package dhbw.project.judokugame;
  * @author Dennis Uteg, Florian Steurer, Markus Wingler, Michael Jauch
  */
 public interface NumberPuzzle {
-
+	
+	public int getSize();
+	
+	public int getCarreeSize();
+	
 	/**
 	 * @return The recent state as a 2-dimensional array.
 	 */
@@ -22,7 +26,7 @@ public interface NumberPuzzle {
 	 * @return The solution as a 2-dimensional array.
 	 */
 	public int[][] getSolvedGrid();
-
+	
 	/**
 	 * Sets a value in the recentGrid inside the NumberPuzzle.
 	 * 

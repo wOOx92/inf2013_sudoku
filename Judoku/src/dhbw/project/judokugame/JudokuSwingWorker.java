@@ -12,21 +12,23 @@ import javax.swing.SwingWorker;
  */
 public class JudokuSwingWorker extends SwingWorker<Sudoku, Void> {
 
-	private final Difficulty requestedDifficulty;
-
+	private final Difficulty REQUESTED_DIFFICULTY;
+	private final int CARREE_SIZE;
+	
 	/**
 	 * Creates a new JudokuSwingWorker object.
 	 * 
 	 * @param sudokuDifficulty
 	 *            The favored Difficulty of the Sudoku.
 	 */
-	public JudokuSwingWorker(Difficulty sudokuDifficulty) {
-		this.requestedDifficulty = sudokuDifficulty;
+	public JudokuSwingWorker(Difficulty sudokuDifficulty, int carreeSize) {
+		this.REQUESTED_DIFFICULTY = sudokuDifficulty;
+		this.CARREE_SIZE = carreeSize;
 	}
 
 	@Override
 	public Sudoku doInBackground() {
-		return new SudokuBuilder().newSudoku(requestedDifficulty);
+		return new SudokuBuilder().newSudoku(REQUESTED_DIFFICULTY, CARREE_SIZE);
 	}
 
 	/**
