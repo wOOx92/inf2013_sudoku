@@ -18,24 +18,32 @@ public class SudokuBuilder {
 	/**
 	 * This is the Solution of the Sudoku that will be generated
 	 */
-	protected int[][] solvedGrid;
+	private int[][] solvedGrid;
 
 	/**
 	 * This is the Sudoku grid that will be cut and minimized and will become
 	 * the start grid of the new Sudoku
 	 */
-	protected int[][] sudokuGridStorage;
+	private int[][] sudokuGridStorage;
 
 	/**
 	 * This is the Random Number Generator that generates every random variable
 	 * needed during the generating process.
 	 */
-	protected Random prng;
+	private Random prng;
 	
-	protected int carreeSize;
+	private int carreeSize;
 	
-	protected int sudokuSize;
+	private int sudokuSize;
 
+	/**
+	 * This method sets the carreeSize to the given value and the sudokuSize to carreeSize squared.
+	 * @param size
+	 */
+	protected void setCarreeSize(int size) {
+		this.carreeSize = size;
+		this.sudokuSize = size*size;
+	}
 	/**
 	 * Builds a Sudoku object of the desired difficulty.
 	 * 
