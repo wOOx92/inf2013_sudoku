@@ -12,6 +12,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -590,18 +591,7 @@ public class GuiWindow {
 	/**
 	 * Listens for keyinput from user.
 	 */
-	class JudokuKeyListener implements KeyListener {
-
-		@Override
-		public void keyPressed(KeyEvent e) {
-			// do nothing
-
-		}
-
-		@Override
-		public void keyReleased(KeyEvent e) {
-			// do nothing
-		}
+	class JudokuKeyListener extends KeyAdapter {
 
 		@Override
 		public void keyTyped(KeyEvent e) {
