@@ -44,6 +44,11 @@ public class SudokuBuilder {
 		this.carreeSize = size;
 		this.sudokuSize = size*size;
 	}
+	
+	protected void setSudokuGridStorage(int[][] sudoku) {
+		this.sudokuGridStorage = sudoku;
+	}
+	
 	/**
 	 * Builds a Sudoku object of the desired difficulty.
 	 * 
@@ -609,7 +614,8 @@ public class SudokuBuilder {
 	 *            The difficulty determines the maximum number of clues that get
 	 *            cut out by this.
 	 */
-	protected void doRandomCutting(Difficulty diff) {
+	protected int doRandomCutting(Difficulty diff) {
+		int cuts = 0;
 		for (int x = 0; x < this.sudokuSize; x++) {
 			for (int y = 0; y < this.sudokuSize; y++) {
 				if (sudokuGridStorage[y][x] != 0) {
@@ -625,10 +631,13 @@ public class SudokuBuilder {
 					if (!hasUniqueSolution(sudokuGridStorage,
 							diff.maxRecursionDepth())) {
 						sudokuGridStorage[y][x] = cutCandidate;
+					} else {
+						cuts++;
 					}
 				}
 			}
 		}
+		return cuts;
 	}
 
 	/**

@@ -13,7 +13,13 @@ package dhbw.project.judokugame;
 public enum Difficulty {
 	EASY, 
 	MEDIUM, 
-	HARD;
+	HARD,
+	/**
+	 * This Difficulty's maxRecursionDepth is extremely high. It is only
+	 * recommended for testing because the high recursion depth could make the
+	 * backtracking too slow for user interaction.
+	 */
+	UNRESTRICTED;
 
 	/**
 	 * The value of the recursion depth will directly influence the amount of
@@ -31,6 +37,9 @@ public enum Difficulty {
 		if (this == MEDIUM) {
 			return 11;
 		}
-		return 29;
+		if (this == HARD) {
+			return 29;
+		}
+		return 10000;
 	}
 }
