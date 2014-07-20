@@ -62,21 +62,19 @@ public class Sudoku implements NumberPuzzle {
 	 *            The 9x9 grid of the Sudoku.
 	 * @param The
 	 *            complete solution in a 9x9 grid.
-	 * @param diff
-	 *            The estimated difficulty.
 	 */
-	public Sudoku(int[][] sudokuGrid, int[][] solvedGrid, Difficulty diff) {
+	public Sudoku(int[][] sudokuGrid, int[][] solvedGrid) {
 		SIZE = solvedGrid.length;
 		CARREE_SIZE = (int)Math.sqrt(solvedGrid.length);
-		
-		this.startGrid = sudokuGrid;
+	
 		/*
 		 * Never assign one of the grid fields to another one without making a
 		 * deep copy. Without making a deep copy each grid will adapt changes in
 		 * the other one!
 		 */
+		this.startGrid = SudokuBuilder.deepCopy(sudokuGrid);
 		this.recentGrid = SudokuBuilder.deepCopy(startGrid);
-		this.solvedGrid = solvedGrid;
+		this.solvedGrid = SudokuBuilder.deepCopy(solvedGrid);
 	}
 
 	/**

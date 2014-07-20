@@ -131,7 +131,7 @@ public class SudokuBuilder {
 			addRandomClues(this.carreeSize+1);
 		}
 
-		return new Sudoku(sudokuGridStorage, solvedGrid, diff);
+		return new Sudoku(sudokuGridStorage, solvedGrid);
 	}
 
 	/**

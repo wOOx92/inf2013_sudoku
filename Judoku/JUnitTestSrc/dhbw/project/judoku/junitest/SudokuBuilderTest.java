@@ -1,10 +1,12 @@
 package dhbw.project.judoku.junitest;
 
 import static org.junit.Assert.*;
-import dhbw.project.judokugame.*;
+import dhbw.project.judokugame.Difficulty;
+import dhbw.project.judokugame.SudokuBuilder;
+
+
 
 import org.junit.Test;
-import org.junit.experimental.theories.internal.Assignments;
 
 public class SudokuBuilderTest extends SudokuBuilder{
 	/**
@@ -162,12 +164,12 @@ public class SudokuBuilderTest extends SudokuBuilder{
 	@Test
 	public void doRandomCuttingTest() {
 		/*
-		 * If you add one clue, the resulting Sudoku should have 17 clues again.
-		 * Adding more than one clue must not necessarily result in a Sudoku
-		 * with 17 clues again, because one of the original clues could be cut
-		 * out because the two additional clues add enough information to do so,
-		 * but after that no other clue can be cut..
-		 */	
+		 * If you add one clue, the Sudoku should have 17 clues again after
+		 * doRandomCutting(). Adding more than one clue must not necessarily
+		 * result in a Sudoku with 17 clues again, because one of the original
+		 * clues could be cut out because the two additional clues add enough
+		 * information to do so, but after that no other clue can be cut.
+		 */
 		
 		/*
 		 * Testing 9x9
