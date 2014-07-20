@@ -1,26 +1,14 @@
 package dhbw.project.judokugame;
 
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.GridLayout;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.JTextPane;
-import javax.swing.MenuSelectionManager;
-import javax.swing.border.EmptyBorder;
-import javax.swing.text.StyleConstants;
-import javax.swing.JButton;
-
-import dhbw.project.judokugame.GuiWindow.JudokuButtonListener;
-import dhbw.project.judokugame.GuiWindow.JudokuTimeListener;
-
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JTextPane;
+import javax.swing.border.EmptyBorder;
 
 public class GuiInfoView {
 	private GuiWindow parentWindow;
