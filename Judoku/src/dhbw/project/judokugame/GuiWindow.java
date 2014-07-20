@@ -724,11 +724,11 @@ public class GuiWindow {
 			if (e.getSource() == btnQuit) {
 				frame.dispose();
 			} else if (e.getSource() == btnEasy) {
-				GuiWindow.this.initNewGame(3, Difficulty.EASY, "EASY");
+				GuiWindow.this.initNewGame(3, Difficulty.EASY, "Easy");
 			} else if (e.getSource() == btnMedium) {
-				GuiWindow.this.initNewGame(3, Difficulty.MEDIUM, "MEDIUM");
+				GuiWindow.this.initNewGame(3, Difficulty.MEDIUM, "Medium");
 			} else if (e.getSource() == btnHard) {
-				GuiWindow.this.initNewGame(3, Difficulty.HARD, "HARD");
+				GuiWindow.this.initNewGame(3, Difficulty.HARD, "Hard");
 			} else if (e.getSource() == btnMiniSdk) {
 				GuiWindow.this.initNewGame(2, Difficulty.HARD, "Mini 4x4");
 			} else if (e.getSource() == btnMaxiSdk) {
