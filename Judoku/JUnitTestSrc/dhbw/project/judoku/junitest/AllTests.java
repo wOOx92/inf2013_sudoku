@@ -5,6 +5,9 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ SudokuBuilderTest.class })
+@SuiteClasses({ 
+	SudokuBuilderTest.class,
+	SudokuTest.class
+	})
 public class AllTests {
 }
