@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -14,9 +15,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.IOException;
 
 import javax.swing.BorderFactory;
@@ -43,7 +41,6 @@ public class GuiWindow {
 	private Controller controller;
 	private JudokuJTextField[][] gameField;
 	private Timer swingTimer = new Timer(1000, new JudokuTimeListener());;
-	String activeCenterView = "gameField";
 
 	/*
 	 * Buttons
@@ -73,9 +70,11 @@ public class GuiWindow {
 	private JTextField txtTime;
 	private JTextField txtLostMsg;
 	private JTextArea txtWonMsg;
-	private JTextField txtDifficulty;
+	private JTextField txtGameInfo;
 
 	private JPanel pnlCenter;
+	private CardLayout centerLayout;
+	private String activeCenterView = "gameField";
 
 	/**
 	 * Create the application.
@@ -121,7 +120,8 @@ public class GuiWindow {
 		pnlNorth.add(pnlNorthBottom);
 
 		pnlCenter = new JPanel();
-		pnlCenter.setLayout(new CardLayout());
+		centerLayout = new CardLayout();
+		pnlCenter.setLayout(centerLayout);
 
 		pnlGameField = new JPanel();
 		initializeGameField(pnlGameField, 3);
@@ -137,7 +137,7 @@ public class GuiWindow {
 
 		GuiInfoView viewHelp = new GuiInfoView(this);
 		pnlCenter.add(viewHelp.getContentPane(), "help");
-		
+
 		JPanel pnlSouth = new JPanel();
 		pnlSouth.setLayout(new BorderLayout(15, 15));
 		initializeGameStatusPanel(pnlSouth);
@@ -184,14 +184,14 @@ public class GuiWindow {
 		btnHard.addActionListener(new JudokuButtonListener());
 		btnHard.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		mnNewGame.add(btnHard);
-		
+
 		btnMiniSdk = new JButton("Mini 4x4 ");
 		btnMiniSdk.setContentAreaFilled(false);
 		btnMiniSdk.setBorderPainted(false);
 		btnMiniSdk.addActionListener(new JudokuButtonListener());
 		btnMiniSdk.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		mnNewGame.add(btnMiniSdk);
-		
+
 		btnMaxiSdk = new JButton("Maxi 16x16");
 		btnMaxiSdk.setContentAreaFilled(false);
 		btnMaxiSdk.setBorderPainted(false);
@@ -301,17 +301,17 @@ public class GuiWindow {
 	 * 
 	 * @param pane
 	 */
-	private void initializeGameField(JPanel pane, int carreeSize) {		
-		int puzzleSize = carreeSize*carreeSize;
+	private void initializeGameField(JPanel pane, int carreeSize) {
+		int puzzleSize = carreeSize * carreeSize;
 		pane.removeAll();
 		pane.setLayout(new GridLayout(puzzleSize, puzzleSize, 2, 2));
 		gameField = new JudokuJTextField[puzzleSize][puzzleSize];
-		
+
 		int fontSize = 38;
-		if(puzzleSize == 16) {
+		if (puzzleSize == 16) {
 			fontSize = 28;
 		}
-		
+
 		int xPosition = 10;
 		int yPosition = 10;
 		final int width = 37;
@@ -320,9 +320,9 @@ public class GuiWindow {
 		Color active = Color.WHITE;
 		Color toggle = new Color(195, 220, 255); // light Sudoku-Blue
 
-		for (int y = 0; y < puzzleSize ; y++) {
+		for (int y = 0; y < puzzleSize; y++) {
 			yPosition = 10;
-			for (int x = 0; x <  puzzleSize; x++) {
+			for (int x = 0; x < puzzleSize; x++) {
 				if (x % carreeSize == 0) {
 					Color buffer = active;
 					active = toggle;
@@ -360,26 +360,26 @@ public class GuiWindow {
 			 * light-blue).
 			 */
 			if (puzzleSize == 4) {
-				if (y%carreeSize != 0) {
+				if (y % carreeSize != 0) {
 					Color buffer = active;
 					active = toggle;
 					toggle = buffer;
 				}
 			} else if (puzzleSize == 9) {
-				if ((y+1)%carreeSize != 0) {
+				if ((y + 1) % carreeSize != 0) {
 					Color buffer = active;
 					active = toggle;
 					toggle = buffer;
 				}
 			} else if (puzzleSize == 16) {
-				if ((y)%carreeSize > 2) {
+				if ((y) % carreeSize > 2) {
 					Color buffer = active;
 					active = toggle;
 					toggle = buffer;
 				}
 			}
 			xPosition = xPosition + 38;
-		}	
+		}
 		frame.setVisible(true);
 	}
 
@@ -432,7 +432,7 @@ public class GuiWindow {
 		JLabel lostLabel = new JLabel("", lostImage, JLabel.CENTER);
 		pnlLost.add(lostLabel);
 	}
-	
+
 	/**
 	 * Writes time, progressbar and difficulty to the bottom jpanel.
 	 * 
@@ -449,14 +449,14 @@ public class GuiWindow {
 		txtTime.setHorizontalAlignment(SwingConstants.CENTER);
 		pnlStatus.add(txtTime, BorderLayout.WEST);
 
-		txtDifficulty = new JTextField();
-		txtDifficulty.setEnabled(false);
-		txtDifficulty.setBackground(frame.getBackground());
-		txtDifficulty.setDisabledTextColor(Color.BLACK);
-		txtDifficulty.setFont(new Font("DIALOG", Font.PLAIN, 14));
-		txtDifficulty.setPreferredSize(new Dimension(80, 25));
-		txtDifficulty.setHorizontalAlignment(SwingConstants.CENTER);
-		pnlStatus.add(txtDifficulty, BorderLayout.EAST);
+		txtGameInfo = new JTextField();
+		txtGameInfo.setEnabled(false);
+		txtGameInfo.setBackground(frame.getBackground());
+		txtGameInfo.setDisabledTextColor(Color.BLACK);
+		txtGameInfo.setFont(new Font("DIALOG", Font.PLAIN, 14));
+		txtGameInfo.setPreferredSize(new Dimension(80, 25));
+		txtGameInfo.setHorizontalAlignment(SwingConstants.CENTER);
+		pnlStatus.add(txtGameInfo, BorderLayout.EAST);
 
 		prgrBar = new JProgressBar();
 		prgrBar.setPreferredSize(new Dimension(210, 25));
@@ -495,7 +495,8 @@ public class GuiWindow {
 
 			}
 		}
-		if (startFilledFields + userFilledFields == puzzle.getSize() * puzzle.getSize()) {
+		if (startFilledFields + userFilledFields == puzzle.getSize()
+				* puzzle.getSize()) {
 			btnValidate.setEnabled(true);
 		} else {
 			btnValidate.setEnabled(false);
@@ -524,16 +525,7 @@ public class GuiWindow {
 		gameField[y][x].setCaretColor(gameField[y][x].getBackground());
 	}
 
-	public NumberPuzzle getNumberPuzzle() {
-		return puzzle;
-	}
-
-	public void setNumberPuzzle(NumberPuzzle np) {
-		this.puzzle = np;
-		refreshView();
-	}
-
-	public void enableButtons(boolean enabled) {
+	private void enableButtons(boolean enabled) {
 		btnHint.setEnabled(enabled);
 		btnReset.setEnabled(enabled);
 	}
@@ -542,7 +534,7 @@ public class GuiWindow {
 	 * Check, if undo and /or redo is possible and enables / disables the
 	 * corresponding buttons.
 	 */
-	public void checkUndoRedoButtons() {
+	private void checkUndoRedoButtons() {
 		if (puzzle.redoPossible()) {
 			btnRedo.setEnabled(true);
 		} else {
@@ -556,17 +548,59 @@ public class GuiWindow {
 		}
 	}
 
-	public void toggleHelpViewBack() {		
+	public void toggleHelpViewBack() {
 		btnContinue.setEnabled(true);
-		CardLayout cl = (CardLayout) pnlCenter.getLayout();
-		cl.show(pnlCenter, activeCenterView);	
-		
-		if(!activeCenterView.equals("won") && !activeCenterView.equals("lost") && puzzle != null){
+		switchCenterView(activeCenterView);
+
+		if (!activeCenterView.equals("won") && !activeCenterView.equals("lost")
+				&& puzzle != null) {
 			enableButtons(true);
+			swingTimer.start();
 			refreshView();
 		}
+
 	}
-	
+
+	private void initNewGame(int carreeSize, Difficulty diff,
+			String gameInfoText) {
+		/*
+		 * Start the SwingWorker
+		 */
+		JudokuSwingWorker sWork = new JudokuSwingWorker(diff, carreeSize);
+		sWork.execute();
+
+		/*
+		 * GUI adpations
+		 */
+		switchCenterView("gameField");
+		enableButtons(true);
+
+		/*
+		 * Close the "dropdown"-Menu.
+		 */
+		MenuSelectionManager.defaultManager().clearSelectedPath();
+		/*
+		 * Reset time-listener.
+		 */
+		JudokuTimeListener jtl = (JudokuTimeListener) swingTimer
+				.getActionListeners()[0];
+		jtl.reset();
+		swingTimer.restart();
+		txtGameInfo.setText(gameInfoText);
+		initializeGameField(pnlGameField, carreeSize);
+		pnlGameField.repaint();
+		/*
+		 * Wait until the thread has finished and get the Sudoku object.
+		 */
+		puzzle = sWork.easyGet();
+		refreshView();
+	}
+
+	private void switchCenterView(String cardName) {
+		centerLayout.show(pnlCenter, cardName);
+		activeCenterView = cardName;
+	}
+
 	/**
 	 * Listens to the JTextFields for gained / lost focus within the gamefield.
 	 * 
@@ -616,7 +650,6 @@ public class GuiWindow {
 						currentTextField.Y,
 						Integer.parseInt(currentTextField.getText()), puzzle)) {
 				}
-				;
 			}
 
 			refreshView();
@@ -688,223 +721,81 @@ public class GuiWindow {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			JudokuSwingWorker sWork = null;
-			/*
-			 * Quit-Button
-			 */
 			if (e.getSource() == btnQuit) {
 				frame.dispose();
-			}
-			/*
-			 * New Game -> Easy-Button
-			 */
-			else if (e.getSource() == btnEasy) {
-				/*
-				 * Start the SwingWorker
-				 */
-				sWork = new JudokuSwingWorker(Difficulty.EASY, 3);
-				sWork.execute();
-				/*
-				 * GUI adpations
-				 */
-				CardLayout cl = (CardLayout) pnlCenter.getLayout();
-				cl.show(pnlCenter, "gameField");
-				activeCenterView = "gameField";
-				enableButtons(true);
-				/*
-				 * Close the "dropdown"-Menu.
-				 */
-				MenuSelectionManager.defaultManager().clearSelectedPath();
-				/*
-				 * Reset time-listener.
-				 */
-				JudokuTimeListener jtl = (JudokuTimeListener) swingTimer
-						.getActionListeners()[0];
-				jtl.reset();
-				swingTimer.restart();
-				txtDifficulty.setText("Easy");
-				initializeGameField(pnlGameField, 3);
-				pnlGameField.repaint();
-				/*
-				 * Wait until the thread has finished and get the easy sudoku object.
-				 */
-				puzzle = sWork.easyGet();
-				refreshView();
-			}
-			/*
-			 * New Game -> Medium-Button
-			 */
-			else if (e.getSource() == btnMedium) {
-				sWork = new JudokuSwingWorker(Difficulty.MEDIUM, 3);
-				sWork.execute();
-				CardLayout cl = (CardLayout) pnlCenter.getLayout();
-				cl.show(pnlCenter, "gameField");
-				activeCenterView = "gameField";
-				enableButtons(true);
-				MenuSelectionManager.defaultManager().clearSelectedPath();
-				JudokuTimeListener jtl = (JudokuTimeListener) swingTimer
-						.getActionListeners()[0];
-				jtl.reset();
-				swingTimer.restart();
-				txtDifficulty.setText("Medium");
-				initializeGameField(pnlGameField, 3);
-				puzzle = sWork.easyGet();
-				refreshView();
-			}
-			/*
-			 * New Game -> Hard-Button
-			 */
-			else if (e.getSource() == btnHard) {
-				sWork = new JudokuSwingWorker(Difficulty.HARD, 3);
-				sWork.execute();
-				CardLayout cl = (CardLayout) pnlCenter.getLayout();
-				cl.show(pnlCenter, "gameField");
-				activeCenterView = "gameField";
-				enableButtons(true);
-				MenuSelectionManager.defaultManager().clearSelectedPath();
-				JudokuTimeListener jtl = (JudokuTimeListener) swingTimer
-						.getActionListeners()[0];
-				jtl.reset();
-				swingTimer.restart();
-				txtDifficulty.setText("Hard");
-				initializeGameField(pnlGameField, 3);
-				puzzle = sWork.easyGet();
-				refreshView();
-			}
-			else if(e.getSource() == btnMiniSdk) {
-				sWork = new JudokuSwingWorker(Difficulty.HARD, 2);
-				sWork.execute();
-				CardLayout cl = (CardLayout) pnlCenter.getLayout();
-				cl.show(pnlCenter, "gameField");
-				activeCenterView = "gameField";
-				enableButtons(true);
-				MenuSelectionManager.defaultManager().clearSelectedPath();
-				JudokuTimeListener jtl = (JudokuTimeListener) swingTimer
-						.getActionListeners()[0];
-				jtl.reset();
-				swingTimer.restart();
-				txtDifficulty.setText("Mini 4x4");
-				initializeGameField(pnlGameField, 2);
-				puzzle = sWork.easyGet();
-				refreshView();	
-			}
-			else if(e.getSource() == btnMaxiSdk) {
-				sWork = new JudokuSwingWorker(Difficulty.EASY, 4);
-				sWork.execute();
-				CardLayout cl = (CardLayout) pnlCenter.getLayout();
-				cl.show(pnlCenter, "gameField");
-				activeCenterView = "gameField";
-				enableButtons(true);
-				MenuSelectionManager.defaultManager().clearSelectedPath();
-				JudokuTimeListener jtl = (JudokuTimeListener) swingTimer
-						.getActionListeners()[0];
-				jtl.reset();
-				swingTimer.restart();
-				txtDifficulty.setText("Maxi 16x16");
-				initializeGameField(pnlGameField, 4);
-				puzzle = sWork.easyGet();
-				refreshView();					
-			}
-			/*
-			 * Reset-Button
-			 */
-			else if (e.getSource() == btnReset) {
+			} else if (e.getSource() == btnEasy) {
+				GuiWindow.this.initNewGame(3, Difficulty.EASY, "EASY");
+			} else if (e.getSource() == btnMedium) {
+				GuiWindow.this.initNewGame(3, Difficulty.MEDIUM, "MEDIUM");
+			} else if (e.getSource() == btnHard) {
+				GuiWindow.this.initNewGame(3, Difficulty.HARD, "HARD");
+			} else if (e.getSource() == btnMiniSdk) {
+				GuiWindow.this.initNewGame(2, Difficulty.HARD, "Mini 4x4");
+			} else if (e.getSource() == btnMaxiSdk) {
+				GuiWindow.this.initNewGame(4, Difficulty.EASY, "Maxi 16x16");
+			} else if (e.getSource() == btnReset) {
 				controller.resetPuzzle(puzzle);
 				refreshView();
-			}
-			/*
-			 * Undo-Button
-			 */
-			else if (e.getSource() == btnUndo) {
+			} else if (e.getSource() == btnUndo) {
 				controller.undoPuzzle(puzzle);
 				refreshView();
-			}
-			/*
-			 * Redo-Button
-			 */
-			else if (e.getSource() == btnRedo) {
+			} else if (e.getSource() == btnRedo) {
 				controller.redoPuzzle(puzzle);
 				refreshView();
-			}
-			/*
-			 * Hint-Button
-			 */
-			else if (e.getSource() == btnHint) {
+			} else if (e.getSource() == btnHint) {
 				controller.giveHintPuzzle(puzzle);
 				refreshView();
-			}
-			/*
-			 * Continue-Button
-			 */
-			else if (e.getSource() == btnContinue) {
-				CardLayout cl = (CardLayout) pnlCenter.getLayout();
-				cl.show(pnlCenter, "gameField");
-				activeCenterView = "gameField";
+			} else if (e.getSource() == btnContinue) {
+				switchCenterView("gameField");
+				swingTimer.start();
 				btnContinue.getParent().add(btnValidate);
 				btnContinue.getParent().remove(btnContinue);
 				enableButtons(true);
-			}
-			/*
-			 * Validate-Button
-			 */
-			else if (e.getSource() == btnValidate) {
-				CardLayout cl = (CardLayout) pnlCenter.getLayout();
-				int mistakes = controller.validateUserSolution(puzzle);
-				/*
-				 * User has won (no mistakes).
-				 */
-				if (mistakes == 0) {
-					cl.show(pnlCenter, "won");
-					activeCenterView = "won";
-					swingTimer.stop();
-					btnValidate.setEnabled(false);
-					txtWonMsg
-							.setText("Congratulations, you won! \n Your Time: "
-									+ txtTime.getText());
-
-				} else {
-					/*
-					 * User has "lost" (1 mistake).
-					 */
-					if (mistakes == 1) {
-						txtLostMsg.setText("There is " + mistakes
-								+ " mistake left");
-					} else {
-						txtLostMsg.setText("There are " + mistakes
-								+ " mistakes left");
-					}
-					cl.show(pnlCenter, "lost");
-					activeCenterView = "lost";
-					btnValidate.getParent().add(btnContinue);
-					btnValidate.getParent().remove(btnValidate);
-				}
-				enableButtons(false);
-				btnUndo.setEnabled(false);
-				btnRedo.setEnabled(false);
-			}
-			/*
-			 * Info-Button
-			 */
-			else if (e.getSource() == btnInfo) {
-				CardLayout cl = (CardLayout) pnlCenter.getLayout();
-				cl.show(pnlCenter, "help");
+			} else if (e.getSource() == btnInfo) {
+				centerLayout.show(pnlCenter, "help");
 				enableButtons(false);
 				btnUndo.setEnabled(false);
 				btnRedo.setEnabled(false);
 				btnValidate.setEnabled(false);
 				btnContinue.setEnabled(false);
-				//controller.initWindowHelp();
-			}
-			/*
-			 * LanguageEN-Button
-			 */
-			else if (e.getSource() == btnLangENG) {
+				swingTimer.stop();
+			} else if (e.getSource() == btnLangENG) {
 				for (int i = 0; i < puzzle.getSize() * puzzle.getSize(); i++) {
 					puzzle.giveHint();
 				}
 				refreshView();
+			} else if (e.getSource() == btnValidate) {
+				swingTimer.stop();
+				enableButtons(false);
+				btnUndo.setEnabled(false);
+				btnRedo.setEnabled(false);
+				int mistakes = controller.validateUserSolution(puzzle);
+				/*
+				 * User has won (no mistakes).
+				 */
+				if (mistakes == 0) {
+					switchCenterView("won");
+					btnValidate.setEnabled(false);
+					txtWonMsg
+							.setText("Congratulations, you won! \n Your Time: "
+									+ txtTime.getText());
+					return;
+
+				}
+				/*
+				 * User has "lost".
+				 */
+				switchCenterView("lost");
+				btnValidate.getParent().add(btnContinue);
+				btnValidate.getParent().remove(btnValidate);
+				if (mistakes == 1) {
+					txtLostMsg
+							.setText("There is " + mistakes + " mistake left");
+				} else {
+					txtLostMsg.setText("There are " + mistakes
+							+ " mistakes left");
+				}
 			}
 		}
 	}
-
 }

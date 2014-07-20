@@ -1,6 +1,5 @@
 HIGH PRIORITY
 
-- beim generieren von maxi sudokus hängt das programm manchmal
 - Wenn man schnell ausführt: btnValidate (mit fehler vorhanden) -> info -> goback -> btnContinue -> ca 1 sek bis validate angezeigt wird
 - Win text nicht mittig.
 - Texte HelpWIndow für Sudoku und About
