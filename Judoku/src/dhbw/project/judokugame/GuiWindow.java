@@ -16,6 +16,9 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -441,7 +444,7 @@ public class GuiWindow {
 	private void initializeGameStatusPanel(JPanel pnlStatus) {
 		txtTime = new JTextField();
 		txtTime.setEnabled(false);
-		txtTime.setText("0s");
+		txtTime.setText("0:00:00");
 		txtTime.setBackground(frame.getBackground());
 		txtTime.setDisabledTextColor(Color.BLACK);
 		txtTime.setFont(new Font("DIALOG", Font.PLAIN, 14));
@@ -690,26 +693,20 @@ public class GuiWindow {
 			 * Calculates the passed time.
 			 */
 			secondsPassed++;
-			int hours = secondsPassed / 3600;
-			int minutes = secondsPassed / 60 - hours * 60;
-			int seconds = secondsPassed - 60 * minutes - hours * 3600;
-
+			int hrs = secondsPassed / 3600;
+			int min = secondsPassed / 60 - hrs*60;
+			int sec = secondsPassed - 60*min - hrs*3600;
+			
 			/*
 			 * Formatting the time to a human read-friendly format.
 			 */
-			if (hours == 0 && minutes == 0) {
-				txtTime.setText(seconds + "s");
-			} else if (hours == 0) {
-				txtTime.setText(minutes + "m " + seconds + "s");
-			} else {
-				txtTime.setText(hours + "h " + minutes + "m " + seconds + "s");
-			}
-			txtTime.getRootPane().repaint();
+			String text = String.format("%d:%02d:%02d", hrs, min, sec);
+			txtTime.setText(text);
 		}
 
 		public void reset() {
 			secondsPassed = 0;
-			txtTime.setText(secondsPassed + "s");
+			txtTime.setText("0:00:00");
 		}
 	}
 
