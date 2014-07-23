@@ -1,10 +1,8 @@
 package dhbw.project.judoku.junitest;
 
 import static org.junit.Assert.*;
-import dhbw.project.judokugame.Difficulty;
-import dhbw.project.judokugame.SudokuBuilder;
-
-
+import dhbw.project.puzzlemodel.Difficulty;
+import dhbw.project.puzzlemodel.SudokuBuilder;
 
 import org.junit.Test;
 

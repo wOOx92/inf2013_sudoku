@@ -3,6 +3,7 @@ package dhbw.project.judokugame;
 import java.awt.EventQueue;
 
 import dhbw.project.judoku.junitest.SudokuBuilderTest;
+import dhbw.project.puzzlemodel.NumberPuzzle;
 
 /**
  * The Controller evaluates user inputs from the GUI_Window and initializes the

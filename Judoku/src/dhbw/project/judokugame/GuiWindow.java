@@ -36,6 +36,9 @@ import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.UIManager;
 
+import dhbw.project.puzzlemodel.Difficulty;
+import dhbw.project.puzzlemodel.NumberPuzzle;
+
 public class GuiWindow {
 
 	private JFrame frame;

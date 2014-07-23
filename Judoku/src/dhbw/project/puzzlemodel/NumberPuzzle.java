@@ -1,8 +1,7 @@
-package dhbw.project.judokugame;
+package dhbw.project.puzzlemodel;
 
 /**
- * Every class implementing this interface can be displayed by the GUI. This
- * makes it easier to implement other NumberPuzzles like Str8ts.
+ * NumberPuzzle is thought to be a unified interface for every puzzle based on completing a grid (e. g. Sudoku and Str8ts). 
  * 
  * @author Dennis Uteg, Florian Steurer, Markus Wingler, Michael Jauch
  */

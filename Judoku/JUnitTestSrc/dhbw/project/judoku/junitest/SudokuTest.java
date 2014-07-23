@@ -4,8 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import dhbw.project.judokugame.Sudoku;
-import dhbw.project.judokugame.SudokuBuilder;
+import dhbw.project.puzzlemodel.Sudoku;
+import dhbw.project.puzzlemodel.SudokuBuilder;
 
 public class SudokuTest {
 	/* 

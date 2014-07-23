@@ -1,4 +1,4 @@
-package dhbw.project.judokugame;
+package dhbw.project.puzzlemodel;
 
 /**
  * This enumeration contains the difficulties for NumberPuzzles. Difficulties

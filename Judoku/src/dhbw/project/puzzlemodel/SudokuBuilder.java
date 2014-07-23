@@ -1,4 +1,4 @@
-package dhbw.project.judokugame;
+package dhbw.project.puzzlemodel;
 
 import java.util.Arrays;
 import java.util.Random;

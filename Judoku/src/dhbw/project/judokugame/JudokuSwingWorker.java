@@ -1,7 +1,12 @@
 package dhbw.project.judokugame;
 
 import java.util.concurrent.ExecutionException;
+
 import javax.swing.SwingWorker;
+
+import dhbw.project.puzzlemodel.Difficulty;
+import dhbw.project.puzzlemodel.Sudoku;
+import dhbw.project.puzzlemodel.SudokuBuilder;
 
 /**
  * The Judoku Swing worker outsources the generating of Sudoku objects to a
