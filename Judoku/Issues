@@ -1,6 +1,5 @@
 HIGH PRIORITY
 
-- 16x16 brauchen manchmal zu lang um zu generieren.
 - Texte HelpWIndow für Sudoku und About
 - Threadsicher (Hint 2x prellen)
 - Date in JavaDocs

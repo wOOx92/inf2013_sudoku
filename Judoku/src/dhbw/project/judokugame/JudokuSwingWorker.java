@@ -1,6 +1,8 @@
 package dhbw.project.judokugame;
 
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import javax.swing.SwingWorker;
 
@@ -34,20 +36,5 @@ public class JudokuSwingWorker extends SwingWorker<Sudoku, Void> {
 	@Override
 	public Sudoku doInBackground() {
 		return new SudokuBuilder().newSudoku(REQUESTED_DIFFICULTY, CARREE_SIZE);
-	}
-
-	/**
-	 * Provides an easy way (without using try and catch in the calling method)
-	 * to get the result of the worker thread.
-	 * 
-	 * @see SwingWorker#get()
-	 * @return The Sudoku object, if exceptions occurred, returns null
-	 */
-	public Sudoku easyGet() {
-		try {
-			return this.get();
-		} catch (InterruptedException | ExecutionException ex) {
-			return null;
-		}
 	}
 }

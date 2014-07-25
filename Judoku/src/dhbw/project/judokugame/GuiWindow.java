@@ -16,6 +16,9 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -587,17 +590,17 @@ public class GuiWindow {
 		sWork.execute();
 
 		/*
-		 * GUI adpations
+		 * Switch to the game field view
 		 */
 		switchCenterView("gameField");
 		enableButtons(true);
 
 		/*
-		 * Close the "dropdown"-Menu.
+		 * Close the "drop-down"-Menu.
 		 */
 		MenuSelectionManager.defaultManager().clearSelectedPath();
 		/*
-		 * Reset time-listener.
+		 * Reset the timers JudokuTimeListener.
 		 */
 		JudokuTimeListener jtl = (JudokuTimeListener) swingTimer
 				.getActionListeners()[0];
@@ -606,10 +609,39 @@ public class GuiWindow {
 		txtGameInfo.setText(gameInfoText);
 		initializeGameField(pnlGameField, carreeSize);
 		pnlGameField.repaint();
+
 		/*
-		 * Wait until the thread has finished and get the Sudoku object.
+		 * Get the Sudoku from the worker thread. If it the thread fails to
+		 * complete in appropriate time (2.5s), restart it. This is needed due
+		 * to a potential generation time of up to 30 seconds for 16x16 Sudokus.
 		 */
-		puzzle = sWork.easyGet();
+		boolean threadSuccess = false;
+		int i = 0;
+		while(!threadSuccess && i < 3) {
+			try {
+				puzzle = sWork.get(2500, TimeUnit.MILLISECONDS);
+				threadSuccess = true;
+			} catch(TimeoutException | InterruptedException | ExecutionException ex) {
+				/*
+				 * Create a new worker thread and start it.
+				 */
+				sWork = new JudokuSwingWorker(diff, carreeSize);
+				sWork.execute();
+			}
+			i++;
+		}
+		/*
+		 * Fallback: If the thread failed to complete 3 times in a row try to
+		 * get it without timing it out.
+		 */
+		if(!threadSuccess) {
+			try {
+				System.out.println("Fallback");
+				puzzle = sWork.get();
+			} catch(InterruptedException | ExecutionException ex) {
+
+			}
+		}
 	}
 
 	private void switchCenterView(String cardName) {
