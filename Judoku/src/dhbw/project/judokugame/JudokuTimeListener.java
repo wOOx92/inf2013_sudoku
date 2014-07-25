@@ -16,7 +16,8 @@ class JudokuTimeListener implements ActionListener {
 	private final JTextField txtOutput;
 
 	/**
-	 * @param guiWindow
+	 * @param txtOutput
+	 *            The listener will write the time passed into this JTextField.
 	 */
 	JudokuTimeListener(JTextField txtOutput) {
 		this.txtOutput = txtOutput;
