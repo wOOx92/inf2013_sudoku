@@ -1,5 +1,6 @@
 HIGH PRIORITY
 
+- Focus listener durch document listener ersetzen
 - Texte HelpWIndow für Sudoku und About
 - Threadsicher (Hint 2x prellen)
 - Date in JavaDocs

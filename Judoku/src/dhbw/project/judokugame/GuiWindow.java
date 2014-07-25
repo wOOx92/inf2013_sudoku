@@ -49,7 +49,7 @@ public class GuiWindow {
 	private NumberPuzzle puzzle;
 	private Controller controller;
 	private JudokuJTextField[][] gameField;
-	private Timer swingTimer = new Timer(1000, new JudokuTimeListener());;
+	private Timer swingTimer;
 
 	/*
 	 * Buttons
@@ -151,6 +151,11 @@ public class GuiWindow {
 		pnlSouth.setLayout(new BorderLayout(15, 15));
 		initializeGameStatusPanel(pnlSouth);
 
+		/*
+		 * Now that txtTime exists, the Timer can be instantiated.
+		 */
+		swingTimer = new Timer(1000, new JudokuTimeListener(txtTime));
+		
 		frame.getContentPane().add(pnlSouth, BorderLayout.SOUTH);
 		frame.getContentPane().add(pnlCenter, BorderLayout.CENTER);
 		frame.getContentPane().add(pnlNorth, BorderLayout.PAGE_START);
@@ -466,7 +471,7 @@ public class GuiWindow {
 		txtTime.setPreferredSize(new Dimension(80, 35));
 		txtTime.setHorizontalAlignment(SwingConstants.CENTER);
 		pnlStatus.add(txtTime, BorderLayout.WEST);
-
+		
 		txtGameInfo = new JTextField();
 		txtGameInfo.setEnabled(false);
 		txtGameInfo.setBackground(frame.getBackground());
@@ -545,11 +550,6 @@ public class GuiWindow {
 		gameField[y][x].setCaretColor(gameField[y][x].getBackground());
 	}
 
-	private void enableButtons(boolean enabled) {
-		btnHint.setEnabled(enabled);
-		btnReset.setEnabled(enabled);
-	}
-
 	/**
 	 * Check, if undo and /or redo is possible and enables / disables the
 	 * corresponding buttons.
@@ -574,7 +574,8 @@ public class GuiWindow {
 
 		if (!activeCenterView.equals("won") && !activeCenterView.equals("lost")
 				&& puzzle != null) {
-			enableButtons(true);
+			btnHint.setEnabled(true);
+			btnReset.setEnabled(true);
 			swingTimer.start();
 			refreshView();
 		}
@@ -593,7 +594,8 @@ public class GuiWindow {
 		 * Switch to the game field view
 		 */
 		switchCenterView("gameField");
-		enableButtons(true);
+		btnHint.setEnabled(true);
+		btnReset.setEnabled(true);
 
 		/*
 		 * Close the "drop-down"-Menu.
@@ -726,36 +728,6 @@ public class GuiWindow {
 	}
 
 	/**
-	 * Manages the passed time and the displaying textfield.
-	 * 
-	 */
-	class JudokuTimeListener implements ActionListener {
-		private int secondsPassed = 0;
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			/*
-			 * Calculates the passed time.
-			 */
-			secondsPassed++;
-			int hrs = secondsPassed / 3600;
-			int min = secondsPassed / 60 - hrs*60;
-			int sec = secondsPassed - 60*min - hrs*3600;
-			
-			/*
-			 * Formatting the time to a human read-friendly format.
-			 */
-			String text = String.format("%d:%02d:%02d", hrs, min, sec);
-			txtTime.setText(text);
-		}
-
-		public void reset() {
-			secondsPassed = 0;
-			txtTime.setText("0:00:00");
-		}
-	}
-
-	/**
 	 * Listens for actions on the buttons.
 	 * 
 	 */
@@ -798,11 +770,13 @@ public class GuiWindow {
 				Container pnlParent = btnContinue.getParent();
 				pnlParent.add(btnValidate);
 				pnlParent.remove(btnContinue);
-				enableButtons(true);
+				btnHint.setEnabled(true);
+				btnReset.setEnabled(true);
 				refreshView();
 			} else if (e.getSource() == btnInfo) {
 				centerLayout.show(pnlCenter, "help");
-				enableButtons(false);
+				btnHint.setEnabled(false);
+				btnReset.setEnabled(false);
 				btnUndo.setEnabled(false);
 				btnRedo.setEnabled(false);
 				btnValidate.setEnabled(false);
@@ -815,7 +789,8 @@ public class GuiWindow {
 				refreshView();
 			} else if (e.getSource() == btnValidate) {
 				swingTimer.stop();
-				enableButtons(false);
+				btnHint.setEnabled(false);
+				btnReset.setEnabled(false);;
 				btnUndo.setEnabled(false);
 				btnRedo.setEnabled(false);
 				int mistakes = controller.validateUserSolution(puzzle);
