@@ -1,13 +1,12 @@
 HIGH PRIORITY
 
-- Wenn man schnell ausführt: btnValidate (mit fehler vorhanden) -> info -> goback -> btnContinue -> ca 1 sek bis validate angezeigt wird
-- Win text nicht mittig.
+- 16x16 brauchen manchmal zu lang um zu generieren.
 - Texte HelpWIndow für Sudoku und About
 - Threadsicher (Hint 2x prellen)
 - Date in JavaDocs
 - JUnit Tests
 	- Welche Methoden?
-- NumberPuzzle sollte eine Methode toJudokuJTextField bereitstellen, da sonst St8ts nicht angezeigt werden kann.
+- NumberPuzzle hat momentan keine Funktion und würde für eine Str8ts Erweiterung so nicht funktionieren -> Rausnehmen?
 
 LOW PRIORITY and ADD-ONs
 

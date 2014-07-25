@@ -16,9 +16,6 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -29,12 +26,15 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.MenuSelectionManager;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.UIManager;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 import dhbw.project.puzzlemodel.Difficulty;
 import dhbw.project.puzzlemodel.NumberPuzzle;
@@ -75,7 +75,7 @@ public class GuiWindow {
 	private JProgressBar prgrBar;
 	private JTextField txtTime;
 	private JTextField txtLostMsg;
-	private JTextArea txtWonMsg;
+	private JTextPane txtWonMsg;
 	private JTextField txtGameInfo;
 
 	private JPanel pnlCenter;
@@ -303,7 +303,7 @@ public class GuiWindow {
 	}
 
 	/**
-	 * Create NxN JudokuJTextFields as the gamefield.
+	 * Create a NxN JudokuJTextFields array used as the game field.
 	 * 
 	 * @param pane
 	 */
@@ -395,7 +395,16 @@ public class GuiWindow {
 	 * @param pnlWon
 	 */
 	private void initializePanelWon(JPanel pnlWon) {
-		txtWonMsg = new JTextArea();
+		txtWonMsg = new JTextPane();
+		
+		/*
+		 * Centering the text in the Message
+		 */
+		StyledDocument doc = txtWonMsg.getStyledDocument();
+		SimpleAttributeSet center = new SimpleAttributeSet();
+		StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+		doc.setParagraphAttributes(0, doc.getLength(), center, false);
+		
 		txtWonMsg.setFont(new Font("DIALOG", Font.BOLD, 20));
 		txtWonMsg.setPreferredSize(new Dimension(200, 60));
 		txtWonMsg.setBackground(frame.getBackground());
@@ -518,6 +527,8 @@ public class GuiWindow {
 				/ (puzzle.getSize() * puzzle.getSize() - startFilledFields));
 		prgrBar.setString(prgrBar.getValue() + "% Done");
 		prgrBar.getRootPane().repaint();
+		
+		frame.repaint();
 	}
 
 	/**
@@ -599,7 +610,6 @@ public class GuiWindow {
 		 * Wait until the thread has finished and get the Sudoku object.
 		 */
 		puzzle = sWork.easyGet();
-		refreshView();
 	}
 
 	private void switchCenterView(String cardName) {
@@ -725,14 +735,19 @@ public class GuiWindow {
 				frame.dispose();
 			} else if (e.getSource() == btnEasy) {
 				GuiWindow.this.initNewGame(3, Difficulty.EASY, "Easy");
+				refreshView();
 			} else if (e.getSource() == btnMedium) {
 				GuiWindow.this.initNewGame(3, Difficulty.MEDIUM, "Medium");
+				refreshView();
 			} else if (e.getSource() == btnHard) {
 				GuiWindow.this.initNewGame(3, Difficulty.HARD, "Hard");
+				refreshView();
 			} else if (e.getSource() == btnMiniSdk) {
 				GuiWindow.this.initNewGame(2, Difficulty.HARD, "Mini 4x4");
+				refreshView();
 			} else if (e.getSource() == btnMaxiSdk) {
 				GuiWindow.this.initNewGame(4, Difficulty.EASY, "Maxi 16x16");
+				refreshView();
 			} else if (e.getSource() == btnReset) {
 				controller.resetPuzzle(puzzle);
 				refreshView();
@@ -748,9 +763,11 @@ public class GuiWindow {
 			} else if (e.getSource() == btnContinue) {
 				switchCenterView("gameField");
 				swingTimer.start();
-				btnContinue.getParent().add(btnValidate);
-				btnContinue.getParent().remove(btnContinue);
+				Container pnlParent = btnContinue.getParent();
+				pnlParent.add(btnValidate);
+				pnlParent.remove(btnContinue);
 				enableButtons(true);
+				refreshView();
 			} else if (e.getSource() == btnInfo) {
 				centerLayout.show(pnlCenter, "help");
 				enableButtons(false);
