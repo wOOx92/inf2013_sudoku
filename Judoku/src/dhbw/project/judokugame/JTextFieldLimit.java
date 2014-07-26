@@ -23,8 +23,9 @@ class JTextFieldLimit extends PlainDocument {
 	@Override
 	public void insertString(int offset, String str, AttributeSet attr)
 			throws BadLocationException {
+		
 		if (str == null)
-			return;
+			return;	
 
 		/*
 		 * Do a what-if and see if the resulting value is allowed.
@@ -34,6 +35,7 @@ class JTextFieldLimit extends PlainDocument {
 		String text = textBuilder.toString();
 
 		if (allowedValues.contains(text)) {
+			System.out.println(text);
 			super.insertString(offset, str, attr);
 		}
 	}

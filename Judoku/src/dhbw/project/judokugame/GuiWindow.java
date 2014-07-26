@@ -35,8 +35,6 @@ import javax.swing.MenuSelectionManager;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.UIManager;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
@@ -365,7 +363,7 @@ public class GuiWindow {
 				 * Add the required listeners
 				 */
 				gameField[y][x].addFocusListener(new JudokuFocusListener());
-				gameField[y][x].addKeyListener(new JudokuKeyListener());
+				gameField[y][x].addKeyListener(new JudokuKeyListener(gameField));
 				gameField[y][x].setEnabled(false);
 
 				pane.add(gameField[y][x]);
@@ -672,17 +670,6 @@ public class GuiWindow {
 			currentTextField.setBorder(BorderFactory.createMatteBorder(2, 2, 2,
 					2, new Color(0, 165, 255)));
 
-			/*
-			 * Only allow numeric input from 0 to 9, length == 1
-			 */
-			char input = '?';
-			if (currentTextField.getText().length() == 1) {
-				input = currentTextField.getText().charAt(0);
-			}
-			if (Character.isDigit(input)) {
-				oldValue = Integer.parseInt(currentTextField.getText());
-			}
-
 			currentTextField.selectAll();
 		}
 
@@ -702,10 +689,9 @@ public class GuiWindow {
 						Integer.parseInt(currentTextField.getText()), puzzle)) {
 				}
 			}
-
+			
+			currentTextField.setBorder(BorderFactory.createEmptyBorder());			
 			refreshView();
-			currentTextField.setBorder(BorderFactory.createEmptyBorder());
-
 		}
 	}
 
@@ -714,15 +700,32 @@ public class GuiWindow {
 	 */
 	class JudokuKeyListener extends KeyAdapter {
 
-		/*@Override 
+		private final JudokuJTextField[][] gameField;
+		
+		public JudokuKeyListener(JudokuJTextField[][] gameField) {
+			this.gameField = gameField;
+		}
+		
+		@Override 
 		public void keyPressed(KeyEvent e) {
 			JudokuJTextField currentTextField = (JudokuJTextField) e
 					.getSource();
 			
-			if(e.VK_UP == e.getKeyCode()) {
-				System.out.println(gameField[currentTextField.Y-1][currentTextField.X].requestFocusInWindow());
-			}			
-		}*/
+			int key = e.getKeyCode();
+			int x = currentTextField.X;
+			int y = currentTextField.Y;
+			
+			if(key == e.VK_UP || key == e.VK_W) {
+				focusNextTextFieldY(x, y, false);
+			} else if(key == e.VK_DOWN || key == e.VK_S) {
+				focusNextTextFieldY(x, y, true);
+			} else if(key == e.VK_LEFT || key == e.VK_A) {
+				focusNextTextFieldX(x, y, false);
+			} else if(key == e.VK_RIGHT || key == e.VK_D) {
+				focusNextTextFieldX(x, y, true);
+			}
+			e.consume();
+		}
 		
 		@Override
 		public void keyTyped(KeyEvent e) {			
@@ -730,7 +733,7 @@ public class GuiWindow {
 					.getSource();
 			
 			char c = e.getKeyChar();
-			if (((c < '0') || (c > '9')) && (c != KeyEvent.VK_BACK_SPACE)) {
+			if (!Character.isDigit(c) && (c != KeyEvent.VK_BACK_SPACE)) {
 				return;
 			}
 			
@@ -740,14 +743,43 @@ public class GuiWindow {
 			
 			currentTextField.selectAll();
 		}
+		
+		private void focusNextTextFieldY(int x, int y, boolean positiveDirection) {
+			int size = gameField.length;
+			do {
+				if (positiveDirection) {
+					y++;
+				} else {
+					y--;
+				}
+			} while (y < size && y >= 0 && !gameField[y][x].isEnabled());
 
+			if (0 <= y && y < size) {
+				gameField[y][x].requestFocusInWindow();
+			}
+		}
+	
+		private void focusNextTextFieldX(int x, int y, boolean positiveDirection) {
+			int size = gameField.length;
+			do {
+				if (positiveDirection) {
+					x++;
+				} else {
+					x--;
+				}
+			} while (x < size && x >= 0 && !gameField[y][x].isEnabled());
+
+			if (0 <= x && x < size) {
+				gameField[y][x].requestFocusInWindow();
+			}
+		}
 	}
 
 	/**
 	 * Listens for actions on the buttons.
 	 * 
 	 */
-	class JudokuButtonListener implements ActionListener {
+	private class JudokuButtonListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
