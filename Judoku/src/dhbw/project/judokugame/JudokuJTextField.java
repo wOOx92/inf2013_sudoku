@@ -51,7 +51,10 @@ public class JudokuJTextField extends JTextField {
 	@Override
 	public void setText(String t){
 		if(!this.getText().equals(t) || !this.getText().equals(contentWhenMarked)){
-			this.unmark();
+			/*
+			 * Unmark
+			 */
+			super.setBackground(initialColor);
 		}
 		super.setText(t);
 	}
@@ -73,13 +76,6 @@ public class JudokuJTextField extends JTextField {
 		this.contentWhenMarked = this.getText();
 		super.setBackground(Color.RED);
 	}
-
-	/**
-	 * Switches this JudokuJTextFields to its initial color.
-	 */
-	public void unmark() {
-		super.setBackground(initialColor);
-	}
 	
 	@Override
 	protected void processFocusEvent(FocusEvent e) {
@@ -94,5 +90,4 @@ public class JudokuJTextField extends JTextField {
 		
 		super.processFocusEvent(e);
 	}
-	
 }

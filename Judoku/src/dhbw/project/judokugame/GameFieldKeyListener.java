@@ -6,14 +6,14 @@ import java.awt.event.KeyEvent;
 /**
  * Listens for keyinput from user.
  */
-public class JudokuKeyListener extends KeyAdapter {
+public class GameFieldKeyListener extends KeyAdapter {
 
 	/**
 	 * 
 	 */
 	private final JudokuJTextField[][] gameField;
 	
-	public JudokuKeyListener(JudokuJTextField[][] gameField) {
+	public GameFieldKeyListener(JudokuJTextField[][] gameField) {
 		this.gameField = gameField;
 	}
 	

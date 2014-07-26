@@ -10,9 +10,13 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -112,7 +116,8 @@ public class GuiWindow {
 		ImageIcon windowIcon = new ImageIcon(getClass().getClassLoader()
 				.getResource("resources/judoku_icon.png"));
 		frame.setIconImage(windowIcon.getImage());
-
+		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new ShortcutKeyDispatcher());
+		
 		JPanel pnlNorth = new JPanel();
 		pnlNorth.setLayout(new GridLayout(2, 1, 10, 10));
 
@@ -362,7 +367,7 @@ public class GuiWindow {
 				 * Add the required listeners
 				 */
 				gameField[y][x].addFocusListener(new JudokuFocusListener());
-				gameField[y][x].addKeyListener(new JudokuKeyListener(gameField));
+				gameField[y][x].addKeyListener(new GameFieldKeyListener(gameField));
 				gameField[y][x].setEnabled(false);
 
 				pane.add(gameField[y][x]);
@@ -567,7 +572,7 @@ public class GuiWindow {
 		}
 	}
 
-	public void toggleHelpViewBack() {
+	public void toggleInfoViewBack() {
 		btnContinue.setEnabled(true);
 		switchCenterView(activeCenterView);
 
@@ -650,6 +655,26 @@ public class GuiWindow {
 		activeCenterView = cardName;
 	}
 
+	public class ShortcutKeyDispatcher implements KeyEventDispatcher {
+		private int ctrl = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();	
+		
+		@Override
+		public boolean dispatchKeyEvent(KeyEvent e) {
+			if(e.getID() != KeyEvent.KEY_PRESSED) {
+				return false;
+			}
+			if(e.getKeyCode() == KeyEvent.VK_Z && (e.getModifiers() & ctrl) != 0) {
+				controller.undoPuzzle(puzzle);
+			} else if(e.getKeyCode() == KeyEvent.VK_Y && (e.getModifiers() & ctrl) != 0) {
+				controller.redoPuzzle(puzzle);
+			} else if(e.getKeyCode() == KeyEvent.VK_H && (e.getModifiers() & ctrl) != 0) {
+				controller.giveHintPuzzle(puzzle);
+			}
+			refreshView();
+			return false;
+		}
+	}
+	
 	/**
 	 * Listens to the JTextFields for gained / lost focus within the gamefield.
 	 * 
@@ -674,6 +699,7 @@ public class GuiWindow {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			System.out.println(e.getActionCommand());
 			if (e.getSource() == btnQuit) {
 				frame.dispose();
 			} else if (e.getSource() == btnEasy) {
