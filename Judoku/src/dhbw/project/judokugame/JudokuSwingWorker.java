@@ -1,9 +1,5 @@
 package dhbw.project.judokugame;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
 import javax.swing.SwingWorker;
 
 import dhbw.project.puzzlemodel.Difficulty;

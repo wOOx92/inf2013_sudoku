@@ -21,6 +21,7 @@ public class GuiInfoView {
 	private JButton btnReturn;
 	private JTextPane txtCenterText;
 	private JPanel pnlButtons;
+	
 	/**
 	 * Create the frame.
 	 */
@@ -38,18 +39,23 @@ public class GuiInfoView {
 		btnInfo = new JButton("Info");
 		btnInfo.setContentAreaFilled(false);
 		btnInfo.addActionListener(new WindowHelpButtonListener());
+		
 		btnSudokuRules = new JButton("Sudoku Rules");
 		btnSudokuRules.addActionListener(new WindowHelpButtonListener());
 		btnSudokuRules.setContentAreaFilled(false);
+		
 		btnFunctions = new JButton("Functions");
 		btnFunctions.addActionListener(new WindowHelpButtonListener());
 		btnFunctions.setContentAreaFilled(false);
+		
 		btnCredits = new JButton("Credits");
 		btnCredits.addActionListener(new WindowHelpButtonListener());
 		btnCredits.setContentAreaFilled(false);
+		
 		btnReturn = new JButton("Go back");
 		btnReturn.addActionListener(new WindowHelpButtonListener());
 		btnReturn.setContentAreaFilled(false);
+		
 		pnlButtons.add(btnInfo);
 		pnlButtons.add(btnSudokuRules);
 		pnlButtons.add(btnFunctions);

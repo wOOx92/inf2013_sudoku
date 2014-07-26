@@ -1,9 +1,8 @@
 HIGH PRIORITY
 
-- Focus listener durch document listener ersetzen
 - Texte HelpWIndow für Sudoku und About
+- Help Window kommentieren
 - Threadsicher (Hint 2x prellen)
-- Date in JavaDocs
 - JUnit Tests
 	- Welche Methoden?
 - NumberPuzzle hat momentan keine Funktion und würde für eine Str8ts Erweiterung so nicht funktionieren -> Rausnehmen?
@@ -22,3 +21,8 @@ LOW PRIORITY and ADD-ONs
 	- Navigation mit Pfeiltasten
 	
 - Str8ts
+
+Verworfen?
+
+- Focus listener durch document listener ersetzen -> Probleme mit x und y rausfinden, eigenes document schreiben...
+- Datum in JavaDoc Kommentaren -> In der StyleGuide Vorlesung nicht vorhanden, außerdem steht dann überall das selbe datum

@@ -35,6 +35,8 @@ import javax.swing.MenuSelectionManager;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.UIManager;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
@@ -694,7 +696,6 @@ public class GuiWindow {
 				if (controller.trySetValue(currentTextField.X,
 						currentTextField.Y, 0, puzzle)) {
 				}
-				;
 			} else {
 				if (controller.trySetValue(currentTextField.X,
 						currentTextField.Y,
@@ -713,15 +714,30 @@ public class GuiWindow {
 	 */
 	class JudokuKeyListener extends KeyAdapter {
 
-		@Override
-		public void keyTyped(KeyEvent e) {
+		/*@Override 
+		public void keyPressed(KeyEvent e) {
 			JudokuJTextField currentTextField = (JudokuJTextField) e
 					.getSource();
-
+			
+			if(e.VK_UP == e.getKeyCode()) {
+				System.out.println(gameField[currentTextField.Y-1][currentTextField.X].requestFocusInWindow());
+			}			
+		}*/
+		
+		@Override
+		public void keyTyped(KeyEvent e) {			
+			JudokuJTextField currentTextField = (JudokuJTextField) e
+					.getSource();
+			
 			char c = e.getKeyChar();
 			if (((c < '0') || (c > '9')) && (c != KeyEvent.VK_BACK_SPACE)) {
-				e.consume(); // ignore event
+				return;
 			}
+			
+			if(currentTextField.getText().equals("1") && puzzle.getRecentGrid().length == 16) {
+				return;
+			}
+			
 			currentTextField.selectAll();
 		}
 
