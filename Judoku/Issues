@@ -1,7 +1,5 @@
 HIGH PRIORITY
 
-- Navigieren mit Pfeiltasten löscht values
-
 - Texte HelpWIndow für Sudoku und About
 - Help Window kommentieren
 - Threadsicher (Hint 2x prellen)

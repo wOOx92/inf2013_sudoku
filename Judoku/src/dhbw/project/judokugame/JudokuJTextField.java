@@ -1,7 +1,9 @@
 package dhbw.project.judokugame;
 
 import java.awt.Color;
+import java.awt.event.FocusEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.JTextField;
 
 /**
@@ -78,4 +80,19 @@ public class JudokuJTextField extends JTextField {
 	public void unmark() {
 		super.setBackground(initialColor);
 	}
+	
+	@Override
+	protected void processFocusEvent(FocusEvent e) {
+		if(e.getID() == FocusEvent.FOCUS_GAINED) {
+			this.setBorder(BorderFactory.createMatteBorder(3, 3, 3,
+					3, new Color(0, 165, 255)));
+
+			this.selectAll();
+		} else if(e.getID() == FocusEvent.FOCUS_LOST) {
+			this.setBorder(BorderFactory.createEmptyBorder());		
+		}
+		
+		super.processFocusEvent(e);
+	}
+	
 }

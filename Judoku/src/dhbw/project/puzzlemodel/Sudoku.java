@@ -109,6 +109,15 @@ public class Sudoku implements NumberPuzzle {
 
 	public void setValue(int x, int y, int val) {
 		/*
+		 * If the value is already set at this place, do not set it again
+		 * (otherwise undo() will recognize this as an undoable action even
+		 * though nothing actually happened.
+		 */
+		if (recentGrid[y][x] == val) {
+			return;
+		}
+		
+		/*
 		 * Saves the recent state to the undo storage (so undo() can be called on
 		 * this action).
 		 */

@@ -12,9 +12,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.FocusAdapter;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -46,7 +44,7 @@ public class GuiWindow {
 
 	private JFrame frame;
 
-	private NumberPuzzle puzzle;
+	NumberPuzzle puzzle;
 	private Controller controller;
 	private JudokuJTextField[][] gameField;
 	private Timer swingTimer;
@@ -355,6 +353,7 @@ public class GuiWindow {
 				gameField[y][x].setHorizontalAlignment(JTextField.CENTER);
 				gameField[y][x].setBounds(xPosition, yPosition, width, height);
 				gameField[y][x].setInitialColor(active);
+				gameField[y][x].setCaretColor(active);
 				gameField[y][x].setSelectionColor(new Color(0, 0, 0, 0));
 				gameField[y][x].getCaret().setBlinkRate(0);
 				gameField[y][x].setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -655,123 +654,15 @@ public class GuiWindow {
 	 * Listens to the JTextFields for gained / lost focus within the gamefield.
 	 * 
 	 */
-	class JudokuFocusListener implements FocusListener {
-		int oldValue;
-
-		@Override
-		public void focusGained(java.awt.event.FocusEvent evt) {
-			JudokuJTextField currentTextField = (JudokuJTextField) evt
-					.getSource();
-
-			/*
-			 * Set cursorcolor "invisible", looks nicer.
-			 */
-			currentTextField.setCaretColor(currentTextField.getBackground());
-			currentTextField.setBorder(BorderFactory.createMatteBorder(2, 2, 2,
-					2, new Color(0, 165, 255)));
-
-			currentTextField.selectAll();
-		}
+	class JudokuFocusListener extends FocusAdapter {
 
 		@Override
 		public void focusLost(java.awt.event.FocusEvent evt) {
 			JudokuJTextField currentTextField = (JudokuJTextField) evt
 					.getSource();
-
-			if (currentTextField.getText().equals("")
-					|| currentTextField.getText().equals(null)) {
-				if (controller.trySetValue(currentTextField.X,
-						currentTextField.Y, 0, puzzle)) {
-				}
-			} else {
-				if (controller.trySetValue(currentTextField.X,
-						currentTextField.Y,
-						Integer.parseInt(currentTextField.getText()), puzzle)) {
-				}
-			}
-			
-			currentTextField.setBorder(BorderFactory.createEmptyBorder());			
+			controller.trySetValue(currentTextField.X, currentTextField.Y,
+					currentTextField.getText(), puzzle);
 			refreshView();
-		}
-	}
-
-	/**
-	 * Listens for keyinput from user.
-	 */
-	class JudokuKeyListener extends KeyAdapter {
-
-		private final JudokuJTextField[][] gameField;
-		
-		public JudokuKeyListener(JudokuJTextField[][] gameField) {
-			this.gameField = gameField;
-		}
-		
-		@Override 
-		public void keyPressed(KeyEvent e) {
-			JudokuJTextField currentTextField = (JudokuJTextField) e
-					.getSource();
-			
-			int key = e.getKeyCode();
-			int x = currentTextField.X;
-			int y = currentTextField.Y;
-			
-			if(key == e.VK_UP || key == e.VK_W) {
-				focusNextTextFieldY(x, y, false);
-			} else if(key == e.VK_DOWN || key == e.VK_S) {
-				focusNextTextFieldY(x, y, true);
-			} else if(key == e.VK_LEFT || key == e.VK_A) {
-				focusNextTextFieldX(x, y, false);
-			} else if(key == e.VK_RIGHT || key == e.VK_D) {
-				focusNextTextFieldX(x, y, true);
-			}
-			e.consume();
-		}
-		
-		@Override
-		public void keyTyped(KeyEvent e) {			
-			JudokuJTextField currentTextField = (JudokuJTextField) e
-					.getSource();
-			
-			char c = e.getKeyChar();
-			if (!Character.isDigit(c) && (c != KeyEvent.VK_BACK_SPACE)) {
-				return;
-			}
-			
-			if(currentTextField.getText().equals("1") && puzzle.getRecentGrid().length == 16) {
-				return;
-			}
-			
-			currentTextField.selectAll();
-		}
-		
-		private void focusNextTextFieldY(int x, int y, boolean positiveDirection) {
-			int size = gameField.length;
-			do {
-				if (positiveDirection) {
-					y++;
-				} else {
-					y--;
-				}
-			} while (y < size && y >= 0 && !gameField[y][x].isEnabled());
-
-			if (0 <= y && y < size) {
-				gameField[y][x].requestFocusInWindow();
-			}
-		}
-	
-		private void focusNextTextFieldX(int x, int y, boolean positiveDirection) {
-			int size = gameField.length;
-			do {
-				if (positiveDirection) {
-					x++;
-				} else {
-					x--;
-				}
-			} while (x < size && x >= 0 && !gameField[y][x].isEnabled());
-
-			if (0 <= x && x < size) {
-				gameField[y][x].requestFocusInWindow();
-			}
 		}
 	}
 

@@ -62,17 +62,29 @@ public class Controller {
 	 *            The x-value of the cell in which the value should be set.
 	 * @param y
 	 *            The y-value of the cell in which the value should be set.
-	 * @param val
-	 *            The value, that is validated and set or denied.
+	 * @param strVal
+	 *            The input, that is validated and set or denied.
 	 * @param puzzle
 	 *            The puzzle inside which the value should be set.
 	 * @return True, if the value was valid and got set, false otherwise
 	 */
-	public boolean trySetValue(int x, int y, int val, NumberPuzzle puzzle) {
+	public boolean trySetValue(int x, int y, String strVal, NumberPuzzle puzzle) {
+		/*
+		 * If the value is an empty String, set a 0 in the NumberPuzzle
+		 */
+		int iVal = 0;
+		if (!strVal.equals("")) {
+			/*
+			 * Try and catch is not necessary because JudokuJTextFields only
+			 * allow numeric input.
+			 */
+			iVal = Integer.parseInt(strVal);
+		}
+
 		/*
 		 * The value must be between 0 and 9.
 		 */
-		if (val < 0 || val > puzzle.getSize()) {
+		if (iVal < 0 || iVal > puzzle.getSize()) {
 			return false;
 		}
 
@@ -98,11 +110,10 @@ public class Controller {
 			return false;
 		}
 		
-		if(val == puzzle.getRecentGrid()[y][x]){
-			return true;
-		}
-		
-		puzzle.setValue(x, y, val);
+		/*
+		 * After validating, set the value in the puzzle.
+		 */
+		puzzle.setValue(x, y, iVal);
 		return true;
 	}
 	

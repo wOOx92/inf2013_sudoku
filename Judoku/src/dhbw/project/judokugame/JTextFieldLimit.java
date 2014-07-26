@@ -35,7 +35,6 @@ class JTextFieldLimit extends PlainDocument {
 		String text = textBuilder.toString();
 
 		if (allowedValues.contains(text)) {
-			System.out.println(text);
 			super.insertString(offset, str, attr);
 		}
 	}
