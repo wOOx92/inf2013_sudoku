@@ -78,7 +78,7 @@ public class JudokuJTextField extends JTextField {
 	}
 	
 	@Override
-	protected void processFocusEvent(FocusEvent e) {
+	protected void processFocusEvent(FocusEvent e) {	
 		if(e.getID() == FocusEvent.FOCUS_GAINED) {
 			this.setBorder(BorderFactory.createMatteBorder(3, 3, 3,
 					3, new Color(0, 165, 255)));

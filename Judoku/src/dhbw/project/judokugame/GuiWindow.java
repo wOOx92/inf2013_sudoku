@@ -16,6 +16,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
@@ -64,7 +65,6 @@ public class GuiWindow {
 	private JButton btnValidate;
 	private JButton btnContinue;
 	private JButton btnInfo;
-	private JButton btnLangENG;
 	private JButton btnEasy;
 	private JButton btnMedium;
 	private JButton btnHard;
@@ -244,13 +244,6 @@ public class GuiWindow {
 		btnInfo.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		btnInfo.setPreferredSize(new Dimension(80, 25));
 		mnBar.add(btnInfo);
-
-		btnLangENG = new JButton("ENG");
-		btnLangENG.setContentAreaFilled(false);
-		btnLangENG.setBorderPainted(false);
-		btnLangENG.addActionListener(new JudokuButtonListener());
-		btnLangENG.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		mnBar.add(btnLangENG);
 	}
 
 	/**
@@ -326,7 +319,7 @@ public class GuiWindow {
 
 		int fontSize = 38;
 		if (puzzleSize == 16) {
-			fontSize = 28;
+			fontSize = 26;
 		}
 
 		int xPosition = 10;
@@ -505,6 +498,7 @@ public class GuiWindow {
 		int userFilledFields = 0;
 		for (int y = 0; y < puzzle.getSize(); y++) {
 			for (int x = 0; x < puzzle.getSize(); x++) {
+				gameField[y][x].setEnabled(true);
 				if (startGrid[y][x] != 0) {
 					gameField[y][x].setText(String.valueOf(startGrid[y][x]));
 					gameField[y][x].setEnabled(false);
@@ -513,13 +507,10 @@ public class GuiWindow {
 					startFilledFields++;
 				} else if (recentGrid[y][x] != 0) {
 					gameField[y][x].setText(String.valueOf(recentGrid[y][x]));
-					gameField[y][x].setEnabled(true);
 					userFilledFields++;
 				} else {
 					gameField[y][x].setText("");
-					gameField[y][x].setEnabled(true);
 				}
-
 			}
 		}
 		if (startFilledFields + userFilledFields == puzzle.getSize()
@@ -642,10 +633,9 @@ public class GuiWindow {
 		 */
 		if(!threadSuccess) {
 			try {
-				System.out.println("Fallback");
 				puzzle = sWork.get();
 			} catch(InterruptedException | ExecutionException ex) {
-
+				txtGameInfo.setText("ERROR");
 			}
 		}
 	}
@@ -665,12 +655,14 @@ public class GuiWindow {
 			}
 			if(e.getKeyCode() == KeyEvent.VK_Z && (e.getModifiers() & ctrl) != 0) {
 				controller.undoPuzzle(puzzle);
+				refreshView();
 			} else if(e.getKeyCode() == KeyEvent.VK_Y && (e.getModifiers() & ctrl) != 0) {
 				controller.redoPuzzle(puzzle);
+				refreshView();
 			} else if(e.getKeyCode() == KeyEvent.VK_H && (e.getModifiers() & ctrl) != 0) {
 				controller.giveHintPuzzle(puzzle);
+				refreshView();
 			}
-			refreshView();
 			return false;
 		}
 	}
@@ -680,11 +672,12 @@ public class GuiWindow {
 	 * 
 	 */
 	class JudokuFocusListener extends FocusAdapter {
-
+		
 		@Override
-		public void focusLost(java.awt.event.FocusEvent evt) {
+		public void focusLost(FocusEvent evt) {
 			JudokuJTextField currentTextField = (JudokuJTextField) evt
 					.getSource();
+			
 			controller.trySetValue(currentTextField.X, currentTextField.Y,
 					currentTextField.getText(), puzzle);
 			refreshView();
@@ -699,7 +692,6 @@ public class GuiWindow {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println(e.getActionCommand());
 			if (e.getSource() == btnQuit) {
 				frame.dispose();
 			} else if (e.getSource() == btnEasy) {
@@ -747,11 +739,6 @@ public class GuiWindow {
 				btnValidate.setEnabled(false);
 				btnContinue.setEnabled(false);
 				swingTimer.stop();
-			} else if (e.getSource() == btnLangENG) {
-				for (int i = 0; i < puzzle.getSize() * puzzle.getSize(); i++) {
-					puzzle.giveHint();
-				}
-				refreshView();
 			} else if (e.getSource() == btnValidate) {
 				swingTimer.stop();
 				btnHint.setEnabled(false);
