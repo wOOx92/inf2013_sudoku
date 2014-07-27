@@ -645,7 +645,7 @@ public class GuiWindow {
 		activeCenterView = cardName;
 	}
 
-	public class ShortcutKeyDispatcher implements KeyEventDispatcher {
+	protected class ShortcutKeyDispatcher implements KeyEventDispatcher {
 		private int ctrl = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();	
 		
 		@Override
@@ -671,7 +671,7 @@ public class GuiWindow {
 	 * Listens to the JTextFields for gained / lost focus within the gamefield.
 	 * 
 	 */
-	class JudokuFocusListener extends FocusAdapter {
+	protected class JudokuFocusListener extends FocusAdapter {
 		
 		@Override
 		public void focusLost(FocusEvent evt) {
@@ -688,7 +688,7 @@ public class GuiWindow {
 	 * Listens for actions on the buttons.
 	 * 
 	 */
-	private class JudokuButtonListener implements ActionListener {
+	protected class JudokuButtonListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
