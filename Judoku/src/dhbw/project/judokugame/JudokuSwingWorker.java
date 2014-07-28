@@ -17,12 +17,15 @@ public class JudokuSwingWorker extends SwingWorker<Sudoku, Void> {
 
 	private final Difficulty REQUESTED_DIFFICULTY;
 	private final int CARREE_SIZE;
-	
+
 	/**
 	 * Creates a new JudokuSwingWorker object.
 	 * 
 	 * @param sudokuDifficulty
 	 *            The favored Difficulty of the Sudoku.
+	 * @param carreeSize
+	 *            The size of on carree (the resulting Sudoku will have the
+	 *            squared size of on carree).
 	 */
 	public JudokuSwingWorker(Difficulty sudokuDifficulty, int carreeSize) {
 		this.REQUESTED_DIFFICULTY = sudokuDifficulty;

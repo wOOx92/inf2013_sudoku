@@ -6,18 +6,18 @@ import java.awt.event.ActionListener;
 import javax.swing.JTextField;
 
 /**
- * Manages the passed time and the displaying textfield.
+ * Displays time in a given JTextField.
  * 
  */
 class JudokuTimeListener implements ActionListener {
 	/**
-	 * 
+	 * The JTextField where the time will be written in.
 	 */
 	private final JTextField txtOutput;
 
 	/**
 	 * @param txtOutput
-	 *            The listener will write the time passed into this JTextField.
+	 *            The listener will write the passed time into this JTextField.
 	 */
 	JudokuTimeListener(JTextField txtOutput) {
 		this.txtOutput = txtOutput;

@@ -7,9 +7,9 @@ import dhbw.project.puzzlemodel.NumberPuzzle;
 /**
  * The Controller evaluates user inputs from the GUI_Window and initializes the
  * necessary actions inside the model (the NumberPuzzle object).
- *
+ * 
  * @author Dennis Uteg, Florian Steurer, Markus Wingler, Michael Jauch
- *
+ * 
  */
 public class Controller {
 
@@ -109,14 +109,14 @@ public class Controller {
 		if (puzzle.getStartGrid()[y][x] != 0) {
 			return false;
 		}
-		
+
 		/*
 		 * After validating, set the value in the puzzle.
 		 */
 		puzzle.setValue(x, y, iVal);
 		return true;
 	}
-	
+
 	/**
 	 * Counts the number of mistakes the user made when solving the
 	 * NumberPuzzle.

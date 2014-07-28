@@ -341,7 +341,7 @@ public class GuiWindow {
 
 				gameField[y][x] = new JudokuJTextField(x, y);
 				gameField[y][x].setBorder(BorderFactory.createEmptyBorder());
-				gameField[y][x].setDocument(new JTextFieldLimit(puzzleSize));
+				gameField[y][x].setDocument(new JudokuPlainDocument(puzzleSize));
 
 				/*
 				 * Format the JTextFields
