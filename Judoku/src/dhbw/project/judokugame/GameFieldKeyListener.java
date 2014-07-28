@@ -129,6 +129,7 @@ public class GameFieldKeyListener extends KeyAdapter {
 	 */
 	private void focusNextTextFieldX(int x, int y, boolean positiveDirection) {
 		int size = gameField.length;
+		
 		do {
 			if (positiveDirection) {
 				x++;
