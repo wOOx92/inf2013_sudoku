@@ -53,6 +53,7 @@ public class GuiWindow {
 	private Controller controller;
 	private JudokuJTextField[][] gameField;
 	private Timer swingTimer;
+	private JudokuTimeListener judokuTimeListener;
 
 	/*
 	 * Buttons
@@ -75,8 +76,6 @@ public class GuiWindow {
 	 * Other Components
 	 */
 	private JPanel pnlGameField;
-	private JMenuBar mnbrTop;
-	private JMenu mnNewGame;
 	private JProgressBar prgrBar;
 	private JTextField txtTime;
 	private JTextField txtLostMsg;
@@ -121,7 +120,7 @@ public class GuiWindow {
 		JPanel pnlNorth = new JPanel();
 		pnlNorth.setLayout(new GridLayout(2, 1, 10, 10));
 
-		mnbrTop = new JMenuBar();
+		JMenuBar mnbrTop = new JMenuBar();
 		mnbrTop.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
 		initializeMenuBar(mnbrTop);
 		pnlNorth.add(mnbrTop);
@@ -157,7 +156,8 @@ public class GuiWindow {
 		/*
 		 * Now that txtTime exists, the Timer can be instantiated.
 		 */
-		swingTimer = new Timer(1000, new JudokuTimeListener(txtTime));
+		judokuTimeListener = new JudokuTimeListener(txtTime);
+		swingTimer = new Timer(1000, judokuTimeListener);
 		
 		frame.getContentPane().add(pnlSouth, BorderLayout.SOUTH);
 		frame.getContentPane().add(pnlCenter, BorderLayout.CENTER);
@@ -176,7 +176,7 @@ public class GuiWindow {
 	 * @param mnBar
 	 */
 	private void initializeMenuBar(JMenuBar mnBar) {
-		mnNewGame = new JMenu("New Game");
+		JMenu mnNewGame = new JMenu("New Game");
 		mnNewGame.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		mnNewGame.setToolTipText("Start a new Judoku");
 		mnNewGame.setPreferredSize(new Dimension(80, 25));
@@ -593,19 +593,12 @@ public class GuiWindow {
 		btnReset.setEnabled(true);
 
 		/*
-		 * Close the "drop-down"-Menu.
-		 */
-		MenuSelectionManager.defaultManager().clearSelectedPath();
-		/*
 		 * Reset the timers JudokuTimeListener.
 		 */
-		JudokuTimeListener jtl = (JudokuTimeListener) swingTimer
-				.getActionListeners()[0];
-		jtl.reset();
+		judokuTimeListener.reset();
 		swingTimer.restart();
 		txtGameInfo.setText(gameInfoText);
 		initializeGameField(pnlGameField, carreeSize);
-		pnlGameField.repaint();
 
 		/*
 		 * Get the Sudoku from the worker thread. If it the thread fails to
@@ -696,18 +689,26 @@ public class GuiWindow {
 				frame.dispose();
 			} else if (e.getSource() == btnEasy) {
 				GuiWindow.this.initNewGame(3, Difficulty.EASY, "Easy");
+				/*
+				 * Close the "drop-down"-Menu.
+				 */
+				MenuSelectionManager.defaultManager().clearSelectedPath();
 				refreshView();
 			} else if (e.getSource() == btnMedium) {
 				GuiWindow.this.initNewGame(3, Difficulty.MEDIUM, "Medium");
+				MenuSelectionManager.defaultManager().clearSelectedPath();
 				refreshView();
 			} else if (e.getSource() == btnHard) {
 				GuiWindow.this.initNewGame(3, Difficulty.HARD, "Hard");
+				MenuSelectionManager.defaultManager().clearSelectedPath();
 				refreshView();
 			} else if (e.getSource() == btnMiniSdk) {
 				GuiWindow.this.initNewGame(2, Difficulty.HARD, "Mini 4x4");
+				MenuSelectionManager.defaultManager().clearSelectedPath();
 				refreshView();
 			} else if (e.getSource() == btnMaxiSdk) {
 				GuiWindow.this.initNewGame(4, Difficulty.EASY, "Maxi 16x16");
+				MenuSelectionManager.defaultManager().clearSelectedPath();
 				refreshView();
 			} else if (e.getSource() == btnReset) {
 				controller.resetPuzzle(puzzle);

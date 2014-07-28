@@ -9,7 +9,7 @@ import javax.swing.JTextField;
  * Displays time in a given JTextField.
  * 
  */
-class JudokuTimeListener implements ActionListener {
+public class JudokuTimeListener implements ActionListener {
 	/**
 	 * The JTextField where the time will be written in.
 	 */
