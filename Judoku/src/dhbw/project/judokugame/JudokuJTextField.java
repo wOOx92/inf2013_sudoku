@@ -50,8 +50,13 @@ public class JudokuJTextField extends JTextField {
 	 *            The y-position of the JudokuJTextField in the game field.
 	 */
 	public JudokuJTextField(int x, int y) {
+		super();
 		this.X = x;
 		this.Y = y;
+		/*
+		 * JudokuJTextFields have no border, except when focused.
+		 */
+		this.setBorder(BorderFactory.createEmptyBorder());
 	}
 
 	@Override
@@ -66,6 +71,7 @@ public class JudokuJTextField extends JTextField {
 			 * unmark the field.
 			 */
 			super.setBackground(initialColor);
+			super.setCaretColor(initialColor);
 		}
 		super.setText(t);
 	}
@@ -87,6 +93,7 @@ public class JudokuJTextField extends JTextField {
 	public void mark() {
 		this.contentWhenMarked = this.getText();
 		super.setBackground(Color.RED);
+		super.setCaretColor(Color.RED);
 	}
 
 	@Override

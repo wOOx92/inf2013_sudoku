@@ -107,6 +107,9 @@ public class Sudoku {
 		return clues;
 	}
 	
+	/**
+	 * Resets the Sudoku to the initial state.
+	 */
 	public void reset() {
 		undoStorage.clear();
 		redoStorage.clear();
@@ -118,6 +121,12 @@ public class Sudoku {
 
 	}
 
+	/**
+	 * Sets a value at a certain position in the recentGrid of this Sudoku.
+	 * @param x X-coordinate of the cell.
+	 * @param y Y-coordinate of the cell.
+	 * @param val Value to be set.
+	 */
 	public void setValue(int x, int y, int val) {
 		/*
 		 * If the value is already set at this place, do not set it again
@@ -144,26 +153,49 @@ public class Sudoku {
 		redoStorage.clear();
 	}
 	
+	/**
+	 * @return Size of this Sudoku.
+	 */
 	public int getSize() {
 		return this.SIZE;
 	}
 	
+	/**
+	 * @return Carree size of this Sudoku.
+	 */
 	public int getCarreeSize() {
 		return this.CARREE_SIZE;
 	}
 	
+	/**
+	 * @return The initial state of this Sudoku (before values have been set with {@link Sudoku#setValue(int, int, int)}.
+	 */
 	public int[][] getStartGrid() {
 		return this.startGrid;
 	}
 
+	/**
+	 * @return The recent state of this Sudoku.
+	 */
 	public int[][] getRecentGrid() {
 		return this.recentGrid;
 	}
 
+	/**
+	 * @return The unique solution of this Sudoku.
+	 */
 	public int[][] getSolvedGrid() {
 		return this.solvedGrid;
 	}
 
+	/**
+	 * Searches for a mistake (differences between the recentGrid and the
+	 * solvedGrid).
+	 * 
+	 * @return An array of length 0 if no mistakes were found, an array of
+	 *         length 2 (the first entry beeing the x, the second the y
+	 *         coordinate of the first mistake) if mistakes have been found.
+	 */
 	public int[] searchMistake() {
 		/*
 		 * For each cell in the Sudoku
@@ -190,6 +222,9 @@ public class Sudoku {
 		return new int[0];
 	}
 
+	/**
+	 * Writes a hint in the recentGrid of the Sudoku.
+	 */
 	public void giveHint() {
 		/*
 		 * Get the number of filled cells and check if there are any empty cells
@@ -245,6 +280,9 @@ public class Sudoku {
 		redoStorage.clear();
 	}
 
+	/**
+	 * Returns to a previous state.
+	 */
 	public void undo() {
 		if (!undoStorage.empty()) {
 			/*
@@ -257,6 +295,9 @@ public class Sudoku {
 		}
 	}
 
+	/**
+	 * Returns to the state before an {@link Sudoku#undo()} call.
+	 */
 	public void redo() {
 		if (!redoStorage.empty()) {
 			/*
@@ -269,6 +310,9 @@ public class Sudoku {
 		}
 	}
 
+	/**
+	 * Limits a stack to a defined limit {@link Sudoku#UNDOLIMIT}.
+	 */
 	private void limitStack(Stack<?> undoRedoStack) {
 		/*
 		 * If the given Stack has reached the defined limit, remove the oldest
@@ -279,6 +323,10 @@ public class Sudoku {
 		}
 	}
 
+	/**
+	 * Checks if an {@link Sudoku#undo()} would result in a change in the state.
+	 * @return True if undo possible, false otherwise.
+	 */
 	public boolean undoPossible() {
 		if (!undoStorage.isEmpty()) {
 			return true;
@@ -286,7 +334,11 @@ public class Sudoku {
 		return false;
 
 	}
-
+	
+	/**
+	 * Checks if an {@link Sudoku#redo()} would result in a change in the state.
+	 * @return True if redo possible, false otherwise.
+	 */
 	public boolean redoPossible() {
 		if (!redoStorage.isEmpty()) {
 			return true;
@@ -294,12 +346,22 @@ public class Sudoku {
 		return false;
 	}
 	
+	/**
+	 * Tries to solve this Sudoku using the recentGrid of the Sudoku.
+	 * @return 0 if not solvable, 1 if uniquely solvable, > 1 if more than one solution (not necessarily the actual number of solutions).
+	 */
 	public int solve() {
 		SudokuBuilder sb = new SudokuBuilder();
+		/*
+		 * Make a copy and use the SudokuBuilder algorithms to determine the number of solutions.
+		 */
 		int[][] copy = SudokuBuilder.deepCopy(recentGrid);
 		sb.setCarreeSize(CARREE_SIZE);
 		int solutions = sb.checkSolutions(0, 0, copy, 0, 34);
 		if(solutions == 1) {
+			/*
+			 * If it is valid, generate the actual solution and manage the grids.
+			 */
 			this.startGrid = SudokuBuilder.deepCopy(recentGrid);
 			sb.solve(0, 0, recentGrid);
 			this.undoStorage.clear();

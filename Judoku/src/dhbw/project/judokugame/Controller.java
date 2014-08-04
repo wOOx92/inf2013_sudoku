@@ -42,21 +42,25 @@ public class Controller {
 		});
 	}
 
-	public void resetPuzzle(Sudoku puzzle) {
-		puzzle.reset();
+	public void resetSudoku(Sudoku sdk) {
+		sdk.reset();
 	}
 
-	public void undoPuzzle(Sudoku puzzle) {
-		puzzle.undo();
+	public void undoSudoku(Sudoku sdk) {
+		sdk.undo();
 	}
 
-	public void redoPuzzle(Sudoku puzzle) {
-		puzzle.redo();
+	public void redoSudoku(Sudoku sdk) {
+		sdk.redo();
+	}
+	
+	public int solveSudoku(Sudoku sdk) {
+		return sdk.solve();
 	}
 
 	/**
 	 * Validates a user input and, if it is valid, sets the value inside the
-	 * NumberPuzzle.
+	 * Sudoku.
 	 * 
 	 * @param x
 	 *            The x-value of the cell in which the value should be set.
@@ -64,13 +68,13 @@ public class Controller {
 	 *            The y-value of the cell in which the value should be set.
 	 * @param strVal
 	 *            The input, that is validated and set or denied.
-	 * @param puzzle
+	 * @param sdk
 	 *            The puzzle inside which the value should be set.
 	 * @return True, if the value was valid and got set, false otherwise
 	 */
-	public boolean trySetValue(int x, int y, String strVal, Sudoku puzzle) {
+	public boolean trySetValue(int x, int y, String strVal, Sudoku sdk) {
 		/*
-		 * If the value is an empty String, set a 0 in the NumberPuzzle
+		 * If the value is an empty String, set a 0 in the Sudoku.
 		 */
 		int iVal = 0;
 		if (!strVal.equals("")) {
@@ -84,21 +88,21 @@ public class Controller {
 		/*
 		 * The value must be between 0 and 9.
 		 */
-		if (iVal < 0 || iVal > puzzle.getSize()) {
+		if (iVal < 0 || iVal > sdk.getSize()) {
 			return false;
 		}
 
 		/*
 		 * The x-coordinate must be between 0 and 9.
 		 */
-		if (x < 0 || x >= puzzle.getSize()) {
+		if (x < 0 || x >= sdk.getSize()) {
 			return false;
 		}
 
 		/*
 		 * The y-coordinate must be between 0 and 9.
 		 */
-		if (y < 0 || y >= puzzle.getSize()) {
+		if (y < 0 || y >= sdk.getSize()) {
 			return false;
 		}
 
@@ -106,39 +110,39 @@ public class Controller {
 		 * If in the startGrid this cell contains a value, the user is not
 		 * allowed to set a value there since this is an essential clue.
 		 */
-		if (puzzle.getStartGrid()[y][x] != 0) {
+		if (sdk.getStartGrid()[y][x] != 0) {
 			return false;
 		}
 
 		/*
-		 * After validating, set the value in the puzzle.
+		 * After validating, set the value in the Sudoku.
 		 */
-		puzzle.setValue(x, y, iVal);
+		sdk.setValue(x, y, iVal);
 		return true;
 	}
 
 	/**
 	 * Counts the number of mistakes the user made when solving the
-	 * NumberPuzzle.
+	 * Sudoku.
 	 * 
-	 * @param puzzle
-	 *            The user-solved NumberPuzzle
+	 * @param sdk
+	 *            The user-solved Sudoku.
 	 * @return The number of mistakes. If it is zero, the user solved the
-	 *         NumberPuzzle correctly.
+	 *         Sudoku correctly.
 	 */
-	public int validateUserSolution(Sudoku puzzle) {
+	public int validateUserSolution(Sudoku sdk) {
 		int mistakes = 0;
 
 		/*
 		 * For every field in the NumberPuzzle
 		 */
-		for (int x = 0; x < puzzle.getSize(); x++) {
-			for (int y = 0; y < puzzle.getSize(); y++) {
+		for (int x = 0; x < sdk.getSize(); x++) {
+			for (int y = 0; y < sdk.getSize(); y++) {
 
 				/*
 				 * Check if the user input varies from the actual solution
 				 */
-				if (puzzle.getRecentGrid()[y][x] != puzzle.getSolvedGrid()[y][x]) {
+				if (sdk.getRecentGrid()[y][x] != sdk.getSolvedGrid()[y][x]) {
 					mistakes++;
 				}
 			}
@@ -148,20 +152,20 @@ public class Controller {
 
 	/**
 	 * Checks whether the user already made mistakes filling in the
-	 * NumberPuzzle. If so, notifies the GuiWindow to mark the erroneous field,
-	 * otherwise calls the NumberPuzzle itself to provide an hint.
+	 * Sudoku. If so, notifies the GuiWindow to mark the erroneous field,
+	 * otherwise calls the Sudoku itself to provide an hint.
 	 * 
-	 * @param puzzle
-	 *            The NumberPuzzle object displayed by the GuiWindow
+	 * @param sdk
+	 *            The Sudoku object displayed by the GuiWindow
 	 */
-	public void giveHintPuzzle(Sudoku puzzle) {
-		int[] coords = puzzle.searchMistake();
+	public void giveHintPuzzle(Sudoku sdk) {
+		int[] coords = sdk.searchMistake();
 
 		/*
 		 * If the returned array has length 0, no mistakes have been found.
 		 */
 		if (coords.length == 0) {
-			puzzle.giveHint();
+			sdk.giveHint();
 		} else {
 
 			/*
