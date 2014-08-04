@@ -79,10 +79,13 @@ public class Controller {
 		int iVal = 0;
 		if (!strVal.equals("")) {
 			/*
-			 * Try and catch is not necessary because JudokuJTextFields only
-			 * allow numeric input.
-			 */
-			iVal = Integer.parseInt(strVal);
+			 * Try to parse the number 
+			 */ 
+			try {
+				iVal = Integer.parseInt(strVal);
+			} catch(NumberFormatException e) {
+				return false;
+			}
 		}
 
 		/*

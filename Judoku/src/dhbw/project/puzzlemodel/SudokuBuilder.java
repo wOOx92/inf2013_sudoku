@@ -569,7 +569,7 @@ public class SudokuBuilder {
 	 *            The value which is searched in the neighboring cells.
 	 * @return True if there is a neighbor with the given value, false if not.
 	 */
-	private boolean isNeighboredBy(int x, int y, int val) {
+	protected boolean isNeighboredBy(int x, int y, int val) {
 		for (int i = 0; i < this.sudokuSize; i++) {
 			/*
 			 * If a cell in the column or in the row contains the value, the
@@ -751,7 +751,7 @@ public class SudokuBuilder {
 	protected void addRandomClues(int add) {
 		int clues = Sudoku.getNumberOfClues(sudokuGridStorage);
 		/*
-		 * If clues + i is equal the SIZE*SIZE, this means there are no empty
+		 * If clues + i is equal to SIZE*SIZE, this means there are no empty
 		 * cells left and the loop has to stop.
 		 */
 		for (int i = 0; i < add && clues + i < this.sudokuSize * this.sudokuSize;) {

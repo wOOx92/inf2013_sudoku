@@ -347,7 +347,7 @@ public class Sudoku {
 	}
 	
 	/**
-	 * Tries to solve this Sudoku using the recentGrid of the Sudoku.
+	 * Tries to solve this Sudoku using the recentGrid of the Sudoku. This is not undoable.
 	 * @return 0 if not solvable, 1 if uniquely solvable, > 1 if more than one solution (not necessarily the actual number of solutions).
 	 */
 	public int solve() {

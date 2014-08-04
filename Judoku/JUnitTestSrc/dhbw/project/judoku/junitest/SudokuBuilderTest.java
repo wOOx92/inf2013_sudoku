@@ -20,6 +20,7 @@ public class SudokuBuilderTest extends SudokuBuilder{
 	 */
 	private int[][] sdkTestCaseTwo = new int[4][4];
 	
+	
 	public SudokuBuilderTest() {
 		
 		/*
@@ -196,5 +197,46 @@ public class SudokuBuilderTest extends SudokuBuilder{
 		testCaseCopy[2][0] = 4;
 		setSudokuGridStorage(testCaseCopy);
 		assertTrue("An additional clue was not cut out." , this.doRandomCutting(Difficulty.UNRESTRICTED) == 1);
+	}
+	
+	@Test
+	public void legalTest() {
+		/*
+		 * Test various cases for the 9x9 Sudoku.
+		 */
+		this.setCarreeSize(3);
+		assertFalse("Invalid value was legal.", legal(0, 0, 4, sdkTestCaseOne));
+		assertFalse("Invalid value was legal.", legal(3, 4, 8, sdkTestCaseOne));
+		assertTrue("Valid value was illegal.", legal(0, 0, 6, sdkTestCaseOne));
+		assertTrue("Valid value was illegal.", legal(3, 4, 9, sdkTestCaseOne));
+		
+		/*
+		 * Testing the 4x4 cases.
+		 */
+		this.setCarreeSize(2);
+		assertFalse("Invalid value was legal.", legal(0, 0, 4, sdkTestCaseTwo));
+		assertFalse("Invalid value was legal.", legal(3, 3, 1, sdkTestCaseTwo));
+		assertTrue("Valid value was illegal.", legal(0, 0, 3, sdkTestCaseTwo));
+		assertTrue("Valid value was illegal.", legal(3, 0, 2, sdkTestCaseTwo));
+	}
+
+	@Test
+	public void isNeighboredByTest() {
+		this.setCarreeSize(3);
+		this.setSudokuGridStorage(sdkTestCaseOne);
+		
+		/*
+		 * Testing the 9x9 case.
+		 */
+		assertTrue("Neighbor in row not found.", this.isNeighboredBy(4, 0, 2));
+		assertTrue("Neighbor in carree not found.", this.isNeighboredBy(1, 1, 1));
+		assertTrue("Neighbor in column not found.", this.isNeighboredBy(1, 2, 9));
+		
+		assertFalse("Non-existent neighbor found.", this.isNeighboredBy(4, 1, 1));
+		assertFalse("Non-existent neighbor found.", this.isNeighboredBy(1, 1, 8));
+		
+		this.setCarreeSize(2);
+		this.setSudokuGridStorage(sdkTestCaseTwo);
+		assertFalse("Non-existent neighbor found.", this.isNeighboredBy(0, 1, 4));
 	}
 }

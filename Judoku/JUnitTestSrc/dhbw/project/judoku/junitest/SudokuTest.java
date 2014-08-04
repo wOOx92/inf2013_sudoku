@@ -124,13 +124,12 @@ public class SudokuTest {
 		/*
 		 * The unsolved 4x4 grid has 4 clues at the beginning.
 		 */
-
 		Sudoku sdkTestObj = new Sudoku(sdkUnsolved, sdkSolved);
 		sdkTestObj.giveHint();
 		assertTrue(
 				"After requesting an hint, the Sudoku still has as much clues as before.",
 				Sudoku.getNumberOfClues(sdkTestObj.getRecentGrid()) == 5);
-		
+
 		sdkTestObj.giveHint();
 		assertTrue(
 				"After requesting an hint, the Sudoku still has as much clues as before.",
@@ -147,9 +146,4 @@ public class SudokuTest {
 				"Giving all possible hints does not result in the solved grid",
 				sdkSolved, sdkTestObj.getSolvedGrid());
 	}
-	
-	/*
-	 * Undo() / Redo() 
-	 * reset()
-	 */
 }
