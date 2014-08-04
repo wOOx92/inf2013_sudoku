@@ -3,11 +3,13 @@ HIGH PRIORITY
 DONE - Erstes Feld auswählen bei New Game
 DONE - Tastenkombis deaktivieren wenn nicht im GameFieldView
 DONE - Solving Mode
-- kommentare
+DONE - kommentare
+- Info view klasse
+- Word Doc
 - junittests
 - hints mit klicken
 
-- Was machen mit numberpuzzle?
+- Was machen mit numberpuzzle? -> löschen
 
 
 LOW PRIORITY and ADD-ONs

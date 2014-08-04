@@ -117,7 +117,7 @@ public class GuiInfoView {
 			    				+ "Michael Jauch</font face></html>");				
 			    	} 
 			    	else if(e.getSource() == btnReturn){
-			    		parentWindow.toggleInfoViewBack();
+			    		parentWindow.toggleCenterViewBack();
 			    	}
 		}
 	}
