@@ -775,6 +775,7 @@ public class GuiWindow {
 				btnReset.setEnabled(true);
 				btnHint.setEnabled(false);
 				prgrBar.setString("");
+				prgrBar.setValue(0);
 				swingTimer.stop();
 				judokuTimeListener.reset();
 				solvingMode = true;
