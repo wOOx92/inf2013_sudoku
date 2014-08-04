@@ -688,7 +688,7 @@ public class SudokuBuilder {
 	 *         >1 if multiple solutions where found (not necessarily the actual
 	 *         amount of solutions).
 	 */
-	private int checkSolutions(int x, int y, int[][] sudoku,
+	protected int checkSolutions(int x, int y, int[][] sudoku,
 			int solutionsFound, int maxRecursionDepth) {
 		/*
 		 * If all columns in a row have been filled increase the number of rows.

@@ -1,10 +1,11 @@
 HIGH PRIORITY
 
-- Erstes Feld auswählen bei New Game
+DONE - Erstes Feld auswählen bei New Game
 DONE - Tastenkombis deaktivieren wenn nicht im GameFieldView
 - Solving Mode
 - kommentare
 - junittests
+- hints mit klicken
 
 - Was machen mit numberpuzzle?
 

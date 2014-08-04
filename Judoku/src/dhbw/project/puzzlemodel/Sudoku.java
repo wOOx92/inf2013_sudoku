@@ -12,7 +12,7 @@ import java.util.Stack;
  * @author Dennis Uteg, Florian Steurer, Markus Wingler, Michael Jauch
  * 
  */
-public class Sudoku implements NumberPuzzle {
+public class Sudoku {
 
 	/**
 	 * This field is the side-length of a carree in a Sudoku.
@@ -33,7 +33,7 @@ public class Sudoku implements NumberPuzzle {
 	/**
 	 * The solution of the Sudoku.
 	 */
-	private final int[][] solvedGrid;
+	private int[][] solvedGrid;
 
 	/**
 	 * The initial state of the Sudoku.
@@ -77,6 +77,17 @@ public class Sudoku implements NumberPuzzle {
 		this.solvedGrid = SudokuBuilder.deepCopy(solvedGrid);
 	}
 
+	/**
+	 * Creates a empty Sudoku.
+	 */
+	public Sudoku(int carreeSize) {
+		CARREE_SIZE = carreeSize;
+		SIZE = carreeSize*carreeSize;
+		this.startGrid = new int[SIZE][SIZE];
+		this.recentGrid = new int[SIZE][SIZE];
+		this.solvedGrid = new int[SIZE][SIZE];
+	}
+	
 	/**
 	 * Calculates the number of clues in a Sudoku grid.
 	 * 
@@ -281,5 +292,19 @@ public class Sudoku implements NumberPuzzle {
 			return true;
 		}
 		return false;
+	}
+	
+	public int solve() {
+		SudokuBuilder sb = new SudokuBuilder();
+		int[][] copy = SudokuBuilder.deepCopy(recentGrid);
+		sb.setCarreeSize(CARREE_SIZE);
+		int solutions = sb.checkSolutions(0, 0, copy, 0, 34);
+		if(solutions == 1) {
+			this.startGrid = SudokuBuilder.deepCopy(recentGrid);
+			sb.solve(0, 0, recentGrid);
+			this.undoStorage.clear();
+			this.redoStorage.clear();
+		}
+		return solutions;
 	}
 }

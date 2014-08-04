@@ -2,7 +2,7 @@ package dhbw.project.judokugame;
 
 import java.awt.EventQueue;
 
-import dhbw.project.puzzlemodel.NumberPuzzle;
+import dhbw.project.puzzlemodel.Sudoku;
 
 /**
  * The Controller evaluates user inputs from the GUI_Window and initializes the
@@ -42,15 +42,15 @@ public class Controller {
 		});
 	}
 
-	public void resetPuzzle(NumberPuzzle puzzle) {
+	public void resetPuzzle(Sudoku puzzle) {
 		puzzle.reset();
 	}
 
-	public void undoPuzzle(NumberPuzzle puzzle) {
+	public void undoPuzzle(Sudoku puzzle) {
 		puzzle.undo();
 	}
 
-	public void redoPuzzle(NumberPuzzle puzzle) {
+	public void redoPuzzle(Sudoku puzzle) {
 		puzzle.redo();
 	}
 
@@ -68,7 +68,7 @@ public class Controller {
 	 *            The puzzle inside which the value should be set.
 	 * @return True, if the value was valid and got set, false otherwise
 	 */
-	public boolean trySetValue(int x, int y, String strVal, NumberPuzzle puzzle) {
+	public boolean trySetValue(int x, int y, String strVal, Sudoku puzzle) {
 		/*
 		 * If the value is an empty String, set a 0 in the NumberPuzzle
 		 */
@@ -126,7 +126,7 @@ public class Controller {
 	 * @return The number of mistakes. If it is zero, the user solved the
 	 *         NumberPuzzle correctly.
 	 */
-	public int validateUserSolution(NumberPuzzle puzzle) {
+	public int validateUserSolution(Sudoku puzzle) {
 		int mistakes = 0;
 
 		/*
@@ -154,7 +154,7 @@ public class Controller {
 	 * @param puzzle
 	 *            The NumberPuzzle object displayed by the GuiWindow
 	 */
-	public void giveHintPuzzle(NumberPuzzle puzzle) {
+	public void giveHintPuzzle(Sudoku puzzle) {
 		int[] coords = puzzle.searchMistake();
 
 		/*
