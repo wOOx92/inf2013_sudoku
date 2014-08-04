@@ -774,7 +774,7 @@ public class GuiWindow {
 				txtGameInfo.setText("Solver");
 				btnReset.setEnabled(true);
 				btnHint.setEnabled(false);
-				prgrBar.setString("");
+				prgrBar.setString("Write your Sudoku in the field");
 				prgrBar.setValue(0);
 				swingTimer.stop();
 				judokuTimeListener.reset();
@@ -782,6 +782,7 @@ public class GuiWindow {
 				MenuSelectionManager.defaultManager().clearSelectedPath();
 				initializeGameField(pnlGameField, 3);
 				refreshView();
+				focusFirstCell();
 			} else if (e.getSource() == btnReset) {
 				controller.resetPuzzle(puzzle);
 				refreshView();
