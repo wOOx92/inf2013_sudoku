@@ -1,23 +1,18 @@
 HIGH PRIORITY
 
-- Texte HelpWIndow für Sudoku und About
-- Help Window kommentieren
-- Threadsicher (Hint 2x prellen)
-- JUnit Tests
-	- Welche Methoden?
-- NumberPuzzle hat momentan keine Funktion und würde für eine Str8ts Erweiterung so nicht funktionieren -> Rausnehmen?
+- Erstes Feld auswählen bei New Game
+DONE - Tastenkombis deaktivieren wenn nicht im GameFieldView
+- Solving Mode
+- kommentare
+- junittests
+
+- Was machen mit numberpuzzle?
+
 
 LOW PRIORITY and ADD-ONs
 
 - sind Sudokus rechts-unten-lastig?
 
-- Seed
-
 - Mehrsprachigkeit
 	
 - Str8ts
-
-Verworfen?
-
-- Focus listener durch document listener ersetzen -> Probleme mit x und y rausfinden, eigenes document schreiben...
-- Datum in JavaDoc Kommentaren -> In der StyleGuide Vorlesung nicht vorhanden, außerdem steht dann überall das selbe datum

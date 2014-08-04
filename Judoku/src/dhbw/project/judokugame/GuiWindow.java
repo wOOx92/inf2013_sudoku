@@ -84,7 +84,9 @@ public class GuiWindow {
 
 	private JPanel pnlCenter;
 	private CardLayout centerLayout;
+	private String previousCenterView;
 	private String activeCenterView = "gameField";
+	private ShortcutKeyDispatcher actKeyDispatcher;
 
 	/**
 	 * Create the application.
@@ -115,7 +117,8 @@ public class GuiWindow {
 		ImageIcon windowIcon = new ImageIcon(getClass().getClassLoader()
 				.getResource("resources/judoku_icon.png"));
 		frame.setIconImage(windowIcon.getImage());
-		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new ShortcutKeyDispatcher());
+		actKeyDispatcher = new ShortcutKeyDispatcher();
+		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(actKeyDispatcher);
 		
 		JPanel pnlNorth = new JPanel();
 		pnlNorth.setLayout(new GridLayout(2, 1, 10, 10));
@@ -146,8 +149,8 @@ public class GuiWindow {
 		initializePanelLost(pnlLost);
 		pnlCenter.add(pnlLost, "lost");
 
-		GuiInfoView viewHelp = new GuiInfoView(this);
-		pnlCenter.add(viewHelp.getContentPane(), "help");
+		GuiInfoView infoView = new GuiInfoView(this);
+		pnlCenter.add(infoView.getContentPane(), "info");
 
 		JPanel pnlSouth = new JPanel();
 		pnlSouth.setLayout(new BorderLayout(15, 15));
@@ -564,17 +567,16 @@ public class GuiWindow {
 	}
 
 	public void toggleInfoViewBack() {
-		btnContinue.setEnabled(true);
-		switchCenterView(activeCenterView);
-
-		if (!activeCenterView.equals("won") && !activeCenterView.equals("lost")
+		if (!previousCenterView.equals("won") && !previousCenterView.equals("lost")
 				&& puzzle != null) {
 			btnHint.setEnabled(true);
 			btnReset.setEnabled(true);
 			swingTimer.start();
 			refreshView();
 		}
-
+		
+		btnContinue.setEnabled(true);	
+		switchCenterView(previousCenterView);
 	}
 
 	private void initNewGame(int carreeSize, Difficulty diff,
@@ -634,15 +636,25 @@ public class GuiWindow {
 	}
 
 	private void switchCenterView(String cardName) {
+		if(cardName.equals("gameField")) {
+			actKeyDispatcher.setEnabled(true);
+		} else {
+			actKeyDispatcher.setEnabled(false);
+		}
 		centerLayout.show(pnlCenter, cardName);
+		previousCenterView = activeCenterView;
 		activeCenterView = cardName;
 	}
 
 	protected class ShortcutKeyDispatcher implements KeyEventDispatcher {
+		private boolean enabled = true;
 		private int ctrl = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();	
 		
 		@Override
 		public boolean dispatchKeyEvent(KeyEvent e) {
+			if(!enabled) {
+				return false;
+			}
 			if(e.getID() != KeyEvent.KEY_PRESSED) {
 				return false;
 			}
@@ -657,6 +669,10 @@ public class GuiWindow {
 				refreshView();
 			}
 			return false;
+		}
+		
+		public void setEnabled(boolean enabled) {
+			this.enabled = enabled;
 		}
 	}
 	
@@ -732,7 +748,7 @@ public class GuiWindow {
 				btnReset.setEnabled(true);
 				refreshView();
 			} else if (e.getSource() == btnInfo) {
-				centerLayout.show(pnlCenter, "help");
+				switchCenterView("info");
 				btnHint.setEnabled(false);
 				btnReset.setEnabled(false);
 				btnUndo.setEnabled(false);
