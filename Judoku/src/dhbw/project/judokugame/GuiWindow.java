@@ -99,6 +99,7 @@ public class GuiWindow {
 	private JTextField txtGameInfo;
 	private JTextPane txtWonMsg;
 	private CardLayout centerLayout;
+	private GuiInfoView infoView;
 	private ShortcutKeyDispatcher actKeyDispatcher;
 
 	/*
@@ -179,7 +180,7 @@ public class GuiWindow {
 		initializePanelLost(pnlLost);
 		pnlCenter.add(pnlLost, "lost");
 
-		GuiInfoView infoView = new GuiInfoView(this); // The "help" panel
+		infoView = new GuiInfoView(this); // The "help" panel
 		pnlCenter.add(infoView.getContentPane(), "info");
 
 		JPanel pnlSouth = new JPanel(); // Bottom panel containing game status
@@ -919,6 +920,7 @@ public class GuiWindow {
 				refreshView();
 			} else if (e.getSource() == btnInfo) {
 				switchCenterView("info");
+				
 				btnHint.setEnabled(false);
 				btnReset.setEnabled(false);
 				btnUndo.setEnabled(false);
@@ -926,6 +928,7 @@ public class GuiWindow {
 				btnValidate.setEnabled(false);
 				btnContinue.setEnabled(false);
 				swingTimer.stop();
+				infoView.setScrollBarsToBeginning();
 			} else if (e.getSource() == btnValidate && !solvingMode) {
 				swingTimer.stop();
 				btnHint.setEnabled(false);
