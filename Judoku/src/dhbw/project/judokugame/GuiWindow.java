@@ -674,7 +674,8 @@ public class GuiWindow {
 	public void toggleCenterViewBack() {
 		btnContinue.setEnabled(true);
 		switchCenterView(previousCenterView);
-
+		prgrBar.setVisible(true);
+		
 		/*
 		 * Only do this actions if panel won and lost are not active.
 		 */
@@ -928,13 +929,14 @@ public class GuiWindow {
 				refreshView();
 			} else if (e.getSource() == btnInfo) {
 				switchCenterView("info");
-
+				
 				btnHint.setEnabled(false);
 				btnReset.setEnabled(false);
 				btnUndo.setEnabled(false);
 				btnRedo.setEnabled(false);
 				btnValidate.setEnabled(false);
 				btnContinue.setEnabled(false);
+				prgrBar.setVisible(false);
 				swingTimer.stop();
 				infoView.setScrollBarsToBeginning();
 			} else if (e.getSource() == btnValidate && !solvingMode) {
