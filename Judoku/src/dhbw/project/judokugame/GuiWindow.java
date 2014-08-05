@@ -787,25 +787,28 @@ public class GuiWindow {
 		@Override
 		public boolean dispatchKeyEvent(KeyEvent e) {
 			/*
-			 * Only take actions, if enabled and on key_pressed events.
+			 * Only take actions, if enabled and on key_pressed events (and if a Sudoku is existing).
 			 * Otherwise directly return false.
 			 */
-			if (!enabled || e.getID() != KeyEvent.KEY_PRESSED) {
+			if (!enabled || sudoku == null || e.getID() != KeyEvent.KEY_PRESSED) {
 				return false;
 			}
 			if (e.getKeyCode() == KeyEvent.VK_Z
 					&& (e.getModifiers() & ctrl) != 0) { // Strg + Z
 				controller.undoSudoku(sudoku);
 				refreshView();
+				return true;
 			} else if (e.getKeyCode() == KeyEvent.VK_Y
 					&& (e.getModifiers() & ctrl) != 0) { // Strg + Y
 				controller.redoSudoku(sudoku);
 				refreshView();
+				return true;
 			} else if (e.getKeyCode() == KeyEvent.VK_H // Strg + H (not in
 														// solving mode).
 					&& (e.getModifiers() & ctrl) != 0 && !solvingMode) {
 				controller.giveHintPuzzle(sudoku);
 				refreshView();
+				return true;
 			}
 			return false;
 		}
