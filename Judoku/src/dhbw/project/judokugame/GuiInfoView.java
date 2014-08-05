@@ -34,7 +34,7 @@ public class GuiInfoView {
 	 * @param parentWindow
 	 *            GuiWindow containing this GuiInfoView.
 	 */
-	public GuiInfoView(GuiWindow parentWindow) {
+	public GuiInfoView(GuiWindow parentWindow) {	
 		this.parentWindow = parentWindow;
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -53,6 +53,11 @@ public class GuiInfoView {
 		contentPane.add(pnlSouth, BorderLayout.SOUTH);
 		
 		/*
+		 * Prepare Image loading
+		 */
+		ClassLoader contextCl = Thread.currentThread().getContextClassLoader();
+		
+		/*
 		 * Initialize all components for the tab "Sudoku Rules"
 		 */
 		JTabbedPane tabbedPane = new JTabbedPane();
@@ -68,26 +73,26 @@ public class GuiInfoView {
 		tpSudokuRules.setText("<html><div align='justify'>"
 				+ "<p>- Sudoku is played over a 4x4, 9x9 or 16x16 grid, divided to 2x2, 3x3 or 4x4 sub grids called 'regions':</p> "
 				+ "<p></p>"
-				+ "<div align='center'><img src=\"" + this.getClass().getClassLoader().getResource("resources/sudokufield_empty.png").toString()+"\" border = '1'/></img></div>"
+				+ "<div align='center'><img src=\"" + contextCl.getResource("resources/sudokufield_empty.png") + "\" border = '1'/></img></div>"
 				+ "<p>- Sudoku begins with some of the grid cells already filled with numbers:</p>"
 				+ "<p></p>"
-				+ "<div align='center'><img src=\"" + this.getClass().getClassLoader().getResource("resources/sudokufield_standard.png").toString()+"\" border = '1'/></img></div>"
+				+ "<div align='center'><img src=\"" + contextCl.getResource("resources/sudokufield_standard.png") + "\" border = '1'/></img></div>"
 				+ "<p>- The object of Sudoku is to fill the other empty cells with numbers between 1 and 4, 1 and 9 or 1 and 16(1 number only in each cell) according the following guidelines: </p>"
 				+ "<p>1. A number can appear only once on each row:</p>"
 				+ "<p>Allowed:</p>"
-				+ "<div align='center'><img src=\"" + this.getClass().getClassLoader().getResource("resources/sudokufield_row_correct.png").toString()+"\" border = '1'/></img></div>"
+				+ "<div align='center'><img src=\"" + contextCl.getResource("resources/sudokufield_row_correct.png") + "\" border = '1'/></img></div>"
 				+ "<p>Not allowed:</p> "
-				+ "<div align='center'><img src=\"" + this.getClass().getClassLoader().getResource("resources/sudokufield_row_false.png").toString()+"\" border = '1'/></img></div>"
+				+ "<div align='center'><img src=\"" + contextCl.getResource("resources/sudokufield_row_false.png") + "\" border = '1'/></img></div>"
 				+ "<p>2. A number can appear only once on each column:</p>"
 				+ "<p>Allowed:</p>"
-				+ "<div align='center'><img src=\"" + this.getClass().getClassLoader().getResource("resources/sudokufield_column_correct.png").toString()+"\" border = '1'/></img></div>"
+				+ "<div align='center'><img src=\"" + contextCl.getResource("resources/sudokufield_column_correct.png") + "\" border = '1'/></img></div>"
 				+ "<p>Not allowed:</p>"
-				+ "<div align='center'><img src=\"" + this.getClass().getClassLoader().getResource("resources/sudokufield_column_false.png").toString()+"\" border = '1'/></img></div>"
+				+ "<div align='center'><img src=\"" + contextCl.getResource("resources/sudokufield_column_false.png") + "\" border = '1'/></img></div>"
 				+ "<p>3. A number can appear only once on each region:</p>"
 				+ "<p>Allowed:</p>"
-				+ "<div align='center'><img src=\"" + this.getClass().getClassLoader().getResource("resources/sudokufield_region_correct.png").toString()+"\" border = '1'/></img></div>"
+				+ "<div align='center'><img src=\"" + contextCl.getResource("resources/sudokufield_region_correct.png") + "\" border = '1'/></img></div>"
 				+ "<p>Not allowed:</p>"
-				+ "<div align='center'><img src=\"" + this.getClass().getClassLoader().getResource("resources/sudokufield_region_false.png").toString()+"\" border = '1'/></img></div>"
+				+ "<div align='center'><img src=\"" + contextCl.getResource("resources/sudokufield_region_false.png") + "\" border = '1'/></img></div>"
 				+ "<p>- A summary of these guidelines would be, that a number should appear only once on each row, column and a region.</p>"
 				+ "<p></p>"
 				+ "- The Sudoku Game is finished successful, if all cells are filled in without breaking one of the above-mentioned rules."
@@ -104,24 +109,27 @@ public class GuiInfoView {
 		tpFunctions.setBackground(new Color(247, 247, 247));
 		tabbedPane.addTab("Functions", jspFunctions);
 		tpFunctions.setContentType("text/html");
+		
+	
+		
 		tpFunctions.setText("<html><div align='justify'>"
 				+ "<b><p>New Game:</p></b> Shows which difficulties you can choose (easy/ medium/ hard). Also you can choose betwenn the different game modes (Mini 4x4, Maxi 16x16, Sudoku Solver)."
 				+ "<b><p>Reset:</p></b> Resets the whole gamefield. After resetting all cells will be empty." 
 				+ "<b><p>Exit:</p></b> Closes the Game." 
 				+ "<b><p>Info:</p></b> Opens the info dialogue."
 				+ "<b><p>Redo [ctrl + y]:</p></b> "
-				+ "<div align='left'><img src=\"" + this.getClass().getClassLoader().getResource("resources/redo.png").toString()+"\" border = '1'/></img></div>"
+				+ "<div align='left'><img src=\"" + contextCl.getResource("resources/redo.png") + "\" border = '1'/></img></div>"
 				+ "Redoes the last step." 
 				+ "<b><p>Undo [ctrl + z]:"
-				+ "<div align='left'><img src=\"" + this.getClass().getClassLoader().getResource("resources/undo.png").toString()+"\" border = '1'/></img></div>"
+				+ "<div align='left'><img src=\"" + contextCl.getResource("resources/undo.png") + "\" border = '1'/></img></div>"
 				+ "</p></b> Undoes the last redo." 
 				+ "<b><p>Hint [ctrl + h]:</p></b> "
-				+ "<div align='left'><img src=\"" + this.getClass().getClassLoader().getResource("resources/hint.png").toString()+"\" border = '1'/></img></div>"
+				+ "<div align='left'><img src=\"" + contextCl.getResource("resources/hint.png") + "\" border = '1'/></img></div>"
 				+ "Gives a hint. There are two possibilties: "
 				+ "<br>1. Markes a wrong number red.</br>"
 				+ "<br>2. If all numbers are correct, a new number appears.</br>"
 				+ "<b><p>Validate:</p></b> "
-				+ "<div align='left'><img src=\"" + this.getClass().getClassLoader().getResource("resources/validate.png").toString()+"\" border = '1'/></img></div>"
+				+ "<div align='left'><img src=\"" + contextCl.getResource("resources/validate.png") + "\" border = '1'/></img></div>"
 				+ "Is only enabled if all cells are filled in. Validates whether the Sudoku was filled in correctly. If in solving-mode this tries to solve the Sudoku. " 
 				+ "<b><p>Statuspanel:</p></b> Shows the infos: Time (how long you are playing), progressbar(percentage of filled in fields), difficulty(shows the current game mode)"
 				+ "<b><p>Solving-Mode:</p></b> In this mode you can enter a Sudoku to solve."

@@ -10,6 +10,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
@@ -19,6 +20,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.net.URL;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -88,8 +90,7 @@ public class GuiWindow {
 	private JButton btnMaxiSdk;
 	private JButton btnSolvingMode;
 
-	
-	private JPanel pnlCenter;  // Panel in the Center.
+	private JPanel pnlCenter; // Panel in the Center.
 	private CardLayout centerLayout; // Layout managing the pnlCenter.
 	private JPanel pnlGameField; // One of the cards on the pnlCenter.
 	private JProgressBar prgrBar; // The progress bar in the south.
@@ -98,7 +99,8 @@ public class GuiWindow {
 	private JTextPane txtWonMsg; // Text shown when won.
 	private JTextField txtGameInfo; // Game info text in the corner.
 	private GuiInfoView infoView; // View shown when btnInfo is pressed.
-	private ShortcutKeyDispatcher actKeyDispatcher; // Custom KeyDispatcher for Shortcuts.
+	private ShortcutKeyDispatcher actKeyDispatcher; // Custom KeyDispatcher for
+													// Shortcuts.
 
 	/*
 	 * Variables managing the states of the window.
@@ -129,9 +131,23 @@ public class GuiWindow {
 		frame.setMinimumSize(new Dimension(520, 685));
 		frame.setLayout(new BorderLayout(10, 10));
 		frame.setTitle("Judoku");
-		ImageIcon windowIcon = new ImageIcon(getClass().getClassLoader()
-				.getResource("resources/judoku_icon.png"));
-		frame.setIconImage(windowIcon.getImage());
+
+		/*
+		 * Load icon
+		 */
+		Toolkit tk = Toolkit.getDefaultToolkit();
+		ClassLoader contextCl = Thread.currentThread().getContextClassLoader();
+
+		URL url = contextCl.getResource("resources/judoku_icon.png");
+		Image img = tk.createImage(url);
+		tk.prepareImage(img, -1, -1, null);
+		frame.setIconImage(img);
+
+		/*
+		 * ImageIcon windowIcon = new ImageIcon(getClass()
+		 * .getResource("resources/judoku_icon.png"));
+		 * frame.setIconImage(windowIcon.getImage());
+		 */
 
 		/*
 		 * Add a custom key dispatcher listening for shortcuts (like strg+h).
@@ -140,7 +156,8 @@ public class GuiWindow {
 		KeyboardFocusManager.getCurrentKeyboardFocusManager()
 				.addKeyEventDispatcher(actKeyDispatcher);
 
-		JPanel pnlNorth = new JPanel(); // The top panel containing the menu and a button bar.
+		JPanel pnlNorth = new JPanel(); // The top panel containing the menu and
+										// a button bar.
 		pnlNorth.setLayout(new GridLayout(2, 1, 10, 10));
 
 		JMenuBar mnbrTop = new JMenuBar(); // The menu inside the north panel.
@@ -165,18 +182,21 @@ public class GuiWindow {
 		initializeGameField(pnlGameField, 3);
 		pnlCenter.add(pnlGameField, "gameField");
 
-		JPanel pnlWon = new JPanel(new BorderLayout()); // Panel shown if the user won.
+		JPanel pnlWon = new JPanel(new BorderLayout()); // Panel shown if the
+														// user won.
 		initializePanelWon(pnlWon);
 		pnlCenter.add(pnlWon, "won");
 
-		JPanel pnlLost = new JPanel(new BorderLayout()); // Panel shown if the user lost.
+		JPanel pnlLost = new JPanel(new BorderLayout()); // Panel shown if the
+															// user lost.
 		initializePanelLost(pnlLost);
 		pnlCenter.add(pnlLost, "lost");
 
 		infoView = new GuiInfoView(this); // The "help" panel
 		pnlCenter.add(infoView.getContentPane(), "info");
 
-		JPanel pnlSouth = new JPanel(); // Bottom panel containing game status information
+		JPanel pnlSouth = new JPanel(); // Bottom panel containing game status
+										// information
 		pnlSouth.setLayout(new BorderLayout(15, 15));
 		initializeGameStatusPanel(pnlSouth);
 
@@ -287,14 +307,20 @@ public class GuiWindow {
 	 * Initialize Panel with undo, redo and hint and validate buttons.
 	 */
 	private void initializeButtonPanel(JPanel btnPnl) {
+		/*
+		 * Prepare Image loading
+		 */
+		Toolkit tk = Toolkit.getDefaultToolkit();
+		ClassLoader cntxtCl = Thread.currentThread().getContextClassLoader();
+		
 		btnUndo = new JButton();
 		btnUndo.setContentAreaFilled(false);
 		btnUndo.addActionListener(new JudokuButtonListener());
 		btnUndo.setEnabled(false);
 		btnUndo.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		ImageIcon undoImage = new ImageIcon(getClass().getClassLoader()
-				.getResource("resources/undo.png"));
-		btnUndo.setIcon(undoImage);
+		Image img = tk.createImage(cntxtCl.getResource("resources/undo.png"));
+		tk.prepareImage(img, -1, -1, null);
+		btnUndo.setIcon(new ImageIcon(img));
 		btnUndo.setToolTipText("Undo last change");
 		btnPnl.add(btnUndo);
 
@@ -303,9 +329,9 @@ public class GuiWindow {
 		btnRedo.addActionListener(new JudokuButtonListener());
 		btnRedo.setEnabled(false);
 		btnRedo.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		ImageIcon redoImage = new ImageIcon(getClass().getClassLoader()
-				.getResource("resources/redo.png"));
-		btnRedo.setIcon(redoImage);
+		img = tk.createImage(cntxtCl.getResource("resources/undo.png"));
+		tk.prepareImage(img, -1, -1, null);
+		btnRedo.setIcon(new ImageIcon(img));
 		btnRedo.setToolTipText("Redo last change");
 		btnPnl.add(btnRedo);
 
@@ -314,9 +340,9 @@ public class GuiWindow {
 		btnHint.addActionListener(new JudokuButtonListener());
 		btnHint.setEnabled(false);
 		btnHint.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		ImageIcon hintImage = new ImageIcon(getClass().getClassLoader()
-				.getResource("resources/hint.png"));
-		btnHint.setIcon(hintImage);
+		img = tk.createImage(cntxtCl.getResource("resources/hint.png"));
+		tk.prepareImage(img, -1, -1, null);
+		btnHint.setIcon(new ImageIcon(img));
 		btnHint.setToolTipText("Give a hint");
 		btnPnl.add(btnHint);
 
@@ -325,9 +351,9 @@ public class GuiWindow {
 		btnValidate.addActionListener(new JudokuButtonListener());
 		btnValidate.setEnabled(false);
 		btnValidate.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		ImageIcon validateImage = new ImageIcon(getClass().getClassLoader()
-				.getResource("resources/validate.png"));
-		btnValidate.setIcon(validateImage);
+		img = tk.createImage(cntxtCl.getResource("resources/validate.png"));
+		tk.prepareImage(img, -1, -1, null);
+		btnValidate.setIcon(new ImageIcon(img));
 		btnValidate.setToolTipText("Validate");
 		btnPnl.add(btnValidate);
 
@@ -335,9 +361,9 @@ public class GuiWindow {
 		btnContinue.setContentAreaFilled(false);
 		btnContinue.addActionListener(new JudokuButtonListener());
 		btnContinue.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		ImageIcon continueImage = new ImageIcon(getClass().getClassLoader()
-				.getResource("resources/correct.png"));
-		btnContinue.setIcon(continueImage);
+		img = tk.createImage(cntxtCl.getResource("resources/correct.png"));
+		tk.prepareImage(img, -1, -1, null);
+		btnContinue.setIcon(new ImageIcon(img));
 		btnContinue.setToolTipText("Correct my mistake(s)");
 	}
 
@@ -461,7 +487,7 @@ public class GuiWindow {
 		txtWonMsg.setBackground(frame.getBackground());
 		txtWonMsg.setDisabledTextColor(Color.BLACK);
 		txtWonMsg.setBorder(BorderFactory.createEmptyBorder());
-		
+
 		pnlWon.add(txtWonMsg, BorderLayout.NORTH); // Add the textPane
 
 		/*
@@ -648,7 +674,7 @@ public class GuiWindow {
 	public void toggleCenterViewBack() {
 		btnContinue.setEnabled(true);
 		switchCenterView(previousCenterView);
-		
+
 		/*
 		 * Only do this actions if panel won and lost are not active.
 		 */
@@ -774,7 +800,8 @@ public class GuiWindow {
 					&& (e.getModifiers() & ctrl) != 0) { // Strg + Z
 				controller.undoSudoku(sudoku);
 				refreshView();
-				return true; // If a shortcut was processed no other actions are desired.
+				return true; // If a shortcut was processed no other actions are
+								// desired.
 			} else if (e.getKeyCode() == KeyEvent.VK_Y
 					&& (e.getModifiers() & ctrl) != 0) { // Strg + Y
 				controller.redoSudoku(sudoku);
