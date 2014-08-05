@@ -18,7 +18,7 @@ public class GuiInfoView {
 	private GuiWindow parentWindow;
 
 	/*
-	 * Declaring buttons, panels and textpane
+	 * Declaring buttons, panels and textpane.
 	 */
 	private JPanel contentPane;
 	private JButton btnBack;
