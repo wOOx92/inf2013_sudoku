@@ -28,7 +28,7 @@ public class Sudoku {
 	 * The maximum number of steps a user can use {@link Sudoku#undo()} and
 	 * {@link Sudoku#undo()}.
 	 */
-	private final static int UNDOLIMIT = 5;
+	private final static int UNDOLIMIT = 7;
 
 	/**
 	 * The solution of the Sudoku.

@@ -24,6 +24,9 @@ public class JudokuTimeListener implements ActionListener {
 		this.txtOutput = txtOutput;
 	}
 
+	/**
+	 * TimeUnits of the SwingTimer (that this listener is attached to) passed.
+	 */
 	private int secondsPassed = 0;
 
 	@Override

@@ -88,19 +88,17 @@ public class GuiWindow {
 	private JButton btnMaxiSdk;
 	private JButton btnSolvingMode;
 
-	/*
-	 * Other important components
-	 */
-	private JPanel pnlGameField;
-	private JPanel pnlCenter;
-	private JProgressBar prgrBar;
-	private JTextField txtTime;
-	private JTextField txtLostMsg;
-	private JTextField txtGameInfo;
-	private JTextPane txtWonMsg;
-	private CardLayout centerLayout;
-	private GuiInfoView infoView;
-	private ShortcutKeyDispatcher actKeyDispatcher;
+	
+	private JPanel pnlCenter;  // Panel in the Center.
+	private CardLayout centerLayout; // Layout managing the pnlCenter.
+	private JPanel pnlGameField; // One of the cards on the pnlCenter.
+	private JProgressBar prgrBar; // The progress bar in the south.
+	private JTextField txtTime; // The time field in the corner.
+	private JTextField txtLostMsg; // Text shown when lost.
+	private JTextPane txtWonMsg; // Text shown when won.
+	private JTextField txtGameInfo; // Game info text in the corner.
+	private GuiInfoView infoView; // View shown when btnInfo is pressed.
+	private ShortcutKeyDispatcher actKeyDispatcher; // Custom KeyDispatcher for Shortcuts.
 
 	/*
 	 * Variables managing the states of the window.
@@ -111,7 +109,6 @@ public class GuiWindow {
 
 	/**
 	 * Create the application.
-	 * 
 	 */
 	public GuiWindow(Controller c) throws IOException {
 		this.controller = c;
@@ -124,7 +121,6 @@ public class GuiWindow {
 
 	/**
 	 * Initializes the contents of the frame.
-	 *
 	 */
 	private void initialize() throws IOException {
 		frame = new JFrame();
@@ -144,8 +140,7 @@ public class GuiWindow {
 		KeyboardFocusManager.getCurrentKeyboardFocusManager()
 				.addKeyEventDispatcher(actKeyDispatcher);
 
-		JPanel pnlNorth = new JPanel(); // The top panel containing the menu and
-										// a button bar.
+		JPanel pnlNorth = new JPanel(); // The top panel containing the menu and a button bar.
 		pnlNorth.setLayout(new GridLayout(2, 1, 10, 10));
 
 		JMenuBar mnbrTop = new JMenuBar(); // The menu inside the north panel.
@@ -170,21 +165,18 @@ public class GuiWindow {
 		initializeGameField(pnlGameField, 3);
 		pnlCenter.add(pnlGameField, "gameField");
 
-		JPanel pnlWon = new JPanel(new BorderLayout()); // Panel shown if the
-														// user won.
+		JPanel pnlWon = new JPanel(new BorderLayout()); // Panel shown if the user won.
 		initializePanelWon(pnlWon);
 		pnlCenter.add(pnlWon, "won");
 
-		JPanel pnlLost = new JPanel(new BorderLayout()); // Panel shown if thhe
-															// user lost.
+		JPanel pnlLost = new JPanel(new BorderLayout()); // Panel shown if the user lost.
 		initializePanelLost(pnlLost);
 		pnlCenter.add(pnlLost, "lost");
 
 		infoView = new GuiInfoView(this); // The "help" panel
 		pnlCenter.add(infoView.getContentPane(), "info");
 
-		JPanel pnlSouth = new JPanel(); // Bottom panel containing game status
-										// information
+		JPanel pnlSouth = new JPanel(); // Bottom panel containing game status information
 		pnlSouth.setLayout(new BorderLayout(15, 15));
 		initializeGameStatusPanel(pnlSouth);
 
@@ -424,26 +416,20 @@ public class GuiWindow {
 			}
 			/*
 			 * Toggle the background color for carrees in y direction (this is
-			 * dependent from the Sudoku Size).
+			 * dependent of the Sudoku Size).
 			 */
-			if (puzzleSize == 4) {
-				if (y % carreeSize != 0) {
-					Color buffer = active;
-					active = toggle;
-					toggle = buffer;
-				}
-			} else if (puzzleSize == 9) {
-				if ((y + 1) % carreeSize != 0) {
-					Color buffer = active;
-					active = toggle;
-					toggle = buffer;
-				}
-			} else if (puzzleSize == 16) {
-				if ((y) % carreeSize > 2) {
-					Color buffer = active;
-					active = toggle;
-					toggle = buffer;
-				}
+			if (puzzleSize == 4 && y % carreeSize != 0) {
+				Color buffer = active;
+				active = toggle;
+				toggle = buffer;
+			} else if (puzzleSize == 9 && (y + 1) % carreeSize != 0) {
+				Color buffer = active;
+				active = toggle;
+				toggle = buffer;
+			} else if (puzzleSize == 16 && y % carreeSize > 2) {
+				Color buffer = active;
+				active = toggle;
+				toggle = buffer;
 			}
 		}
 
@@ -475,7 +461,7 @@ public class GuiWindow {
 		txtWonMsg.setBackground(frame.getBackground());
 		txtWonMsg.setDisabledTextColor(Color.BLACK);
 		txtWonMsg.setBorder(BorderFactory.createEmptyBorder());
-
+		
 		pnlWon.add(txtWonMsg, BorderLayout.NORTH); // Add the textPane
 
 		/*
@@ -520,7 +506,7 @@ public class GuiWindow {
 	}
 
 	/**
-	 * Writes time, progressbar and difficulty to the bottom jpanel.
+	 * Writes time, progress bar and difficulty to the bottom JPanel.
 	 */
 	private void initializeGameStatusPanel(JPanel pnlStatus) {
 		txtTime = new JTextField(); // textField showing the time.
@@ -631,21 +617,12 @@ public class GuiWindow {
 	}
 
 	/**
-	 * Check, if undo and /or redo is possible and enables / disables the
+	 * Check, if undo or redo is possible and enables / disables the
 	 * corresponding buttons.
 	 */
 	private void checkUndoRedoButtons() {
-		if (sudoku.redoPossible()) {
-			btnRedo.setEnabled(true);
-		} else {
-			btnRedo.setEnabled(false);
-		}
-
-		if (sudoku.undoPossible()) {
-			btnUndo.setEnabled(true);
-		} else {
-			btnUndo.setEnabled(false);
-		}
+		btnRedo.setEnabled(sudoku.redoPossible());
+		btnUndo.setEnabled(sudoku.undoPossible());
 	}
 
 	/**
@@ -669,6 +646,9 @@ public class GuiWindow {
 	 * Toggles the cardLayout in the center back to the previous view.
 	 */
 	public void toggleCenterViewBack() {
+		btnContinue.setEnabled(true);
+		switchCenterView(previousCenterView);
+		
 		/*
 		 * Only do this actions if panel won and lost are not active.
 		 */
@@ -681,9 +661,6 @@ public class GuiWindow {
 			swingTimer.start();
 			refreshView();
 		}
-
-		btnContinue.setEnabled(true);
-		switchCenterView(previousCenterView);
 	}
 
 	/**
@@ -773,8 +750,8 @@ public class GuiWindow {
 			actKeyDispatcher.setEnabled(false);
 		}
 		centerLayout.show(pnlCenter, cardName);
-		previousCenterView = activeCenterView;
-		activeCenterView = cardName;
+		previousCenterView = activeCenterView; // Update state information.
+		activeCenterView = cardName; // Update state information.
 	}
 
 	/**
@@ -787,8 +764,8 @@ public class GuiWindow {
 		@Override
 		public boolean dispatchKeyEvent(KeyEvent e) {
 			/*
-			 * Only take actions, if enabled and on key_pressed events (and if a Sudoku is existing).
-			 * Otherwise directly return false.
+			 * Only take actions, if enabled and on key_pressed events (and if a
+			 * Sudoku is existing). Otherwise directly return false.
 			 */
 			if (!enabled || sudoku == null || e.getID() != KeyEvent.KEY_PRESSED) {
 				return false;
@@ -797,7 +774,7 @@ public class GuiWindow {
 					&& (e.getModifiers() & ctrl) != 0) { // Strg + Z
 				controller.undoSudoku(sudoku);
 				refreshView();
-				return true;
+				return true; // If a shortcut was processed no other actions are desired.
 			} else if (e.getKeyCode() == KeyEvent.VK_Y
 					&& (e.getModifiers() & ctrl) != 0) { // Strg + Y
 				controller.redoSudoku(sudoku);
@@ -827,7 +804,8 @@ public class GuiWindow {
 		@Override
 		public void focusLost(FocusEvent evt) {
 			/*
-			 * On focus lost, try to transfer the value from the textfield to the Sudoku object.
+			 * On focus lost, try to transfer the value from the textfield to
+			 * the Sudoku object.
 			 */
 			JudokuJTextField currentTextField = (JudokuJTextField) evt
 					.getSource();
@@ -923,7 +901,7 @@ public class GuiWindow {
 				refreshView();
 			} else if (e.getSource() == btnInfo) {
 				switchCenterView("info");
-				
+
 				btnHint.setEnabled(false);
 				btnReset.setEnabled(false);
 				btnUndo.setEnabled(false);
@@ -978,11 +956,11 @@ public class GuiWindow {
 						}
 					}
 					btnValidate.setEnabled(false);
-					System.out.println("solved");
-				} else if (solutions == 0) {
 					/*
 					 * (ab)use the progress bar for displaying information.
 					 */
+					prgrBar.setString("Your Sudoku has been solved.");
+				} else if (solutions == 0) {
 					prgrBar.setString("This Sudoku has no solution!");
 				} else {
 					prgrBar.setString("This Sudoku is still missing some clues!");

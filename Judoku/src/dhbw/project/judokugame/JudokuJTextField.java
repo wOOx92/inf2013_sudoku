@@ -92,8 +92,8 @@ public class JudokuJTextField extends JTextField {
 	 */
 	public void mark() {
 		this.contentWhenMarked = this.getText();
-		super.setBackground(Color.RED);
-		super.setCaretColor(Color.RED);
+		super.setBackground(new Color(215, 55, 30)); // Dark red
+		super.setCaretColor(new Color(215, 55, 30));
 	}
 
 	@Override

@@ -53,7 +53,7 @@ public class Controller {
 	public void redoSudoku(Sudoku sdk) {
 		sdk.redo();
 	}
-	
+
 	public int solveSudoku(Sudoku sdk) {
 		return sdk.solve();
 	}
@@ -79,11 +79,11 @@ public class Controller {
 		int iVal = 0;
 		if (!strVal.equals("")) {
 			/*
-			 * Try to parse the number 
-			 */ 
+			 * Try to parse the number.
+			 */
 			try {
 				iVal = Integer.parseInt(strVal);
-			} catch(NumberFormatException e) {
+			} catch (NumberFormatException e) {
 				return false;
 			}
 		}
@@ -125,13 +125,12 @@ public class Controller {
 	}
 
 	/**
-	 * Counts the number of mistakes the user made when solving the
-	 * Sudoku.
+	 * Counts the number of mistakes the user made when solving the Sudoku.
 	 * 
 	 * @param sdk
 	 *            The user-solved Sudoku.
-	 * @return The number of mistakes. If it is zero, the user solved the
-	 *         Sudoku correctly.
+	 * @return The number of mistakes. If it is zero, the user solved the Sudoku
+	 *         correctly.
 	 */
 	public int validateUserSolution(Sudoku sdk) {
 		int mistakes = 0;
@@ -154,9 +153,9 @@ public class Controller {
 	}
 
 	/**
-	 * Checks whether the user already made mistakes filling in the
-	 * Sudoku. If so, notifies the GuiWindow to mark the erroneous field,
-	 * otherwise calls the Sudoku itself to provide an hint.
+	 * Checks whether the user already made mistakes filling in the Sudoku. If
+	 * so, notifies the GuiWindow to mark the erroneous field, otherwise calls
+	 * the Sudoku itself to provide an hint.
 	 * 
 	 * @param sdk
 	 *            The Sudoku object displayed by the GuiWindow
