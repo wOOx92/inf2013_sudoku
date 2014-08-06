@@ -68,7 +68,7 @@ public class GuiInfoView {
 		tpSudokuRules.setFocusable(false);
 		tpSudokuRules.setBorder(new EmptyBorder(10, 10, 10, 10));
 		tpSudokuRules.setBackground(new Color(247, 247, 247)); // light grey
-		tabbedPane.addTab("SudokuRules", jspSudokuRules); // Add the pane
+		tabbedPane.addTab("Sudoku Rules", jspSudokuRules); // Add the pane
 		tpSudokuRules.setContentType("text/html");
 		tpSudokuRules.setText("<html><div align='justify'>"
 				+ "<p>- Sudoku is played over a 4x4, 9x9 or 16x16 grid, divided to 2x2, 3x3 or 4x4 sub grids called 'regions':</p> "
@@ -109,8 +109,6 @@ public class GuiInfoView {
 		tpFunctions.setBackground(new Color(247, 247, 247));
 		tabbedPane.addTab("Functions", jspFunctions);
 		tpFunctions.setContentType("text/html");
-		
-	
 		
 		tpFunctions.setText("<html><div align='justify'>"
 				+ "<b><p>New Game:</p></b> Shows which difficulties you can choose (easy/ medium/ hard). Also you can choose betwenn the different game modes (Mini 4x4, Maxi 16x16, Sudoku Solver)."

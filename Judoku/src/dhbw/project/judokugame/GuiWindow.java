@@ -47,6 +47,13 @@ import javax.swing.text.StyledDocument;
 import dhbw.project.puzzlemodel.Difficulty;
 import dhbw.project.puzzlemodel.Sudoku;
 
+/**
+ * This is the main class of the front-end, the actual window. Its most
+ * important purpose is to manage user interaction.
+ * 
+ * @author Dennis Uteg, Florian Steurer, Markus Wingler, Michael Jauch
+ *
+ */
 public class GuiWindow {
 
 	private JFrame frame;
@@ -99,8 +106,7 @@ public class GuiWindow {
 	private JTextPane txtWonMsg; // Text shown when won.
 	private JTextField txtGameInfo; // Game info text in the corner.
 	private GuiInfoView infoView; // View shown when btnInfo is pressed.
-	private ShortcutKeyDispatcher actKeyDispatcher; // Custom KeyDispatcher for
-													// Shortcuts.
+	private ShortcutKeyDispatcher actKeyDispatcher; // KeyDispatcher for Shortcuts.
 
 	/*
 	 * Variables managing the states of the window.
@@ -173,8 +179,7 @@ public class GuiWindow {
 		initializeButtonPanel(pnlNorthBottom);
 		pnlNorth.add(pnlNorthBottom);
 
-		pnlCenter = new JPanel(); // The main panel containing cards like the
-									// game field.
+		pnlCenter = new JPanel(); // The main panel containing cards.
 		centerLayout = new CardLayout();
 		pnlCenter.setLayout(centerLayout);
 
@@ -182,13 +187,17 @@ public class GuiWindow {
 		initializeGameField(pnlGameField, 3);
 		pnlCenter.add(pnlGameField, "gameField");
 
-		JPanel pnlWon = new JPanel(new BorderLayout()); // Panel shown if the
-														// user won.
+		/*
+		 * Card shown if the user has won.
+		 */
+		JPanel pnlWon = new JPanel(new BorderLayout());
 		initializePanelWon(pnlWon);
 		pnlCenter.add(pnlWon, "won");
 
-		JPanel pnlLost = new JPanel(new BorderLayout()); // Panel shown if the
-															// user lost.
+		/*
+		 * Card shown if the user has lost.
+		 */
+		JPanel pnlLost = new JPanel(new BorderLayout());
 		initializePanelLost(pnlLost);
 		pnlCenter.add(pnlLost, "lost");
 
@@ -329,7 +338,7 @@ public class GuiWindow {
 		btnRedo.addActionListener(new JudokuButtonListener());
 		btnRedo.setEnabled(false);
 		btnRedo.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		img = tk.createImage(cntxtCl.getResource("resources/undo.png"));
+		img = tk.createImage(cntxtCl.getResource("resources/redo.png"));
 		tk.prepareImage(img, -1, -1, null);
 		btnRedo.setIcon(new ImageIcon(img));
 		btnRedo.setToolTipText("Redo last change");
