@@ -13,7 +13,7 @@ import javax.swing.text.PlainDocument;
  * @author Dennis Uteg, Florian Steurer, Markus Wingler, Michael Jauch
  * 
  */
-class JudokuPlainDocument extends PlainDocument {
+public class JudokuPlainDocument extends PlainDocument {
 
 	private static final long serialVersionUID = 0l;
 
@@ -25,12 +25,18 @@ class JudokuPlainDocument extends PlainDocument {
 	private HashSet<String> allowedValues = new HashSet<>();
 
 	/**
+	 * Stores the JudokuJTextField in which this Document is used.
+	 */
+	private JudokuJTextField parent;
+	
+	/**
 	 * Returns an instance of JudokuPlainDocument that will only allow values
 	 * from 1 to limit (inclusive) as content.
 	 */
-	JudokuPlainDocument(int limit) {
+	JudokuPlainDocument(int limit, JudokuJTextField parent) {
 		super();
-
+		this.parent = parent;
+		
 		/*
 		 * Fill the HashSet with allowed values.
 		 */
@@ -39,6 +45,10 @@ class JudokuPlainDocument extends PlainDocument {
 		}
 	}
 
+	public JudokuJTextField getJudokuJTextField() {
+		return parent;
+	}
+	
 	@Override
 	public void insertString(int offset, String str, AttributeSet attr)
 			throws BadLocationException {
