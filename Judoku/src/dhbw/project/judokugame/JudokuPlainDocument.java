@@ -23,19 +23,13 @@ public class JudokuPlainDocument extends PlainDocument {
 	 * JudokuPlainDocument.
 	 */
 	private HashSet<String> allowedValues = new HashSet<>();
-
-	/**
-	 * Stores the JudokuJTextField in which this Document is used.
-	 */
-	private JudokuJTextField parent;
 	
 	/**
 	 * Returns an instance of JudokuPlainDocument that will only allow values
 	 * from 1 to limit (inclusive) as content.
 	 */
-	JudokuPlainDocument(int limit, JudokuJTextField parent) {
+	JudokuPlainDocument(int limit) {
 		super();
-		this.parent = parent;
 		
 		/*
 		 * Fill the HashSet with allowed values.
@@ -45,10 +39,6 @@ public class JudokuPlainDocument extends PlainDocument {
 		}
 	}
 
-	public JudokuJTextField getJudokuJTextField() {
-		return parent;
-	}
-	
 	@Override
 	public void insertString(int offset, String str, AttributeSet attr)
 			throws BadLocationException {

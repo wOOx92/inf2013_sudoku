@@ -16,6 +16,8 @@ import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.URL;
@@ -38,8 +40,6 @@ import javax.swing.MenuSelectionManager;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.UIManager;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
@@ -378,12 +378,8 @@ public class GuiWindow {
 				}
 
 				gameField[y][x] = new JudokuJTextField(x, y);
-				JudokuPlainDocument doc = new JudokuPlainDocument(puzzleSize, gameField[y][x]);
-				doc.addDocumentListener(new JudokuDocumentListener());
-				gameField[y][x].setDocument(doc);
-				//gameField[y][x]
-					//	.setDocument(new JudokuPlainDocument(puzzleSize));
-
+				gameField[y][x]
+						.setDocument(new JudokuPlainDocument(puzzleSize));
 				/*
 				 * Format the JTextFields
 				 */
@@ -398,7 +394,7 @@ public class GuiWindow {
 				/*
 				 * Add the required listeners
 				 */
-				//gameField[y][x].addFocusListener(new JudokuFocusListener());
+				gameField[y][x].addFocusListener(new JudokuFocusListener());
 				gameField[y][x].addKeyListener(new GameFieldKeyListener(
 						gameField));
 
@@ -809,48 +805,20 @@ public class GuiWindow {
 	 * Listens to the JTextFields for lost focus within the game field.
 	 * 
 	 */
-	/*private class JudokuFocusListener extends FocusAdapter {
+	private class JudokuFocusListener extends FocusAdapter {
 
 		@Override
 		public void focusLost(FocusEvent evt) {
 			/*
 			 * On focus lost, try to transfer the value from the textfield to
 			 * the Sudoku object.
-			 
+			 */
 			JudokuJTextField currentTextField = (JudokuJTextField) evt
 					.getSource();
 
-			//controller.trySetValue(currentTextField.X, currentTextField.Y,
-			//		currentTextField.getText(), sudoku);
-			//refreshView();
-		}
-	}*/
-
-	private class JudokuDocumentListener implements DocumentListener {
-		@Override
-		public void changedUpdate(DocumentEvent e) {
-			// Not necessary
-		}
-		
-		@Override
-		public void insertUpdate(DocumentEvent e) {
-			/*
-			 * Get the text field where the change occured and set the value in the Sudoku object.
-			 */
-			JudokuPlainDocument doc = (JudokuPlainDocument) e.getDocument();
-			JudokuJTextField currentTextField = doc.getJudokuJTextField();
-			
 			controller.trySetValue(currentTextField.X, currentTextField.Y,
 					currentTextField.getText(), sudoku);
-		}
-		
-		@Override
-		public void removeUpdate(DocumentEvent e) {
-			JudokuPlainDocument doc = (JudokuPlainDocument) e.getDocument();
-			JudokuJTextField currentTextField = doc.getJudokuJTextField();
-			
-			controller.trySetValue(currentTextField.X, currentTextField.Y,
-					currentTextField.getText(), sudoku);
+			refreshView();
 		}
 	}
 	
