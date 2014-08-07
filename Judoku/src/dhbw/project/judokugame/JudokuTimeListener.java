@@ -17,17 +17,17 @@ public class JudokuTimeListener implements ActionListener {
 	private final JTextField txtOutput;
 
 	/**
-	 * @param txtOutput
-	 *            The listener will write the passed time into this JTextField.
-	 */
-	JudokuTimeListener(JTextField txtOutput) {
-		this.txtOutput = txtOutput;
-	}
-
-	/**
 	 * TimeUnits of the SwingTimer (that this listener is attached to) passed.
 	 */
 	private int secondsPassed = 0;
+	
+	/**
+	 * @param txtOutput
+	 *            The listener will write the passed time into this JTextField.
+	 */
+	public JudokuTimeListener(JTextField txtOutput) {
+		this.txtOutput = txtOutput;
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {

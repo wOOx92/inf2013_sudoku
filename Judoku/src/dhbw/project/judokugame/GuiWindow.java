@@ -229,7 +229,7 @@ public class GuiWindow {
 				255));
 		UIManager.put("ProgressBar.font", new Font("DIALOG", Font.PLAIN, 14));
 	}
-
+	
 	/**
 	 * Writes the buttons to the JMenuBar.
 	 */
@@ -239,74 +239,47 @@ public class GuiWindow {
 		mnNewGame.setToolTipText("Start a new Judoku");
 		mnNewGame.setPreferredSize(new Dimension(80, 25));
 
-		btnEasy = new JButton("Easy Classic");
-		btnEasy.setContentAreaFilled(false);
+		btnEasy = newCustomJButton("Easy");
 		btnEasy.setBorderPainted(false);
-		btnEasy.addActionListener(new JudokuButtonListener());
-		btnEasy.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		mnNewGame.add(btnEasy);
 
-		btnMedium = new JButton("Medium Classic");
-		btnMedium.setContentAreaFilled(false);
+		btnMedium = newCustomJButton("Medium");
 		btnMedium.setBorderPainted(false);
-		btnMedium.addActionListener(new JudokuButtonListener());
-		btnMedium.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		mnNewGame.add(btnMedium);
 
-		btnHard = new JButton("Hard Classic");
-		btnHard.setContentAreaFilled(false);
+		btnHard = newCustomJButton("Hard");
 		btnHard.setBorderPainted(false);
-		btnHard.addActionListener(new JudokuButtonListener());
-		btnHard.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		mnNewGame.add(btnHard);
 
-		btnMiniSdk = new JButton("Mini 4x4 ");
-		btnMiniSdk.setContentAreaFilled(false);
+		btnMiniSdk =newCustomJButton("Mini 4x4");
 		btnMiniSdk.setBorderPainted(false);
-		btnMiniSdk.addActionListener(new JudokuButtonListener());
-		btnMiniSdk.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		mnNewGame.add(btnMiniSdk);
 
-		btnMaxiSdk = new JButton("Maxi 16x16");
-		btnMaxiSdk.setContentAreaFilled(false);
+		btnMaxiSdk = newCustomJButton("Maxi 16x16");
 		btnMaxiSdk.setBorderPainted(false);
-		btnMaxiSdk.addActionListener(new JudokuButtonListener());
-		btnMaxiSdk.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		mnNewGame.add(btnMaxiSdk);
 
-		btnSolvingMode = new JButton("Sudoku Solver");
-		btnSolvingMode.setContentAreaFilled(false);
+		btnSolvingMode = newCustomJButton("Sudoku Solver");
 		btnSolvingMode.setBorderPainted(false);
-		btnSolvingMode.addActionListener(new JudokuButtonListener());
-		btnSolvingMode.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		mnNewGame.add(btnSolvingMode);
 
 		mnBar.add(mnNewGame);
 
-		btnReset = new JButton("Reset");
-		btnReset.setContentAreaFilled(false);
+		btnReset = newCustomJButton("Reset");
 		btnReset.setBorderPainted(false);
-		btnReset.addActionListener(new JudokuButtonListener());
 		btnReset.setEnabled(false);
-		btnReset.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		btnReset.setToolTipText("Reset Judoku");
 		btnReset.setPreferredSize(new Dimension(80, 25));
 		mnBar.add(btnReset);
 
-		btnQuit = new JButton("Exit");
-		btnQuit.setContentAreaFilled(false);
-		btnQuit.addActionListener(new JudokuButtonListener());
+		btnQuit = newCustomJButton("Exit");
 		btnQuit.setBorderPainted(false);
-		btnQuit.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		btnQuit.setToolTipText("Quit Judoku");
 		btnQuit.setPreferredSize(new Dimension(80, 25));
 		mnBar.add(btnQuit);
 
-		btnInfo = new JButton("Info");
-		btnInfo.setContentAreaFilled(false);
+		btnInfo = newCustomJButton("Info");
 		btnInfo.setBorderPainted(false);
-		btnInfo.addActionListener(new JudokuButtonListener());
-		btnInfo.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		btnInfo.setPreferredSize(new Dimension(80, 25));
 		mnBar.add(btnInfo);
 
@@ -322,54 +295,39 @@ public class GuiWindow {
 		Toolkit tk = Toolkit.getDefaultToolkit();
 		ClassLoader cntxtCl = Thread.currentThread().getContextClassLoader();
 		
-		btnUndo = new JButton();
-		btnUndo.setContentAreaFilled(false);
-		btnUndo.addActionListener(new JudokuButtonListener());
+		btnUndo = newCustomJButton("");
 		btnUndo.setEnabled(false);
-		btnUndo.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		Image img = tk.createImage(cntxtCl.getResource("resources/undo.png"));
 		tk.prepareImage(img, -1, -1, null);
 		btnUndo.setIcon(new ImageIcon(img));
 		btnUndo.setToolTipText("Undo last change");
 		btnPnl.add(btnUndo);
 
-		btnRedo = new JButton();
-		btnRedo.setContentAreaFilled(false);
-		btnRedo.addActionListener(new JudokuButtonListener());
+		btnRedo = newCustomJButton("");
 		btnRedo.setEnabled(false);
-		btnRedo.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		img = tk.createImage(cntxtCl.getResource("resources/redo.png"));
 		tk.prepareImage(img, -1, -1, null);
 		btnRedo.setIcon(new ImageIcon(img));
 		btnRedo.setToolTipText("Redo last change");
 		btnPnl.add(btnRedo);
 
-		btnHint = new JButton();
-		btnHint.setContentAreaFilled(false);
-		btnHint.addActionListener(new JudokuButtonListener());
+		btnHint = newCustomJButton("");
 		btnHint.setEnabled(false);
-		btnHint.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		img = tk.createImage(cntxtCl.getResource("resources/hint.png"));
 		tk.prepareImage(img, -1, -1, null);
 		btnHint.setIcon(new ImageIcon(img));
 		btnHint.setToolTipText("Give a hint");
 		btnPnl.add(btnHint);
 
-		btnValidate = new JButton();
-		btnValidate.setContentAreaFilled(false);
-		btnValidate.addActionListener(new JudokuButtonListener());
+		btnValidate = newCustomJButton("");
 		btnValidate.setEnabled(false);
-		btnValidate.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		img = tk.createImage(cntxtCl.getResource("resources/validate.png"));
 		tk.prepareImage(img, -1, -1, null);
 		btnValidate.setIcon(new ImageIcon(img));
 		btnValidate.setToolTipText("Validate");
 		btnPnl.add(btnValidate);
 
-		btnContinue = new JButton();
-		btnContinue.setContentAreaFilled(false);
-		btnContinue.addActionListener(new JudokuButtonListener());
-		btnContinue.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		btnContinue = newCustomJButton("");
 		img = tk.createImage(cntxtCl.getResource("resources/correct.png"));
 		tk.prepareImage(img, -1, -1, null);
 		btnContinue.setIcon(new ImageIcon(img));
@@ -573,6 +531,53 @@ public class GuiWindow {
 	}
 
 	/**
+	 * Initalizes a JButton with a new JudokuButtonListener, an empty ContentArea and a HAND_CURSOR.
+	 * @return The new JButton.
+	 */
+	private JButton newCustomJButton(String name) {
+		JButton btn = new JButton(name);
+		btn.addActionListener(new JudokuButtonListener());
+		btn.setContentAreaFilled(false);
+		btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		return btn;
+	}
+	
+	/**
+	 * Marks a mistake red.
+	 * 
+	 * @param x
+	 *            X-value of the mistake in the grid.
+	 * @param y
+	 *            Y-value of the mistake in the grid.
+	 */
+	public void displayMistake(int x, int y) {
+		this.gameField[y][x].mark();
+		gameField[y][x].setCaretColor(gameField[y][x].getBackground());
+	}
+	
+	/**
+	 * Toggles the cardLayout in the center back to the previous view.
+	 */
+	public void toggleCenterViewBack() {
+		btnContinue.setEnabled(true);
+		switchCenterView(previousCenterView);
+		prgrBar.setVisible(true);
+		
+		/*
+		 * Only do this actions if panel won and lost are not active.
+		 */
+		if (!previousCenterView.equals("won")
+				&& !previousCenterView.equals("lost") && sudoku != null) {
+			if (!solvingMode) {
+				btnHint.setEnabled(true);
+			}
+			btnReset.setEnabled(true);
+			swingTimer.start();
+			refreshView();
+		}
+	}
+	
+	/**
 	 * Makes the view show the recent state of the Sudoku object.
 	 */
 	private void refreshView() {
@@ -639,19 +644,6 @@ public class GuiWindow {
 	}
 
 	/**
-	 * Marks a mistake red.
-	 * 
-	 * @param x
-	 *            X-value of the mistake in the grid.
-	 * @param y
-	 *            Y-value of the mistake in the grid.
-	 */
-	public void displayMistake(int x, int y) {
-		this.gameField[y][x].mark();
-		gameField[y][x].setCaretColor(gameField[y][x].getBackground());
-	}
-
-	/**
 	 * Check, if undo or redo is possible and enables / disables the
 	 * corresponding buttons.
 	 */
@@ -674,28 +666,6 @@ public class GuiWindow {
 					break outer;
 				}
 			}
-		}
-	}
-
-	/**
-	 * Toggles the cardLayout in the center back to the previous view.
-	 */
-	public void toggleCenterViewBack() {
-		btnContinue.setEnabled(true);
-		switchCenterView(previousCenterView);
-		prgrBar.setVisible(true);
-		
-		/*
-		 * Only do this actions if panel won and lost are not active.
-		 */
-		if (!previousCenterView.equals("won")
-				&& !previousCenterView.equals("lost") && sudoku != null) {
-			if (!solvingMode) {
-				btnHint.setEnabled(true);
-			}
-			btnReset.setEnabled(true);
-			swingTimer.start();
-			refreshView();
 		}
 	}
 
@@ -836,7 +806,7 @@ public class GuiWindow {
 	 * Listens to the JTextFields for lost focus within the game field.
 	 * 
 	 */
-	protected class JudokuFocusListener extends FocusAdapter {
+	private class JudokuFocusListener extends FocusAdapter {
 
 		@Override
 		public void focusLost(FocusEvent evt) {
