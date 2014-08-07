@@ -59,28 +59,25 @@ public class SudokuBuilder {
 	public Sudoku newSudoku(Difficulty diff, int carreeSize) {
 		this.carreeSize = carreeSize;
 		this.sudokuSize = carreeSize*carreeSize;	
-		/*
-		 * Since no seed was specified, a random seed is generated.
-		 */
-		return newSudoku(new Random().nextLong(), diff);
-	}
-
-	/**
-	 * Builds a Sudoku object of the desired difficulty using a certain seed.
-	 * 
-	 * @param seed
-	 *            The seed used for the java.util.random generators.
-	 * @param diff
-	 *            The desired difficulty.
-	 * @return A playable Sudoku object.
-	 */
-	public Sudoku newSudoku(long seed, Difficulty diff) {
+		
 		/*
 		 * This Random object will be used to generate all random variables
 		 * needed so exactly the same Sudoku can be recreated using the same
 		 * seed.
 		 */
-		prng = new Random(seed);
+		this.prng = new Random();
+		
+		return newSudoku(diff);
+	}
+
+	/**
+	 * Builds a Sudoku object of the desired difficulty using a certain seed.
+	 * 
+	 * @param diff
+	 *            The desired difficulty.
+	 * @return A playable Sudoku object.
+	 */
+	private Sudoku newSudoku(Difficulty diff) {
 
 		/*
 		 * Step 1: Generate a entirely solved Sudoku grid and copy it for

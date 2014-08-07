@@ -364,6 +364,7 @@ public class Sudoku {
 			 */
 			this.startGrid = SudokuBuilder.deepCopy(recentGrid);
 			sb.solve(0, 0, recentGrid);
+			this.solvedGrid = SudokuBuilder.deepCopy(recentGrid);
 			this.undoStorage.clear();
 			this.redoStorage.clear();
 		}
