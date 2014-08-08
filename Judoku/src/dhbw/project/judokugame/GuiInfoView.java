@@ -115,6 +115,13 @@ public class GuiInfoView {
 		
 		tpFunctions.setText("<html><div align='justify'>"
 				+ "<b><p>New Game:</p></b> Shows which difficulties you can choose (easy/ medium/ hard). Also you can choose betwenn the different game modes (Mini 4x4, Maxi 16x16, Sudoku Solver)."
+				+ "<b><p>Navigation:</p></b> When the game starts, the focus is automatically set on the first free cell. "
+				+ "<br />"
+				+ "There are two ways to navigate:."
+				+ "<br />"
+				+ "- You can click into the cell you want to mark, by using the <b>mouse</b>"
+				+ "<br />"
+				+ "- Or you can navigate through the cells, by using the <b>arrow keys</b>"
 				+ "<b><p>Reset:</p></b> Resets the whole gamefield. After resetting all cells will be empty." 
 				+ "<b><p>Exit:</p></b> Closes the Game." 
 				+ "<b><p>Info:</p></b> Opens the info dialogue."
@@ -134,13 +141,7 @@ public class GuiInfoView {
 				+ "Is only enabled if all cells are filled in. Validates whether the Sudoku was filled in correctly. If in solving-mode this tries to solve the Sudoku. " 
 				+ "<b><p>Statuspanel:</p></b> Shows the infos: Time (how long you are playing), progressbar(percentage of filled in fields), difficulty(shows the current game mode)"
 				+ "<b><p>Solving-Mode:</p></b> In this mode you can enter a Sudoku to solve."
-				+ "<b><p>Navigation:</p></b> When the game starts, the focus is automatically set on the first free cell. "
-				+ "<br />"
-				+ "There are two ways to navigate:."
-				+ "<br />"
-				+ "- You can click into the cell you want to mark, by using the <b>mouse</b>"
-				+ "<br />"
-				+ "- Or you can navigate through the cells, by using the <b>arrow keys</b>"
+				
 				+ "</div></html>");
 		
 		/*
