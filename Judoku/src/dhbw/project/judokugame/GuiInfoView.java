@@ -123,7 +123,6 @@ public class GuiInfoView {
 				+ "<br />"
 				+ "- Or you can navigate through the cells, by using the <b>arrow keys</b>"
 				+ "<b><p>Reset:</p></b> Resets the whole gamefield. After resetting all cells will be empty." 
-				+ "<b><p>Exit:</p></b> Closes the Game." 
 				+ "<b><p>Info:</p></b> Opens the info dialogue."
 				+ "<b><p>Redo [ctrl + y]:</p></b> "
 				+ "<div align='left'><img src=\"" + contextCl.getResource("resources/redo.png") + "\" border = '1'/></img></div>"
@@ -141,7 +140,7 @@ public class GuiInfoView {
 				+ "Is only enabled if all cells are filled in. Validates whether the Sudoku was filled in correctly. If in solving-mode this tries to solve the Sudoku. " 
 				+ "<b><p>Statuspanel:</p></b> Shows the infos: Time (how long you are playing), progressbar(percentage of filled in fields), difficulty(shows the current game mode)"
 				+ "<b><p>Solving-Mode:</p></b> In this mode you can enter a Sudoku to solve."
-				
+				+ "<b><p>Exit:</p></b> Closes the Game." 
 				+ "</div></html>");
 		
 		/*
