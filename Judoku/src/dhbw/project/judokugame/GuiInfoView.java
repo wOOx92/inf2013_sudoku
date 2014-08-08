@@ -4,14 +4,18 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.util.HashSet;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
+import javax.swing.KeyStroke;
 import javax.swing.border.EmptyBorder;
 
 public class GuiInfoView {
@@ -61,7 +65,6 @@ public class GuiInfoView {
 		 * Initialize all components for the tab "Sudoku Rules"
 		 */
 		JTabbedPane tabbedPane = new JTabbedPane();
-
 		JTextPane tpSudokuRules = new JTextPane();
 		jspSudokuRules = new JScrollPane(tpSudokuRules);
 		tpSudokuRules.setEditable(false);
@@ -104,7 +107,7 @@ public class GuiInfoView {
 		JTextPane tpFunctions = new JTextPane();
 		jspFunctions = new JScrollPane(tpFunctions);
 		tpFunctions.setEditable(false);
-		tpFunctions.setFocusable(false);
+		tpSudokuRules.setFocusable(false);
 		tpFunctions.setBorder(new EmptyBorder(10, 10, 10, 10));
 		tpFunctions.setBackground(new Color(247, 247, 247));
 		tabbedPane.addTab("Functions", jspFunctions);
@@ -131,6 +134,13 @@ public class GuiInfoView {
 				+ "Is only enabled if all cells are filled in. Validates whether the Sudoku was filled in correctly. If in solving-mode this tries to solve the Sudoku. " 
 				+ "<b><p>Statuspanel:</p></b> Shows the infos: Time (how long you are playing), progressbar(percentage of filled in fields), difficulty(shows the current game mode)"
 				+ "<b><p>Solving-Mode:</p></b> In this mode you can enter a Sudoku to solve."
+				+ "<b><p>Navigation:</p></b> When the game starts, the focus is automatically set on the first free cell. "
+				+ "<br />"
+				+ "There are two ways to navigate:."
+				+ "<br />"
+				+ "- You can click into the cell you want to mark, by using the <b>mouse</b>"
+				+ "<br />"
+				+ "- Or you can navigate through the cells, by using the <b>arrow keys</b>"
 				+ "</div></html>");
 		
 		/*
@@ -138,7 +148,7 @@ public class GuiInfoView {
 		 */
 		JTextPane tpCredits = new JTextPane();
 		tpCredits.setEditable(false);
-		tpCredits.setFocusable(false);
+		tpSudokuRules.setFocusable(false);
 		tpCredits.setBorder(new EmptyBorder(10, 10, 10, 10));
 		tpCredits.setBackground(new Color(247, 247, 247));
 		tabbedPane.addTab("Credits", tpCredits);
