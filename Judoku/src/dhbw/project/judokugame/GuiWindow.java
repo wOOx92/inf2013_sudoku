@@ -268,18 +268,21 @@ public class GuiWindow {
 		btnReset = newCustomJButton("Reset");
 		btnReset.setBorderPainted(false);
 		btnReset.setEnabled(false);
+		btnReset.setFocusPainted(false);
 		btnReset.setToolTipText("Reset Judoku");
 		btnReset.setPreferredSize(new Dimension(80, 25));
 		mnBar.add(btnReset);
 
 		btnQuit = newCustomJButton("Exit");
 		btnQuit.setBorderPainted(false);
+		btnQuit.setFocusPainted(false);
 		btnQuit.setToolTipText("Quit Judoku");
 		btnQuit.setPreferredSize(new Dimension(80, 25));
 		mnBar.add(btnQuit);
 
 		btnInfo = newCustomJButton("Info");
 		btnInfo.setBorderPainted(false);
+		btnInfo.setFocusPainted(false);
 		btnInfo.setPreferredSize(new Dimension(80, 25));
 		mnBar.add(btnInfo);
 
@@ -882,8 +885,16 @@ public class GuiWindow {
 				refreshView();
 				focusFirstCell();
 			} else if (e.getSource() == btnReset) {
-				controller.resetSudoku(sudoku);
-				refreshView();
+				if(solvingMode) {
+					sudoku = new Sudoku(3);
+					prgrBar.setString("Write your Sudoku in the field");
+					initializeGameField(pnlGameField, 3);
+					refreshView();
+				}
+				else {
+					controller.resetSudoku(sudoku);
+					refreshView();
+				}
 			} else if (e.getSource() == btnUndo) {
 				controller.undoSudoku(sudoku);
 				refreshView();
@@ -953,6 +964,19 @@ public class GuiWindow {
 				/*
 				 * If in solving mode, btnValidate has a different function.
 				 */
+				
+				/*
+				 * Using backtracking on Sudokus with few clues (for example 2)
+				 * is very slow and will never yield a unique solution. Avoid
+				 * using backtracking by checking if there are already 17 clues.
+				 * It is proven that there are no Sudokus with less clues.
+				 */
+				int clues = Sudoku.getNumberOfClues(sudoku.getRecentGrid());
+				if(clues < 17) {
+					prgrBar.setString("This Sudoku is still missing some clues!");
+					return;
+				}
+				
 				int solutions = controller.solveSudoku(sudoku);
 				if (solutions == 1) {
 					refreshView();

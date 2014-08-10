@@ -70,7 +70,7 @@ public class GuiInfoView {
 		tabbedPane.addTab("Sudoku Rules", jspSudokuRules); // Add the pane
 		tpSudokuRules.setContentType("text/html");
 		tpSudokuRules.setText("<html><div align='justify'>"
-				+ "<p>- Sudoku is played over a 4x4, 9x9 or 16x16 grid, divided to 2x2, 3x3 or 4x4 sub grids called 'regions':</p> "
+				+ "<p>- Sudoku is played on a 4x4, 9x9 or 16x16 grid, divided to 2x2, 3x3 or 4x4 sub grids called 'regions':</p> "
 				+ "<p></p>"
 				+ "<div align='center'><img src=\"" + contextCl.getResource("resources/sudokufield_empty.png") + "\" border = '1'/></img></div>"
 				+ "<p>- Sudoku begins with some of the grid cells already filled with numbers:</p>"
