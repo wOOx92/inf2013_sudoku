@@ -28,7 +28,7 @@ public class JudokuPlainDocument extends PlainDocument {
 	 * Returns an instance of JudokuPlainDocument that will only allow values
 	 * from 1 to limit (inclusive) as content.
 	 */
-	JudokuPlainDocument(int limit) {
+	public JudokuPlainDocument(int limit) {
 		super();
 		
 		/*
