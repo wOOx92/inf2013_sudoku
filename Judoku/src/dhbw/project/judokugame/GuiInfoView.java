@@ -134,7 +134,7 @@ public class GuiInfoView {
 				+ "<b><p>Validate:</p></b> "
 				+ "<div align='left'><img src=\"" + contextCl.getResource("resources/validate.png") + "\" border = '1'/></img></div>"
 				+ "Is only enabled if all cells are filled in. Validates whether the Sudoku was filled in correctly. If in solving-mode this tries to solve the Sudoku. " 
-				+ "<b><p>Statuspanel:</p></b> Shows the infos: Time (how long you are playing), progressbar(percentage of filled in fields), difficulty(shows the current game mode)"
+				+ "<b><p>Statuspanel:</p></b> Shows the infos: time (how long you are playing), a progressbar (percentage of filled in fields, note that the progressbar gives no indication whether you filled in correctly), difficulty (shows the current game mode)"
 				+ "<b><p>Solving-Mode:</p></b> In this mode you can enter a Sudoku to solve."
 				+ "<b><p>Exit:</p></b> Closes the Game." 
 				+ "</div></html>");
