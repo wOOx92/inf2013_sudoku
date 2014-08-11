@@ -885,13 +885,13 @@ public class GuiWindow {
 				refreshView();
 				focusFirstCell();
 			} else if (e.getSource() == btnReset) {
-				if(solvingMode) {
+				if(solvingMode) { // restart the solving mode
 					sudoku = new Sudoku(3);
 					prgrBar.setString("Write your Sudoku in the field");
 					initializeGameField(pnlGameField, 3);
 					refreshView();
 				}
-				else {
+				else { // reset the actual sudoku object
 					controller.resetSudoku(sudoku);
 					refreshView();
 				}
