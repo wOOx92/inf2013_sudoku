@@ -693,6 +693,15 @@ public class GuiWindow {
 		solvingMode = false;
 
 		/*
+		 * Switch to btnValidate, if continue was active
+		 */
+		Container pnlParent = btnContinue.getParent();
+		if(pnlParent != null) {
+			pnlParent.add(btnValidate);
+			pnlParent.remove(btnContinue);
+		}
+		
+		/*
 		 * Switch to the game field view
 		 */
 		switchCenterView("gameField");
